@@ -103,6 +103,19 @@ const SheetStats: React.FC = () => {
         { id: "", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: "./src/assets/low_standard-ticket.png", altText: "Standard Banner Icon" },
     ];
 
+    const banners = [
+        { value: "The Phantom Thieves of Hearts", label: "The Phantom Thieves of Hearts (Beginner Banner)", sublabel: "Phantom Idol" },
+        { value: "Phantom Idol Draft X", label: "Phantom Idol Draft X (Standard Banner)", sublabel: "Phantom Idol" },
+
+        { value: "Silent Pistol", label: "Silent Pistol", sublabel: "Arms Deal" },
+
+        { value: "The Phantom Magician", label: "The Phantom Magician (Joker)", sublabel: "Most Wanted Ph. Idol" },
+        { value: "Angel's Diagnosis", label: "Angel's Diagnosis (Marian)", sublabel: "Most Wanted Ph. Idol" },
+        { value: "Virtual Netizen", label: "Virtual Netizen (Bui)", sublabel: "Most Wanted Ph. Idol" },
+        { value: "Art of the Fox", label: "Art of the Fox (Fox)", sublabel: "Most Wanted Ph. Idol" },
+    ];
+
+
     const [datasets, setDatasets] = useState(() => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
@@ -461,51 +474,103 @@ const SheetStats: React.FC = () => {
                                                                 <Button variant="outline" className="min-w-[100px]">Current Banner: {position}</Button>
                                                             </DropdownMenuTrigger>
                                                             <DropdownMenuContent className="w-56">
-                                                                <DropdownMenuLabel>Panel Position</DropdownMenuLabel>
+                                                                <DropdownMenuLabel>Banner Selection</DropdownMenuLabel>
                                                                 <DropdownMenuSeparator />
                                                                 <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                                                                    <DropdownMenuRadioItem value="The Phantom Magician">The Phantom Magician (Joker)</DropdownMenuRadioItem>
-                                                                    <DropdownMenuRadioItem value="Angel's Diagnosis">Angel's Diagnosis (Marian)</DropdownMenuRadioItem>
-                                                                    <DropdownMenuRadioItem value="Virtual Netizen">Virtual Netizen (Bui)</DropdownMenuRadioItem>
-                                                                    <DropdownMenuRadioItem value="Art of the Fox">Art of the Fox (Fox))</DropdownMenuRadioItem>
+                                                                    {banners
+                                                                        .filter(b => {
+                                                                            if (currentBannerSublabel === "Most Wanted Ph. Idol") return b.sublabel === "Most Wanted Ph. Idol";
+                                                                            if (currentBannerSublabel === "Arms Deal") return b.sublabel === "Arms Deal";
+                                                                            if (currentBannerSublabel === "Phantom Idol") return b.sublabel === "Phantom Idol";
+                                                                            return false; // fallback for unknown category
+                                                                        })
+                                                                        .map(banner => (
+                                                                            <DropdownMenuRadioItem key={banner.value} value={banner.value}>
+                                                                                {banner.label}
+                                                                            </DropdownMenuRadioItem>
+                                                                        ))}
                                                                 </DropdownMenuRadioGroup>
                                                             </DropdownMenuContent>
                                                         </DropdownMenu>
-                                                        <div className="flex gap-4">
-                                                            <div className="flex flex-col gap-3">
-                                                                <DropdownMenu>
-                                                                    <DropdownMenuTrigger asChild>
-                                                                        <Button
-                                                                            variant="outline"
-                                                                            className="w-32 justify-between font-normal"
-                                                                        >
-                                                                            {date ? date.toLocaleDateString() : "Select date"}
-                                                                            <ChevronDownIcon />
-                                                                        </Button>
-                                                                    </DropdownMenuTrigger>
-                                                                    <DropdownMenuContent className="w-auto p-0" align="start">
-                                                                        <Calendar
-                                                                            mode="single"
-                                                                            selected={date}
-                                                                            captionLayout="dropdown"
-                                                                            onSelect={(date) => {
-                                                                                setDate(date)
-                                                                                setOpenDatePicker(false)
-                                                                            }}
-                                                                        />
-                                                                    </DropdownMenuContent>
-                                                                </DropdownMenu>
-                                                            </div>
-                                                            <div className="flex flex-col gap-3">
-                                                                <Input
-                                                                    type="time"
-                                                                    step="1"
-                                                                    value={time}
-                                                                    onChange={(e) => setTime(e.target.value)}
-                                                                    className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                                        <div className={"flex justify-between items-center w-full"}>
+                                                            <div className="flex gap-4">
+                                                                <div className="flex flex-col gap-3">
+                                                                    <DropdownMenu>
+                                                                        <DropdownMenuTrigger asChild>
+                                                                            <Button
+                                                                                variant="outline"
+                                                                                className="w-32 justify-between font-normal"
+                                                                            >
+                                                                                {date ? date.toLocaleDateString() : "Select date"}
+                                                                                <ChevronDownIcon />
+                                                                            </Button>
+                                                                        </DropdownMenuTrigger>
+                                                                        <DropdownMenuContent className="w-auto p-0" align="start">
+                                                                            <Calendar
+                                                                                mode="single"
+                                                                                selected={date}
+                                                                                captionLayout="dropdown"
+                                                                                onSelect={(date) => {
+                                                                                    setDate(date)
+                                                                                    setOpenDatePicker(false)
+                                                                                }}
+                                                                            />
+                                                                        </DropdownMenuContent>
+                                                                    </DropdownMenu>
+                                                                </div>
+                                                                <div className="flex flex-col gap-3">
+                                                                    <Input
+                                                                        type="time"
+                                                                        step="1"
+                                                                        value={time}
+                                                                        onChange={(e) => setTime(e.target.value)}
+                                                                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
 
-                                                                />
+                                                                    />
+                                                                </div>
                                                             </div>
+                                                            <Button
+                                                                variant="outline"
+                                                                className="w-32 font-normal"
+                                                                onClick={async () => {
+                                                                    if(position === "N/A"){
+                                                                        console.error("Please select a banner")
+                                                                    }
+                                                                    else {
+                                                                        try {
+                                                                            // @ts-ignore
+                                                                            await appendCharactersToSheet(
+                                                                                currentBanner,
+                                                                                "Sheet1", // tab name
+                                                                                selectedCharacters,
+                                                                                currentBannerSublabel,
+                                                                                position,
+                                                                                date,
+                                                                                time
+                                                                            );
+                                                                            datasets.forEach((ds: {
+                                                                                id: string;
+                                                                            }, i: number) => {
+                                                                                if (ds.id) fetchData(ds.id, i);
+                                                                            });
+                                                                            selectedCharacters.fill({
+                                                                                src: "./src/assets/chicons/basic.png",
+                                                                                modalsrc: "./src/assets/persicons/basic.png",
+                                                                                rarity: "none",
+                                                                                name: "Clear",
+                                                                                codename: "N/A",
+                                                                                affinity: "Support",
+                                                                            });
+                                                                            setPosition("N/A");
+                                                                            setDialogOpen(false);
+                                                                        } catch (err) {
+                                                                            console.error("Failed to send data", err);
+                                                                        }
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Submit to Sheet
+                                                            </Button>
                                                         </div>
                                                     </div>
 
@@ -546,46 +611,6 @@ const SheetStats: React.FC = () => {
                                                             );
                                                         })}
                                                     </div>
-                                                    <Button
-                                                        onClick={async () => {
-                                                            if(position === "N/A"){
-                                                                console.error("Please select a banner")
-                                                            }
-                                                            else {
-                                                                try {
-                                                                    // @ts-ignore
-                                                                    await appendCharactersToSheet(
-                                                                        currentBanner,
-                                                                        "Sheet1", // tab name
-                                                                        selectedCharacters,
-                                                                        currentBannerSublabel,
-                                                                        position,
-                                                                        date,
-                                                                        time
-                                                                    );
-                                                                    datasets.forEach((ds: {
-                                                                        id: string;
-                                                                    }, i: number) => {
-                                                                        if (ds.id) fetchData(ds.id, i);
-                                                                    });
-                                                                    selectedCharacters.fill({
-                                                                        src: "./src/assets/chicons/basic.png",
-                                                                        modalsrc: "./src/assets/persicons/basic.png",
-                                                                        rarity: "none",
-                                                                        name: "Clear",
-                                                                        codename: "N/A",
-                                                                        affinity: "Support",
-                                                                    });
-                                                                    setPosition("N/A");
-                                                                    setDialogOpen(false);
-                                                                } catch (err) {
-                                                                    console.error("Failed to send data", err);
-                                                                }
-                                                            }
-                                                        }}
-                                                    >
-                                                        Submit to Sheet
-                                                    </Button>
                                                     <CharacterPicker
                                                         isOpen={pickerOpenForIndex !== null}
                                                         onClose={() => setPickerOpenForIndex(null)}
