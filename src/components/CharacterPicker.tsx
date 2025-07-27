@@ -30,7 +30,7 @@ const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/lufel.png", modalsrc: "./src/assets/chicons/modal/lufel.png", rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
   { src: "./src/assets/chicons/seiji.png", modalsrc: "./src/assets/chicons/modal/seiji.png", rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
   { src: "./src/assets/chicons/kiyoshi.png", modalsrc: "./src/assets/chicons/modal/kiyoshi.png", rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
-  { src: "./src/assets/chicons/tomoko.png", modalsrc: "./src/assets/chicons/modal/tomoko.png", rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
+  { src: "./src/assets/chicons/Tomoko.png", modalsrc: "./src/assets/chicons/modal/tomoko.png", rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
   { src: "./src/assets/chicons/toshiya.png", modalsrc: "./src/assets/chicons/modal/toshiya.png", rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
   { src: "./src/assets/chicons/shun.png", modalsrc: "./src/assets/chicons/modal/shun.png", rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
   { src: "./src/assets/chicons/kotone.png", modalsrc: "./src/assets/chicons/modal/kotone.png", rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
