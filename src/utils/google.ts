@@ -86,13 +86,12 @@ export async function loadPicker(): Promise<void> {
 }
 
 export const createPicker = (
-    token: string,
     callback: (spreadsheetId: string) => void
 ) => {
     const view = new google.picker.View(google.picker.ViewId.SPREADSHEETS);
 
     const picker = new google.picker.PickerBuilder()
-        .setOAuthToken(token)
+        .setOAuthToken(getAccessToken())
         .addView(view)
         .setDeveloperKey(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
         .setCallback((data: any) => {
@@ -156,8 +155,6 @@ export async function appendCharactersToSheet(
 
     const range = `${sheetName}!A:E`; // Adjust columns if needed
 
-    // @ts-ignore
-    // @ts-ignore
     await gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId,
         range,

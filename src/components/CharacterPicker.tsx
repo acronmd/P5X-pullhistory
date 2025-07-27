@@ -42,7 +42,7 @@ const availableCharacters: CharacterData[] = [
 
   /* Cleave */
   { src: "./src/assets/persicons/inugami.png", modalsrc: "./src/assets/persicons/modal/inugami.png", rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
-  { src: "./src/assets/persicons/ippon_datara.png", modalsrc: "./src/assets/persicons/modal/ippon_datara.png", rarity: "common", name: "Ippon Datara", codename: "N/A", affinity: "Cleave" },
+  { src: "./src/assets/persicons/ippon_datara.png", modalsrc: "./src/assets/persicons/modal/ippon_datara.png", rarity: "common", name: "Ippon-Datara", codename: "N/A", affinity: "Cleave" },
   { src: "./src/assets/persicons/mandrake.png", modalsrc: "./src/assets/persicons/modal/mandrake.png", rarity: "common", name: "Mandrake", codename: "N/A", affinity: "Cleave" },
   { src: "./src/assets/persicons/mokoi.png", modalsrc: "./src/assets/persicons/modal/mokoi.png", rarity: "common", name: "Mokoi", codename: "N/A", affinity: "Cleave" },
 
@@ -123,9 +123,9 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({
                                                            onSelect,
                                                            selectedCharacterName,
                                                          }) => {
-  if (!isOpen) return null;
-
   const [searchQuery, setSearchQuery] = useState("");
+
+  if (!isOpen) return null;
 
   const filteredCharacters = availableCharacters.filter((char) => {
         const labelMatch = char.name.toLowerCase().includes(searchQuery.toLowerCase());
