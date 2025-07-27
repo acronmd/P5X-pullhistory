@@ -40,6 +40,7 @@ import {
 import { ChevronDownIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input"
+import { Separator } from "@/components/ui/separator"
 
 import CharacterPicker, {type CharacterData } from '@/components/CharacterPicker';
 
@@ -115,7 +116,9 @@ const SheetStats: React.FC = () => {
         { value: "Art of the Fox", label: "Art of the Fox (Fox)", sublabel: "Most Wanted Ph. Idol" },
     ];
 
+    const range = 'Sheet1';
 
+    ///React useState variables
     const [datasets, setDatasets] = useState(() => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
@@ -131,9 +134,6 @@ const SheetStats: React.FC = () => {
             altText: ds.altText ?? defaultDatasets[i]?.altText ?? "",
         }));
     });
-
-
-    const range = 'Sheet1';
 
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -164,6 +164,7 @@ const SheetStats: React.FC = () => {
     );
     const [allPulls, setAllPulls] = useState<SheetRow[][]>(datasets.map(() => []));
 
+    ///Fetch data variables
     async function fetchData(id: string, index: number) {
         await gapi.client.load('sheets', 'v4');
         const res = await gapi.client.sheets.spreadsheets.values.get({
@@ -176,9 +177,9 @@ const SheetStats: React.FC = () => {
 
         const total = data.length;
 
-        let counts: Record<string, number> = {};
-        let pityGaps5: number[] = [];
-        let pityGaps4: number[] = [];
+        const counts: Record<string, number> = {};
+        const pityGaps5: number[] = [];
+        const pityGaps4: number[] = [];
 
         let last5Index: number | null = null;
         let last4Index: number | null = null;
@@ -383,8 +384,6 @@ const SheetStats: React.FC = () => {
     }
 
     const handlePickSheet = async (index: number) => {
-        let token = getAccessToken();
-
         await loadPicker();
         createPicker(token!, (id) => {
             setDatasets((prev: any) => {
@@ -398,13 +397,26 @@ const SheetStats: React.FC = () => {
         });
     };
 
-    // @ts-ignore
     return (
         <div >
             {!isSignedIn ? (
-                <Button onClick={handleSignIn} disabled={isLoading}>
-                    {isLoading ? "Signing in..." : "Sign In with Google"}
-                </Button>
+                <div className="max-w-2xl mx-auto space-y-6">
+                    <h1 className="scroll-m-20 text-center text-4xl font-extrabold tracking-tight text-balance">
+                        A P5X Wish Tracker
+                    </h1>
+                    <p className="leading-7 [&:not(:first-child)]:mt-6">
+                        A website that uses Google Drive/Sheets API to store pull data and displays pull statistics, pity tracking,
+                        among other info. This app cannot automatically grab pull history but it provides an easy interface to catalogue
+                        your data!
+                    </p>
+                    <blockquote className="mt-6 border-l-2 pl-6 italic">
+                        &quot;Quite possibly the [...] best [...] software I've [...] ever [...] used.&quot;
+                    </blockquote>
+                    <Separator/>
+                    <Button onClick={handleSignIn} disabled={isLoading}>
+                        {isLoading ? "Signing in..." : "Sign In with Google"}
+                    </Button>
+                </div>
             ) : (
                 <div className="flex flex-wrap gap-6 justify-center px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto">
                     {datasets.map((ds: {
@@ -525,7 +537,6 @@ const SheetStats: React.FC = () => {
                                                                         value={time}
                                                                         onChange={(e) => setTime(e.target.value)}
                                                                         className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-
                                                                     />
                                                                 </div>
                                                             </div>

@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input} from "@/components/ui/input";
 
 export type CharacterData = {
   src: string;
@@ -124,37 +125,61 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({
                                                          }) => {
   if (!isOpen) return null;
 
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const filteredCharacters = availableCharacters.filter((char) => {
+        const labelMatch = char.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const codenameMatch =
+            char.codename !== "N/A" &&
+            char.codename.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return labelMatch || codenameMatch;
+      }
+  );
+
   return (
       <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-        <DialogContent className="max-w-md max-h-[80vh] overflow-auto">
+        <DialogContent
+            className="max-w-md max-h-[80vh] lg:min-h-[800px] overflow-auto flex flex-col"
+        >
           <DialogHeader>
             <DialogTitle>Select Character</DialogTitle>
           </DialogHeader>
-          <div className="grid grid-cols-3 gap-4 p-4">
-            {availableCharacters.map((char, i) => {
-              const isSelected = char.name === selectedCharacterName;
-              return (
-                  <div
-                      key={i}
-                      className={`cursor-pointer flex flex-col items-center p-2 border rounded 
-                          ${char.rarity === "common" ? elementGlow[char.affinity] : rarityGlow[char.rarity]} 
-                          hover:brightness-110 
-                          ${isSelected ? "ring-2 ring-blue-500" : ""}`}
-                      onClick={() => {
-                        onSelect(char);
-                        onClose();
-                      }}
-                  >
-                    <img
-                        src={char.modalsrc}
-                        alt={`Character ${i}`}
-                        className="w-20 h-20 object-contain"
-                        draggable={false}
-                    />
-                    <span className="mt-1 text-sm capitalize">{char.name}</span>
-                  </div>
-              );
-            })}
+          <div className="items-start">
+            <div>
+              <Input
+                  type="text"
+                  className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search characters..."
+              />
+            </div>
+            <div className="grid grid-cols-3 gap-4 p-4 self-start">
+              {filteredCharacters.map((char, i) => {
+                const isSelected = char.name === selectedCharacterName;
+                return (
+                    <div
+                        key={i}
+                        className={`cursor-pointer flex flex-col items-center p-2 border rounded 
+                            ${char.rarity === "common" ? elementGlow[char.affinity] : rarityGlow[char.rarity]} 
+                            hover:brightness-110 
+                            ${isSelected ? "ring-2 ring-blue-500" : ""}`}
+                        onClick={() => {
+                          onSelect(char);
+                          onClose();
+                        }}
+                    >
+                      <img
+                          src={char.modalsrc}
+                          alt={`Character ${i}`}
+                          className="w-20 h-20 object-contain"
+                          draggable={false}
+                      />
+                      <span className="mt-1 text-sm capitalize">{char.name}</span>
+                    </div>
+                );
+              })}
+            </div>
           </div>
         </DialogContent>
       </Dialog>
