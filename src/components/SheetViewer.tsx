@@ -103,8 +103,6 @@ const SheetStats: React.FC = () => {
         { value: "Art of the Fox", label: "Art of the Fox (Fox)", sublabel: "Most Wanted Ph. Idol" },
     ];
 
-    const range = 'Sheet1';
-
     ///React useState variables with LOCAL STORAGE NEAR HERE
     const [datasets, setDatasets] = useState(() => {
         const cached = localStorage.getItem("userDatasets");
@@ -124,6 +122,11 @@ const SheetStats: React.FC = () => {
 
     const [sharedSpreadsheetId, setSharedSpreadsheetId] = useState(() => {
         return localStorage.getItem("sharedSpreadsheetId") ?? "";
+    });
+
+    const [invSheet, setInvSheet] = useState(() => {
+        console.log(localStorage.getItem("invSheet"));
+        return localStorage.getItem("invSheet") ?? "";
     });
 
     useEffect(() => {
@@ -412,7 +415,7 @@ const SheetStats: React.FC = () => {
                 let sheetNames = sheets.map(sheet => sheet.properties?.title).filter(Boolean) as string[];
 
                 // 2. Ensure sheet number exists
-                const neededSheetCount = datasets.length;
+                const neededSheetCount = datasets.length + 1;
                 const currentCount = sheetNames.length;
 
                 if (currentCount < neededSheetCount) {
@@ -438,15 +441,17 @@ const SheetStats: React.FC = () => {
                 // 3. Update datasets with sheet names
                 const updatedDatasets = datasets.map((ds, index) => ({
                     ...ds,
-                    sheetName: sheetNames[index],  // You could match names more intelligently if needed
+                    sheetName: sheetNames[index + 1],  // You could match names more intelligently if needed
                 }));
 
                 // 4. Save spreadsheet ID and datasets
                 localStorage.setItem("sharedSpreadsheetId", spreadsheetId);
                 localStorage.setItem("userDatasets", JSON.stringify(updatedDatasets));
+                localStorage.setItem("invSheet", sheetNames[0])
 
                 setDatasets(updatedDatasets);
                 setSharedSpreadsheetId(spreadsheetId); // You should add this to your state
+                setInvSheet(sheetNames[0])
 
             } catch (error) {
                 console.error("Error loading spreadsheet metadata:", error);
