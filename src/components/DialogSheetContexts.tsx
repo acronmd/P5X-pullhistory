@@ -24,6 +24,7 @@ type Props = {
     banners: any[];
     currentBanner: string;
     currentBannerSublabel: string;
+    currentSheetName: string;
     position: string;
     setPosition: (val: string) => void;
     date: Date | null;
@@ -47,6 +48,7 @@ export default function DialogSheetContent({
                                                banners,
                                                currentBanner,
                                                currentBannerSublabel,
+                                               currentSheetName,
                                                position,
                                                setPosition,
                                                date,
@@ -145,15 +147,15 @@ export default function DialogSheetContent({
                                                 try {
                                                     await appendCharactersToSheetWithOCR(
                                                         currentBanner,
-                                                        "Sheet1", // tab name
+                                                        currentSheetName, // tab name
                                                         ocrResult.reverse(),
                                                         position,
                                                         currentBannerSublabel
                                                     );
                                                     datasets.forEach((ds: {
-                                                        id: string;
+                                                        sheetName: string;
                                                     }, i: number) => {
-                                                        if (ds.id) fetchData(ds.id, i);
+                                                        if (ds.sheetName) fetchData(ds.sheetName, i);
                                                     });
                                                     selectedCharacters.fill({
                                                         src: "./src/assets/chicons/basic.png",
@@ -269,7 +271,7 @@ export default function DialogSheetContent({
                                 try {
                                     await appendCharactersToSheet(
                                         currentBanner,
-                                        "Sheet1", // tab name
+                                        currentSheetName, // tab name
                                         selectedCharacters,
                                         currentBannerSublabel,
                                         position,
@@ -277,9 +279,9 @@ export default function DialogSheetContent({
                                         time
                                     );
                                     datasets.forEach((ds: {
-                                        id: string;
+                                        sheetName: string;
                                     }, i: number) => {
-                                        if (ds.id) fetchData(ds.id, i);
+                                        if (ds.sheetName) fetchData(ds.sheetName, i);
                                     });
                                     selectedCharacters.fill({
                                         src: "./src/assets/chicons/basic.png",

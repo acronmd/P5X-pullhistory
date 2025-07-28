@@ -198,6 +198,7 @@ export async function appendCharactersToSheetWithOCR(
 
     if (rows.length === 0) return;
 
+    console.log(sheetName);
     const range = `${sheetName}!A:E`; // Adjust columns if needed
 
     await gapi.client.sheets.spreadsheets.values.append({

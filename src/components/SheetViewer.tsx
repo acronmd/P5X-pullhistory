@@ -86,9 +86,9 @@ type SheetRow = string[];
 
 const SheetStats: React.FC = () => {
     const defaultDatasets = [
-        { id: "", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: "./src/assets/low_limited-ticket.png", altText: "Limited Banner Icon" },
-        { id: "", label: "Weapon Banner", sublabel: "Arms Deal", pity4: 10, pity5: 70, source: "./src/assets/low_weapons-ticket.png", altText: "Weapon Banner Icon" },
-        { id: "", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: "./src/assets/low_standard-ticket.png", altText: "Standard Banner Icon" },
+        { id: "", sheetName: "Limited Banner", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: "./src/assets/low_limited-ticket.png", altText: "Limited Banner Icon" },
+        { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deal", pity4: 10, pity5: 70, source: "./src/assets/low_weapons-ticket.png", altText: "Weapon Banner Icon" },
+        { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: "./src/assets/low_standard-ticket.png", altText: "Standard Banner Icon" },
     ];
 
     const banners = [
@@ -105,14 +105,14 @@ const SheetStats: React.FC = () => {
 
     const range = 'Sheet1';
 
-    ///React useState variables
+    ///React useState variables with LOCAL STORAGE NEAR HERE
     const [datasets, setDatasets] = useState(() => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
 
         // Fill missing fields from defaultDatasets
         return parsed.map((ds: any, i: number) => ({
-            id: ds.id ?? "",
+            sheetName: ds.sheetName ?? defaultDatasets[i]?.sheetName ?? "",
             label: ds.label ?? defaultDatasets[i]?.label ?? "",
             sublabel: ds.sublabel ?? defaultDatasets[i]?.sublabel ?? "",
             pity4: ds.pity4 ?? defaultDatasets[i]?.pity4 ?? 0,
@@ -120,6 +120,10 @@ const SheetStats: React.FC = () => {
             source: ds.source ?? defaultDatasets[i]?.source ?? "",
             altText: ds.altText ?? defaultDatasets[i]?.altText ?? "",
         }));
+    });
+
+    const [sharedSpreadsheetId, setSharedSpreadsheetId] = useState(() => {
+        return localStorage.getItem("sharedSpreadsheetId") ?? "";
     });
 
     const [isSignedIn, setIsSignedIn] = useState(false);
@@ -152,13 +156,15 @@ const SheetStats: React.FC = () => {
     const [allPulls, setAllPulls] = useState<SheetRow[][]>(datasets.map(() => []));
 
     ///Fetch data variables
-    async function fetchData(id: string, index: number) {
+    async function fetchData(sheetName: string, index: number) {
         await gapi.client.load('sheets', 'v4');
         const res = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: id,
-            range: range,
+            spreadsheetId: sharedSpreadsheetId,
+            range:sheetName,
         });
         const data: SheetRow[] = res.result.values || [];
+
+        console.log(sharedSpreadsheetId);
 
         ///const json = await res.json();
 
@@ -283,6 +289,7 @@ const SheetStats: React.FC = () => {
 
     const [currentBanner, setCurrentBanner] = useState<string>("");
     const [currentBannerSublabel, setCurrentBannerSublabel] = useState<string>("");
+    const [currentSheetName, setCurrentSheetName] = useState<string>("");
 
     const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>(
         Array(10).fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", affinity: "Support" })
@@ -318,8 +325,8 @@ const SheetStats: React.FC = () => {
             //console.log("handleSignIn: signIn done");
             setIsSignedIn(true);
 
-            datasets.forEach((ds: { id: string; }, i: number) => {
-                if (ds.id) fetchData(ds.id, i);
+            datasets.forEach((ds: { sheetName: string; }, i: number) => {
+                if (ds.sheetName) fetchData(ds.sheetName, i);
             });
         } catch (err) {
             console.error("OAuth sign-in failed:", err);
@@ -370,6 +377,7 @@ const SheetStats: React.FC = () => {
         return 'text-red-700 border-red-500 bg-red-100';
     }
 
+    /*
     const handlePickSheet = async (index: number) => {
         await loadPicker();
         createPicker((id) => {
@@ -383,6 +391,50 @@ const SheetStats: React.FC = () => {
             fetchData(id, index);
         });
     };
+     */
+    const handlePickSheet = async () => {
+        await loadPicker();
+
+        createPicker(async (spreadsheetId) => {
+            try {
+                // 1. Get metadata for the selected spreadsheet to read sheet names
+                const sheetMetadata = await gapi.client.sheets.spreadsheets.get({
+                    spreadsheetId,
+                });
+
+                const sheets = sheetMetadata.result.sheets || [];
+                const sheetNames = sheets.map(sheet => sheet.properties?.title).filter(Boolean) as string[];
+
+                // 2. Optional: Validate number of sheets
+                if (sheetNames.length < datasets.length) {
+                    alert(`The selected spreadsheet only has ${sheetNames.length} sheets, but ${datasets.length} are required.`);
+                    return;
+                }
+
+                // 3. Update datasets with sheet names
+                const updatedDatasets = datasets.map((ds, index) => ({
+                    ...ds,
+                    sheetName: sheetNames[index],  // You could match names more intelligently if needed
+                }));
+
+                // 4. Save spreadsheet ID and datasets
+                localStorage.setItem("sharedSpreadsheetId", spreadsheetId);
+                localStorage.setItem("userDatasets", JSON.stringify(updatedDatasets));
+
+                setDatasets(updatedDatasets);
+                setSharedSpreadsheetId(spreadsheetId); // You should add this to your state
+
+                // 5. Fetch data for each sheet
+                updatedDatasets.forEach((ds, i) => {
+                    fetchData(ds.sheetName, i);
+                });
+
+            } catch (error) {
+                console.error("Error loading spreadsheet metadata:", error);
+            }
+        });
+    };
+
 
     return (
         <div >
@@ -405,249 +457,256 @@ const SheetStats: React.FC = () => {
                     </Button>
                 </div>
             ) : (
-                <div className="flex flex-wrap gap-6 justify-center px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto">
-                    {datasets.map((ds: {
-                        id: string;
-                        source: string | undefined;
-                        sublabel: string;
-                        label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
-                        pity4: string;
-                        pity5: string;
-                        altText: string;},
-                        i: number) => (
-                        <Card key={i} className="w-full sm:flex-1 sm:min-w-[350px] sm:max-w-[500px] flex flex-col">
-                            <CardHeader>
-                                <CardTitle>
-                                    <div className="flex items-center justify-between w-full">
-                                        <div className="flex items-center gap-2">
-                                            <img
-                                                src={ds.source}
-                                                alt={ds.altText}
-                                                className="w-8 h-8 object-contain"
-                                            />
-                                            <span className={"text-xl"}>{ds.label}</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                            {/* Add Pull History Button */}
-                                            <Dialog open={dialogOpen} onOpenChange={(open) => {
-                                                setDialogOpen(open);
-                                                if (!open) {
-                                                    setPosition("N/A")
-                                                    selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
-                                                }
-                                            }}>
-                                                <DialogTrigger asChild>
-                                                    <Button
-                                                        variant="outline"
-                                                        size="icon"
-                                                        className="p-1"
-                                                        title="Add Row"
-                                                        onClick={() => {
-                                                            setCurrentBanner(ds.id)
-                                                            setCurrentBannerSublabel(ds.sublabel);
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src="./src/assets/add-icon.png"
-                                                            alt="Add Row to Spreadsheet"
-                                                            className="w-5 h-5 object-contain"
-                                                        />
-                                                    </Button>
-                                                </DialogTrigger>
-
-                                                {/* This is the dialog content that adds new data / pull history to the spreadsheet */}
-                                                <div>
-                                                    <DialogSheetContent
-                                                        bgImage={bgImage}
-                                                        banners={banners}
-                                                        currentBanner={currentBanner}
-                                                        currentBannerSublabel={currentBannerSublabel}
-                                                        position={position}
-                                                        setPosition={setPosition}
-                                                        date={date}
-                                                        setDate={setDate}
-                                                        time={time}
-                                                        setTime={setTime}
-                                                        setOpenDatePicker={setOpenDatePicker}
-                                                        appendCharactersToSheet={appendCharactersToSheet}
-                                                        selectedCharacters={selectedCharacters}
-                                                        setDialogOpen={setDialogOpen}
-                                                        datasets={datasets}
-                                                        fetchData={fetchData}
-                                                        openCharacterPicker={openCharacterPicker}
-                                                        pickerOpenForIndex={pickerOpenForIndex}
-                                                        setPickerOpenForIndex={setPickerOpenForIndex}
-                                                        handleCharacterSelect={handleCharacterSelect}
-                                                    />
-                                                </div>
-                                            </Dialog>
-
-                                            {/* Set Spreadsheet Button */}
-                                            <Button
-                                                variant="outline"
-                                                size="icon"
-                                                onClick={() => handlePickSheet(i)}
-                                                className="p-1"
-                                                title="Set Spreadsheet via Google Drive"
-                                            >
+                <div className={"flex flex-col gap-4"}>
+                    <div className="flex flex-wrap gap-6 justify-center px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto">
+                        {datasets.map((ds: {
+                            id: string;
+                            sheetName: string;
+                            source: string | undefined;
+                            sublabel: string;
+                            label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
+                            pity4: string;
+                            pity5: string;
+                            altText: string;},
+                            i: number) => (
+                            <Card key={i} className="w-full sm:flex-1 sm:min-w-[350px] sm:max-w-[500px] flex flex-col">
+                                <CardHeader>
+                                    <CardTitle>
+                                        <div className="flex items-center justify-between w-full">
+                                            <div className="flex items-center gap-2">
                                                 <img
-                                                    src="./src/assets/edit-icon.png"
-                                                    alt="Set Spreadsheet"
-                                                    className="w-6 h-6 object-contain translate-y-[2px]"
+                                                    src={ds.source}
+                                                    alt={ds.altText}
+                                                    className="w-8 h-8 object-contain"
                                                 />
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="grid gap-4 flex-grow overflow-auto">
-                                <Tabs defaultValue="totals">
-                                    <TabsList className="w-full grid grid-cols-2">
-                                        <TabsTrigger value="totals">Totals</TabsTrigger>
-                                        <TabsTrigger value="statistics">Statistics</TabsTrigger>
-                                    </TabsList>
-
-                                    <TabsContent value="totals">
-                                        <div className="flex flex-col justify-center gap-2 mt-4">
-                                            <StatCard
-                                                label={`Lifetime Pulls`}
-                                                sublabel={
-                                                <>
-                                                    <img
-                                                        src="./src/assets/jewels.png"
-                                                        alt="Meta Jewels"
-                                                        className="w-4 h-4 object-contain"
-                                                    />
-                                                    <span>{(allStats[i].total * 150).toLocaleString()}</span>
-                                                </>
-                                                }
-                                                value={allStats[i]?.total ?? 0}
-                                                bg="bg-gray-100"
-                                                className="w-full min-h-[30px]"  // example width and min height
-                                            />
-                                            <StatCard
-                                                label={`4-Star Pity`}
-                                                sublabel={`Guaranteed at ` + ds.pity4}
-                                                value={allStats[i]?.sinceLast4 ?? -1}
-                                                bg="bg-yellow-100"
-                                                className="w-full min-h-[30px]"
-                                            />
-                                            <StatCard
-                                                label={`5-Star Pity`}
-                                                sublabel={`Guaranteed at ` + ds.pity5}
-                                                value={allStats[i]?.sinceLast5 ?? -1}
-                                                bg="bg-purple-100"
-                                                className="w-full"
-                                            />
-                                        </div>
-                                    </TabsContent>
-
-                                    <TabsContent value="statistics">
-                                        <div className="mt-4 overflow-x-auto">
-                                            <table className="min-w-full text-sm border border-border text-left">
-                                                <thead className="bg-muted">
-                                                <tr>
-                                                    <th className="px-4 py-2 border-b">Rarity</th>
-                                                    <th className="px-4 py-2 border-b">Count</th>
-                                                    <th className="px-4 py-2 border-b">Percent</th>
-                                                    <th className="px-4 py-2 border-b">Pity Avg</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {Object.entries(allStats[i].rarityCounts).map(([rarity, count]) => (
-                                                    <tr key={rarity}>
-                                                        <td className="px-4 py-2 border-b">{rarity}★</td>
-                                                        <td className="px-4 py-2 border-b">{count}</td>
-                                                        <td className="px-4 py-2 border-b">
-                                                            {allStats[i].rarityPercents[rarity].toFixed(2)}%
-                                                        </td>
-                                                        <td className="px-4 py-2 border-b">
-                                                            {rarity === '5'
-                                                                ? allStats[i].avgPity5.toFixed(2)
-                                                                : rarity === '4'
-                                                                    ? allStats[i].avgPity4.toFixed(2)
-                                                                    : '—'}
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                                </tbody>
-                                            </table>
-                                            {allStats[i]?.recent5Stars.length > 0 && (
-                                                <div className="mt-4 flex flex-wrap gap-2">
-                                                    {allStats[i].recent5Stars.map((pull, idx) => (
-                                                        <div
-                                                            key={idx}
-                                                            className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
-                                                        >
-                                                            {pull.name} at {pull.pity} pity
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </TabsContent>
-                                </Tabs>
-                            </CardContent>
-                            <CardFooter className="flex justify-between items-center text-md text-muted-foreground flex-shrink-0 h-14">
-                                {/* Left side: Pull History */}
-                                <div>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline" size="sm">Pull History</Button>
-                                        </DialogTrigger>
-
-                                        <DialogContent className="w-full sm:max-w-[75vw] max-h-[80vh] p-0 m-0 bg-white flex flex-col">
-                                            {/* Sticky Dialog Header */}
-                                            <DialogHeader className="bg-white border-b px-6 py-4">
-                                                <DialogTitle className="text-center">Pull History - {ds.label}</DialogTitle>
-                                            </DialogHeader>
-
-                                            {/* Scrollable table area */}
-                                            <div className="overflow-y-auto overflow-x-auto flex-grow">
-                                                <Table className="min-w-full border-collapse">
-                                                    <TableHeader>
-                                                        <TableRow className="sticky top-0 z-20 bg-white border-b border-border">
-                                                            <TableHead className="text-center px-4 py-2">Pull Number</TableHead>
-                                                            <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
-                                                            <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
-                                                            <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
-                                                            <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
-                                                        </TableRow>
-                                                    </TableHeader>
-                                                    <TableBody>
-                                                        {allPulls[i]?.map((row, index) => (
-                                                            <TableRow
-                                                                key={index}
-                                                                className={`cursor-default ${rowClassForRarity(row[0]?.trim() || '')}`}
-                                                                style={{
-                                                                    boxShadow: `0 0 0 2px ${rarityBorderColor(row[0]?.trim() || '')}`
-                                                                }}
-                                                                tabIndex={-1}
-                                                            >
-                                                                <TableCell className="text-center px-4 py-2">{index + 1}</TableCell>
-                                                                <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
-                                                                <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
-                                                                <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
-                                                                <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
-                                                            </TableRow>
-                                                        ))}
-                                                    </TableBody>
-                                                </Table>
-
+                                                <span className={"text-xl"}>{ds.label}</span>
                                             </div>
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                                <div>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button variant="outline" size="sm">Pity Planner</Button>
-                                        </DialogTrigger>
-                                    </Dialog>
-                                </div>
-                            </CardFooter>
-                        </Card>
-                    ))}
+                                            <div className="flex items-center gap-2">
+                                                {/* Add Pull History Button */}
+                                                <Dialog open={dialogOpen} onOpenChange={(open) => {
+                                                    setDialogOpen(open);
+                                                    if (!open) {
+                                                        setPosition("N/A")
+                                                        selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
+                                                    }
+                                                }}>
+                                                    <DialogTrigger asChild>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="icon"
+                                                            className="p-1"
+                                                            title="Add Row"
+                                                            onClick={() => {
+                                                                setCurrentBanner(ds.sheetName);
+                                                                setCurrentBannerSublabel(ds.sublabel);
+                                                                setCurrentSheetName(ds.sheetName);
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src="./src/assets/add-icon.png"
+                                                                alt="Add Row to Spreadsheet"
+                                                                className="w-5 h-5 object-contain"
+                                                            />
+                                                        </Button>
+                                                    </DialogTrigger>
+
+                                                    {/* This is the dialog content that adds new data / pull history to the spreadsheet */}
+                                                    <div>
+                                                        <DialogSheetContent
+                                                            bgImage={bgImage}
+                                                            banners={banners}
+                                                            currentBanner={sharedSpreadsheetId}
+                                                            currentBannerSublabel={currentBannerSublabel}
+                                                            currentSheetName={currentSheetName}
+                                                            position={position}
+                                                            setPosition={setPosition}
+                                                            date={date}
+                                                            setDate={setDate}
+                                                            time={time}
+                                                            setTime={setTime}
+                                                            setOpenDatePicker={setOpenDatePicker}
+                                                            appendCharactersToSheet={appendCharactersToSheet}
+                                                            selectedCharacters={selectedCharacters}
+                                                            setDialogOpen={setDialogOpen}
+                                                            datasets={datasets}
+                                                            fetchData={fetchData}
+                                                            openCharacterPicker={openCharacterPicker}
+                                                            pickerOpenForIndex={pickerOpenForIndex}
+                                                            setPickerOpenForIndex={setPickerOpenForIndex}
+                                                            handleCharacterSelect={handleCharacterSelect}
+                                                        />
+                                                    </div>
+                                                </Dialog>
+                                            </div>
+                                        </div>
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="grid gap-4 flex-grow overflow-auto">
+                                    <Tabs defaultValue="totals">
+                                        <TabsList className="w-full grid grid-cols-2">
+                                            <TabsTrigger value="totals">Totals</TabsTrigger>
+                                            <TabsTrigger value="statistics">Statistics</TabsTrigger>
+                                        </TabsList>
+
+                                        <TabsContent value="totals">
+                                            <div className="flex flex-col justify-center gap-2 mt-4">
+                                                <StatCard
+                                                    label={`Lifetime Pulls`}
+                                                    sublabel={
+                                                    <>
+                                                        <img
+                                                            src="./src/assets/jewels.png"
+                                                            alt="Meta Jewels"
+                                                            className="w-4 h-4 object-contain"
+                                                        />
+                                                        <span>{(allStats[i].total * 150).toLocaleString()}</span>
+                                                    </>
+                                                    }
+                                                    value={allStats[i]?.total ?? 0}
+                                                    bg="bg-gray-100"
+                                                    className="w-full min-h-[30px]"  // example width and min height
+                                                />
+                                                <StatCard
+                                                    label={`4-Star Pity`}
+                                                    sublabel={`Guaranteed at ` + ds.pity4}
+                                                    value={allStats[i]?.sinceLast4 ?? -1}
+                                                    bg="bg-yellow-100"
+                                                    className="w-full min-h-[30px]"
+                                                />
+                                                <StatCard
+                                                    label={`5-Star Pity`}
+                                                    sublabel={`Guaranteed at ` + ds.pity5}
+                                                    value={allStats[i]?.sinceLast5 ?? -1}
+                                                    bg="bg-purple-100"
+                                                    className="w-full"
+                                                />
+                                            </div>
+                                        </TabsContent>
+
+                                        <TabsContent value="statistics">
+                                            <div className="mt-4 overflow-x-auto">
+                                                <table className="min-w-full text-sm border border-border text-left">
+                                                    <thead className="bg-muted">
+                                                    <tr>
+                                                        <th className="px-4 py-2 border-b">Rarity</th>
+                                                        <th className="px-4 py-2 border-b">Count</th>
+                                                        <th className="px-4 py-2 border-b">Percent</th>
+                                                        <th className="px-4 py-2 border-b">Pity Avg</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {Object.entries(allStats[i].rarityCounts).map(([rarity, count]) => (
+                                                        <tr key={rarity}>
+                                                            <td className="px-4 py-2 border-b">{rarity}★</td>
+                                                            <td className="px-4 py-2 border-b">{count}</td>
+                                                            <td className="px-4 py-2 border-b">
+                                                                {allStats[i].rarityPercents[rarity].toFixed(2)}%
+                                                            </td>
+                                                            <td className="px-4 py-2 border-b">
+                                                                {rarity === '5'
+                                                                    ? allStats[i].avgPity5.toFixed(2)
+                                                                    : rarity === '4'
+                                                                        ? allStats[i].avgPity4.toFixed(2)
+                                                                        : '—'}
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                    </tbody>
+                                                </table>
+                                                {allStats[i]?.recent5Stars.length > 0 && (
+                                                    <div className="mt-4 flex flex-wrap gap-2">
+                                                        {allStats[i].recent5Stars.map((pull, idx) => (
+                                                            <div
+                                                                key={idx}
+                                                                className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
+                                                            >
+                                                                {pull.name} at {pull.pity} pity
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </TabsContent>
+                                    </Tabs>
+                                </CardContent>
+                                <CardFooter className="flex justify-between items-center text-md text-muted-foreground flex-shrink-0 h-14">
+                                    {/* Left side: Pull History */}
+                                    <div>
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button variant="outline" size="sm">Pull History</Button>
+                                            </DialogTrigger>
+
+                                            <DialogContent className="w-full sm:max-w-[75vw] max-h-[80vh] p-0 m-0 bg-white flex flex-col">
+                                                {/* Sticky Dialog Header */}
+                                                <DialogHeader className="bg-white border-b px-6 py-4">
+                                                    <DialogTitle className="text-center">Pull History - {ds.label}</DialogTitle>
+                                                </DialogHeader>
+
+                                                {/* Scrollable table area */}
+                                                <div className="overflow-y-auto overflow-x-auto flex-grow">
+                                                    <Table className="min-w-full border-collapse">
+                                                        <TableHeader>
+                                                            <TableRow className="sticky top-0 z-20 bg-white border-b border-border">
+                                                                <TableHead className="text-center px-4 py-2">Pull Number</TableHead>
+                                                                <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
+                                                                <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
+                                                                <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
+                                                                <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
+                                                            </TableRow>
+                                                        </TableHeader>
+                                                        <TableBody>
+                                                            {allPulls[i]?.map((row, index) => (
+                                                                <TableRow
+                                                                    key={index}
+                                                                    className={`cursor-default ${rowClassForRarity(row[0]?.trim() || '')}`}
+                                                                    style={{
+                                                                        boxShadow: `0 0 0 2px ${rarityBorderColor(row[0]?.trim() || '')}`
+                                                                    }}
+                                                                    tabIndex={-1}
+                                                                >
+                                                                    <TableCell className="text-center px-4 py-2">{index + 1}</TableCell>
+                                                                    <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
+                                                                    <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
+                                                                    <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
+                                                                    <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
+                                                                </TableRow>
+                                                            ))}
+                                                        </TableBody>
+                                                    </Table>
+
+                                                </div>
+                                            </DialogContent>
+                                        </Dialog>
+                                    </div>
+                                    <div>
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                <Button variant="outline" size="sm">Pity Planner</Button>
+                                            </DialogTrigger>
+                                        </Dialog>
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                        ))}
+                    </div>
+                    <div>
+                        {/* Set Spreadsheet Button */}
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => handlePickSheet()}
+                            className="w-72"
+                            title="Set Spreadsheet via Google Drive"
+                        >
+                            <img
+                                src="./src/assets/edit-icon.png"
+                                alt="Set Spreadsheet"
+                                className="w-6 h-6 object-contain translate-y-[2px]"
+                            />
+                            Set Spreadsheet from Google Drive
+                        </Button>
+                    </div>
                 </div>
             )}
         </div>
