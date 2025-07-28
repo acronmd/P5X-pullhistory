@@ -17,7 +17,6 @@ import {
     DialogContent,
     DialogHeader,
     DialogTitle,
-    DialogClose,
 } from "@/components/ui/dialog"
 import {
     Table,
@@ -28,22 +27,9 @@ import {
     TableCell,
 } from "@/components/ui/table";
 
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuRadioGroup,
-    DropdownMenuRadioItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-
-import { ChevronDownIcon, X } from "lucide-react"
-import { Calendar } from "@/components/ui/calendar"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 
-import CharacterPicker, {type CharacterData } from '@/components/CharacterPicker';
+import {type CharacterData } from '@/components/CharacterPicker';
 
 import bgImage from "@/assets/bg.png";
 
@@ -94,6 +80,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {gapi} from "gapi-script";
 import {createPicker, initGoogleClient, loadPicker, signIn} from "@/utils/google.ts";
 import { appendCharactersToSheet} from "@/utils/google.ts";
+import DialogSheetContent from "./DialogSheetContexts";
 
 type SheetRow = string[];
 
@@ -291,7 +278,7 @@ const SheetStats: React.FC = () => {
 
     //Pull date info variable(s)
     const [openDatePicker, setOpenDatePicker] = React.useState(false)
-    const [date, setDate] = React.useState<Date | undefined>(undefined)
+    const [date, setDate] = React.useState<Date | null>(null)
     const [time, setTime] = React.useState("10:30:00")
 
     const [currentBanner, setCurrentBanner] = useState<string>("");
@@ -470,165 +457,28 @@ const SheetStats: React.FC = () => {
 
                                                 {/* This is the dialog content that adds new data / pull history to the spreadsheet */}
                                                 <div>
-                                                    <DialogContent
-                                                        className="w-full sm:max-w-7xl bg-cover pt-25 pb-10 border-4 shadow-none overflow-visible"
-                                                        style={{ backgroundImage: `url(${bgImage})` }}
-                                                    >
-                                                        <img
-                                                            src="./src/assets/texts/history.png"
-                                                            alt="History"
-                                                            className="absolute top-[-40px] left-1/2 -translate-x-33 -translate-y-10 w-[260px]"
-                                                            draggable={false}
-                                                        />
-                                                        <div>
-                                                            <div className={"flex items-center gap-4 mb-6"}>
-                                                                <DropdownMenu>
-                                                                    <DropdownMenuTrigger asChild>
-                                                                        <Button variant="outline" className="min-w-[100px]">Current Banner: {position}</Button>
-                                                                    </DropdownMenuTrigger>
-                                                                    <DropdownMenuContent className="w-56">
-                                                                        <DropdownMenuLabel>Banner Selection</DropdownMenuLabel>
-                                                                        <DropdownMenuSeparator />
-                                                                        <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                                                                            {banners
-                                                                                .filter(b => {
-                                                                                    if (currentBannerSublabel === "Most Wanted Ph. Idol") return b.sublabel === "Most Wanted Ph. Idol";
-                                                                                    if (currentBannerSublabel === "Arms Deal") return b.sublabel === "Arms Deal";
-                                                                                    if (currentBannerSublabel === "Phantom Idol") return b.sublabel === "Phantom Idol";
-                                                                                    return false; // fallback for unknown category
-                                                                                })
-                                                                                .map(banner => (
-                                                                                    <DropdownMenuRadioItem key={banner.value} value={banner.value}>
-                                                                                        {banner.label}
-                                                                                    </DropdownMenuRadioItem>
-                                                                                ))}
-                                                                        </DropdownMenuRadioGroup>
-                                                                    </DropdownMenuContent>
-                                                                </DropdownMenu>
-                                                                <div className={"flex justify-between items-center w-full"}>
-                                                                    <div className="flex gap-4">
-                                                                        <div className="flex flex-col gap-3">
-                                                                            <DropdownMenu>
-                                                                                <DropdownMenuTrigger asChild>
-                                                                                    <Button
-                                                                                        variant="outline"
-                                                                                        className="w-32 justify-between font-normal"
-                                                                                    >
-                                                                                        {date ? date.toLocaleDateString() : "Select date"}
-                                                                                        <ChevronDownIcon />
-                                                                                    </Button>
-                                                                                </DropdownMenuTrigger>
-                                                                                <DropdownMenuContent className="w-auto p-0" align="start">
-                                                                                    <Calendar
-                                                                                        mode="single"
-                                                                                        selected={date}
-                                                                                        captionLayout="dropdown"
-                                                                                        onSelect={(date) => {
-                                                                                            setDate(date)
-                                                                                            setOpenDatePicker(false)
-                                                                                        }}
-                                                                                    />
-                                                                                </DropdownMenuContent>
-                                                                            </DropdownMenu>
-                                                                        </div>
-                                                                        <div className="flex flex-col gap-3">
-                                                                            <Input
-                                                                                type="time"
-                                                                                step="1"
-                                                                                value={time}
-                                                                                onChange={(e) => setTime(e.target.value)}
-                                                                                className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                    <Button
-                                                                        variant="outline"
-                                                                        className="w-32 font-normal"
-                                                                        onClick={async () => {
-                                                                            if(position === "N/A"){
-                                                                                console.error("Please select a banner")
-                                                                            }
-                                                                            else {
-                                                                                try {
-                                                                                    await appendCharactersToSheet(
-                                                                                        currentBanner,
-                                                                                        "Sheet1", // tab name
-                                                                                        selectedCharacters,
-                                                                                        currentBannerSublabel,
-                                                                                        position,
-                                                                                        date,
-                                                                                        time
-                                                                                    );
-                                                                                    datasets.forEach((ds: {
-                                                                                        id: string;
-                                                                                    }, i: number) => {
-                                                                                        if (ds.id) fetchData(ds.id, i);
-                                                                                    });
-                                                                                    selectedCharacters.fill({
-                                                                                        src: "./src/assets/chicons/basic.png",
-                                                                                        modalsrc: "./src/assets/persicons/basic.png",
-                                                                                        rarity: "none",
-                                                                                        name: "Clear",
-                                                                                        codename: "N/A",
-                                                                                        affinity: "Support",
-                                                                                    });
-                                                                                    setPosition("N/A");
-                                                                                    setDialogOpen(false);
-                                                                                } catch (err) {
-                                                                                    console.error("Failed to send data", err);
-                                                                                }
-                                                                            }
-                                                                        }}
-                                                                    >
-                                                                        Submit to Sheet
-                                                                    </Button>
-                                                                </div>
-                                                            </div>
-
-                                                            {/* Pillar Layout */}
-                                                            <div className="flex justify-center gap-4 py-6 px-4">
-                                                                {selectedCharacters.map((_char, i) => {
-                                                                    const offsetMapY = ["translate-y-0", "translate-y-5", "translate-y-0", "-translate-y-5"];
-                                                                    const offsetMapX = ["translate-x-0", "-translate-x-1", "translate-x-0", "translate-x-1"];
-                                                                    const offsetClassY = offsetMapY[i % offsetMapY.length];
-                                                                    const offsetClassX = offsetMapX[i % offsetMapX.length];
-
-                                                                    const rarityGlow = {
-                                                                        none: "shadow-md shadow-gray-100",
-                                                                        common: "shadow-sm shadow-gray-600",
-                                                                        rare: "shadow-lg shadow-yellow-400",
-                                                                        superrare: "shadow-xl shadow-purple-500",
-                                                                    };
-                                                                    const glowClass = rarityGlow[selectedCharacters[i].rarity];
-
-                                                                    return (
-                                                                        <div
-                                                                            className={`relative w-24 h-100 skew-x-[-14deg] ${offsetClassY} ${offsetClassX} ${glowClass}
-                                                                                        flex items-center justify-center cursor-pointer
-                                                                                        transition`}
-                                                                            onClick={() => openCharacterPicker(i)}
-                                                                        >
-                                                                            <div
-                                                                                className="absolute top-0 -left-12.5 w-[203%] h-100 overflow-visible pointer-events-none skew-x-[14deg]"
-                                                                            >
-                                                                                <img
-                                                                                    src={selectedCharacters[i].src}
-                                                                                    alt="Selected Character"
-                                                                                    className="w-full h-full object-contain"
-                                                                                    draggable={false}
-                                                                                />
-                                                                            </div>
-                                                                        </div>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </div>
-                                                        <CharacterPicker
-                                                            isOpen={pickerOpenForIndex !== null}
-                                                            onClose={() => setPickerOpenForIndex(null)}
-                                                            onSelect={handleCharacterSelect}
-                                                        />
-                                                    </DialogContent>
+                                                    <DialogSheetContent
+                                                        bgImage={bgImage}
+                                                        banners={banners}
+                                                        currentBanner={currentBanner}
+                                                        currentBannerSublabel={currentBannerSublabel}
+                                                        position={position}
+                                                        setPosition={setPosition}
+                                                        date={date}
+                                                        setDate={setDate}
+                                                        time={time}
+                                                        setTime={setTime}
+                                                        setOpenDatePicker={setOpenDatePicker}
+                                                        appendCharactersToSheet={appendCharactersToSheet}
+                                                        selectedCharacters={selectedCharacters}
+                                                        setDialogOpen={setDialogOpen}
+                                                        datasets={datasets}
+                                                        fetchData={fetchData}
+                                                        openCharacterPicker={openCharacterPicker}
+                                                        pickerOpenForIndex={pickerOpenForIndex}
+                                                        setPickerOpenForIndex={setPickerOpenForIndex}
+                                                        handleCharacterSelect={handleCharacterSelect}
+                                                    />
                                                 </div>
                                             </Dialog>
 

@@ -1,6 +1,9 @@
 // Declare global type fallback
 declare const google: any;
 
+import { availableCharacters } from "@/components/CharacterPicker"
+import type { pullData } from "@/components/ImageOCRUploader"
+
 let accessToken: string | null = null;
 
 export let tokenClient: google.accounts.oauth2.TokenClient | null = null;
@@ -150,6 +153,48 @@ export async function appendCharactersToSheet(
         date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0") + " " + time,
         position,
     ]);
+
+    if (rows.length === 0) return;
+
+    const range = `${sheetName}!A:E`; // Adjust columns if needed
+
+    await gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range,
+        valueInputOption: "RAW",
+        insertDataOption: "INSERT_ROWS",
+        resource: {
+            values: rows,
+        },
+    });
+}
+
+export async function appendCharactersToSheetWithOCR(
+    spreadsheetId: string | null,
+    sheetName: string,
+    ocrResultArray: pullData[],
+    position: string,
+    bannerSublabel: string,
+): Promise<void> {
+    const token = getAccessToken();
+    if (!token) throw new Error("Access token is missing");
+
+    const rows = ocrResultArray.map((line) => {
+        let rarity = 0;
+
+        const matchedCharacter = availableCharacters.find((char) => char.name === line.name);
+        if (matchedCharacter) {
+            rarity = rarityMap[matchedCharacter.rarity];
+        }
+
+        return [
+            rarity,
+            line.name,
+            bannerSublabel,
+            line.timestampFull,
+            position,
+        ];
+    });
 
     if (rows.length === 0) return;
 

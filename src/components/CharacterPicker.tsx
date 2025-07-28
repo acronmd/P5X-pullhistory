@@ -16,7 +16,8 @@ export type CharacterData = {
   affinity: "Cleave" | "Fire" | "Ice" | "Elec" | "Wind" | "Psi" | "Nuclear" | "Bless" | "Curse" | "Support";
 };
 
-const availableCharacters: CharacterData[] = [
+// eslint-disable-next-line react-refresh/only-export-components
+export const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/ren.png", modalsrc: "./src/assets/chicons/modal/ren.png", rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
   { src: "./src/assets/chicons/yui.png", modalsrc: "./src/assets/chicons/modal/yui.png", rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
   { src: "./src/assets/chicons/minami.png", modalsrc: "./src/assets/chicons/modal/minami.png", rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
@@ -87,7 +88,6 @@ const availableCharacters: CharacterData[] = [
 
   // Add more characters here as needed
   { src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/modal/basic.png", rarity: "none", name: "Clear", codename: "N/A", affinity: "Support" },
-
 ];
 
 interface CharacterPickerProps {
