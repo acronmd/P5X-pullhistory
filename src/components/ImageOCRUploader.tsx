@@ -9,7 +9,10 @@ const CHARACTER_NAMES = availableCharacters.map(c => c.name);
 
 const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Agathlon": "Agathion",
+    "Jack-o0'-Lantern": "Jack-o'-Lantern",
     "Jack-o-Lantern": "Jack-o'-Lantern",
+    "Jack-0'-Lantern": "Jack-o'-Lantern",
+    "Jack-O'-Lantern": "Jack-o'-Lantern",
     "Toshia Sumi": "Toshiya Sumi",
     "Pixy": "Pixie",
     "Nekamata": "Nekomata",
@@ -45,7 +48,10 @@ function parseOcrPulls(rawText: string) {
 
         // Step 1: Find the character name
         const charName = CHARACTER_NAMES.find(name => cleaned.includes(name));
-        if (!charName) continue;
+        if (!charName) {
+            console.log(line);
+            continue;
+        }
 
         // Step 2: Slice everything after the character name
         const afterName = cleaned.slice(cleaned.indexOf(charName) + charName.length).trim();
