@@ -73,7 +73,7 @@ declare global {
     }
 }
 
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 
 import StatCard from '@/components/StatCard';
 import {Button} from "@/components/ui/button.tsx";
@@ -126,6 +126,14 @@ const SheetStats: React.FC = () => {
         return localStorage.getItem("sharedSpreadsheetId") ?? "";
     });
 
+    useEffect(() => {
+        if (!sharedSpreadsheetId) return; // Ignore initial or empty state
+
+        datasets.forEach((ds, i) => {
+            if (ds.sheetName) fetchData(ds.sheetName, i);
+        });
+    }, [sharedSpreadsheetId, datasets]);
+
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -163,8 +171,6 @@ const SheetStats: React.FC = () => {
             range:sheetName,
         });
         const data: SheetRow[] = res.result.values || [];
-
-        console.log(sharedSpreadsheetId);
 
         ///const json = await res.json();
 
@@ -402,13 +408,31 @@ const SheetStats: React.FC = () => {
                     spreadsheetId,
                 });
 
-                const sheets = sheetMetadata.result.sheets || [];
-                const sheetNames = sheets.map(sheet => sheet.properties?.title).filter(Boolean) as string[];
+                let sheets = sheetMetadata.result.sheets || [];
+                let sheetNames = sheets.map(sheet => sheet.properties?.title).filter(Boolean) as string[];
 
-                // 2. Optional: Validate number of sheets
-                if (sheetNames.length < datasets.length) {
-                    alert(`The selected spreadsheet only has ${sheetNames.length} sheets, but ${datasets.length} are required.`);
-                    return;
+                // 2. Ensure sheet number exists
+                const neededSheetCount = datasets.length;
+                const currentCount = sheetNames.length;
+
+                if (currentCount < neededSheetCount) {
+                    const sheetsToAdd = neededSheetCount - currentCount;
+                    const addRequests = Array.from({ length: sheetsToAdd }, () => ({
+                        addSheet: {}, // default blank sheet
+                    }));
+
+                    await gapi.client.sheets.spreadsheets.batchUpdate({
+                        spreadsheetId,
+                        requests: addRequests,
+                    });
+
+                    // Re-fetch metadata to get updated sheet names
+                    const updatedMetadata = await gapi.client.sheets.spreadsheets.get({
+                        spreadsheetId,
+                    });
+
+                    sheets = updatedMetadata.result.sheets || [];
+                    sheetNames = sheets.map(sheet => sheet.properties?.title).filter(Boolean) as string[];
                 }
 
                 // 3. Update datasets with sheet names
@@ -423,11 +447,6 @@ const SheetStats: React.FC = () => {
 
                 setDatasets(updatedDatasets);
                 setSharedSpreadsheetId(spreadsheetId); // You should add this to your state
-
-                // 5. Fetch data for each sheet
-                updatedDatasets.forEach((ds, i) => {
-                    fetchData(ds.sheetName, i);
-                });
 
             } catch (error) {
                 console.error("Error loading spreadsheet metadata:", error);

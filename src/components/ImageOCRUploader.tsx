@@ -24,14 +24,14 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     // Add more corrections here
 };
 
-export type PullData = {
+export type pullData = {
     name: string;
     contractType: string;
     timestampFull: string;
 };
 
 type Props = {
-    onTextExtracted: (data: PullData[]) => void;
+    onTextExtracted: (data: pullData[]) => void;
 };
 
 function correctMistakenNames(line: string): string {
