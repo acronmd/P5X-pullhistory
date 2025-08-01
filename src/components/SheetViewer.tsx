@@ -301,7 +301,7 @@ const SheetStats: React.FC = () => {
     const [currentSheetName, setCurrentSheetName] = useState<string>("");
 
     const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>(
-        Array(10).fill({ src: "@/assets/chicons/basic.png", modalsrc: "@/assets/persicons/basic.png", rarity: "none", name:"Clear", affinity: "Support" })
+        Array(10).fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", affinity: "Support" })
     );
 
     // State for modal control
@@ -511,7 +511,7 @@ const SheetStats: React.FC = () => {
                                                     setDialogOpen(open);
                                                     if (!open) {
                                                         setPosition("N/A")
-                                                        selectedCharacters.fill({ src: "@/assets/chicons/basic.png", modalsrc: "@/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
+                                                        selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
                                                     }
                                                 }}>
                                                     <DialogTrigger asChild>
@@ -527,7 +527,7 @@ const SheetStats: React.FC = () => {
                                                             }}
                                                         >
                                                             <img
-                                                                src="@/assets/add-icon.png"
+                                                                src="./src/assets/add-icon.png"
                                                                 alt="Add Row to Spreadsheet"
                                                                 className="w-5 h-5 object-contain"
                                                             />
@@ -579,7 +579,7 @@ const SheetStats: React.FC = () => {
                                                     sublabel={
                                                     <>
                                                         <img
-                                                            src="@/assets/jewels.png"
+                                                            src="./src/assets/jewels.png"
                                                             alt="Meta Jewels"
                                                             className="w-4 h-4 object-contain"
                                                         />
@@ -724,7 +724,7 @@ const SheetStats: React.FC = () => {
                             title="Set Spreadsheet via Google Drive"
                         >
                             <img
-                                src="@/assets/edit-icon.png"
+                                src="./src/assets/edit-icon.png"
                                 alt="Set Spreadsheet"
                                 className="w-6 h-6 object-contain translate-y-[2px]"
                             />
