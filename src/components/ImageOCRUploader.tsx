@@ -4,6 +4,12 @@ import Tesseract from 'tesseract.js';
 import { Button } from "@/components/ui/button";
 
 import { availableCharacters } from "@/components/CharacterPicker";
+import {
+    ContextMenu,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuTrigger,
+} from "@/components/ui/context-menu"
 
 const CHARACTER_NAMES = availableCharacters.map(c => c.name);
 
@@ -33,7 +39,12 @@ export type pullData = {
 
 type Props = {
     onTextExtracted: (data: pullData[]) => void;
+    position: string;
+    setAlertDialogBoolean: (value: boolean) => void
+    setAlertDialogError: (error: string) => void
 };
+
+
 
 function correctMistakenNames(line: string): string {
     let correctedLine = line;
@@ -55,7 +66,7 @@ function parseOcrPulls(rawText: string) {
         // Step 1: Find the character name
         const charName = CHARACTER_NAMES.find(name => cleaned.includes(name));
         if (!charName) {
-            console.log(line);
+            console.log("Tesseract unknown names: " + line);
             continue;
         }
 
@@ -85,8 +96,8 @@ function parseOcrPulls(rawText: string) {
     return pulls;
 }
 
+const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, position, setAlertDialogBoolean, setAlertDialogError }) => {
 
-const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted }) => {
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -98,21 +109,74 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted }) => {
         onTextExtracted(parsedData); // send formatted string
     };
 
+    const handleClipboardImage = async () => {
+        try {
+            const clipboardItems = await navigator.clipboard.read();
+            for (const item of clipboardItems) {
+                const type = item.types.find((t) => t.startsWith("image/"));
+                if (type) {
+                    const blob = await item.getType(type);
+                    const file = new File([blob], "clipboard-image.png", { type: blob.type });
+
+                    // Send to Tesseract and continue processing
+                    const { data } = await Tesseract.recognize(file, 'eng');
+                    const parsedData = parseOcrPulls(data.text);
+                    onTextExtracted(parsedData);
+                    return;
+                }
+            }
+
+            setAlertDialogError("No image found in clipboard.")
+            setAlertDialogBoolean(true);
+        } catch (err) {
+            console.error("Failed to read from clipboard", err);
+            setAlertDialogError("Clipboard access failed, please ensure your browser supports image reading.")
+            setAlertDialogBoolean(true);
+        }
+    };
+
     return (
-        <Button
-            onClick={() => document.getElementById('ocr-file-input')?.click()}
-            variant="outline"
-            className="w-32 font-normal"
-        >
-            Upload Image
-            <input
-                type="file"
-                id="ocr-file-input"
-                accept="image/*"
-                onChange={handleFileChange}
-                style={{ display: 'none' }}
-            />
-        </Button>
+        <div>
+            <ContextMenu>
+                <ContextMenuTrigger asChild>
+                    <Button
+                        onClick={() => {
+                            if( position == "N/A" ) {
+                                setAlertDialogError("Please select a character banner before uploading an image!")
+                                setAlertDialogBoolean(true);
+                            }
+                            else {
+                                document.getElementById('ocr-file-input')?.click()}
+                        }
+                        }
+                        variant="outline"
+                        className="w-32 font-normal"
+                    >
+                        Upload Image
+                        <input
+                            type="file"
+                            id="ocr-file-input"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: 'none' }}
+                        />
+                    </Button>
+                </ContextMenuTrigger>
+                <ContextMenuContent>
+                    <ContextMenuItem onClick={() => {
+                        if (position == "N/A") {
+                            setAlertDialogError("Please select a character banner before uploading an image!")
+                            setAlertDialogBoolean(true);
+                        } else {
+                            handleClipboardImage()
+                        }
+                    }
+                    }>
+                        Select Image from Clipboard
+                    </ContextMenuItem>
+                </ContextMenuContent>
+            </ContextMenu>
+        </div>
     );
 };
 

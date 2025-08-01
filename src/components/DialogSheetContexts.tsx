@@ -14,14 +14,22 @@ import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { ChevronDownIcon } from "lucide-react";
 import CharacterPicker from "./CharacterPicker";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ImageOCRUploader from "@/components/ImageOCRUploader.tsx";
 import {appendCharactersToSheetWithOCR} from "@/utils/google.ts";
 import type { pullData } from "@/components/ImageOCRUploader";
+import {
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogTitle
+} from "@/components/ui/alert-dialog";
+import {AlertDialogFooter, AlertDialogHeader} from "@/components/ui/alert-dialog.tsx";
 
 type Props = {
     bgImage: string;
-    banners: any[];
+    banners: never[];
     currentBanner: string;
     currentBannerSublabel: string;
     currentSheetName: string;
@@ -32,15 +40,15 @@ type Props = {
     time: string;
     setTime: (val: string) => void;
     setOpenDatePicker: (val: boolean) => void;
-    appendCharactersToSheet: (...args: any[]) => Promise<void>;
-    selectedCharacters: any[];
+    appendCharactersToSheet: (...args: never[]) => Promise<void>;
+    selectedCharacters: never[];
     setDialogOpen: (val: boolean) => void;
-    datasets: any[];
-    fetchData: (...args: any[]) => void;
+    datasets: never[];
+    fetchData: (...args: never[]) => void;
     openCharacterPicker: (index: number) => void;
     pickerOpenForIndex: number | null;
     setPickerOpenForIndex: (val: number | null) => void;
-    handleCharacterSelect: (val: any) => void;
+    handleCharacterSelect: (val: never) => void;
 };
 
 export default function DialogSheetContent({
@@ -70,6 +78,17 @@ export default function DialogSheetContent({
     const [ocrResult, setOcrResult] = useState<pullData[]>([]);
     const [OCRDialogOpen, setOCRDialogOpen] = useState(false);
 
+    useEffect(() => {
+        if (ocrResult.length > 0 && ocrResult.length < 10) {
+            setAlertDialogError("Less than 10 pulls detected in screenshot, dismiss if intentional. \n" +
+                "Potential names parsed by Tesseract are found in browser console");
+            setAlertDialogBoolean(true);
+        }
+    }, [ocrResult]);
+
+    const [alertDialogBoolean, setAlertDialogBoolean] = useState(false);
+    const [alertDialogError, setAlertDialogError] = useState<string>("");
+
     const handleTextExtracted = (data: pullData[]) => {
         //console.log('OCR Text:', data);
         setOcrResult(data);
@@ -85,7 +104,7 @@ export default function DialogSheetContent({
             style={{ backgroundImage: `url(${bgImage})` }}
         >
             <img
-                src="./src/assets/texts/history.png"
+                src="@/assets/texts/history.png"
                 alt="History"
                 className="absolute top-[-40px] left-1/2 -translate-x-33 -translate-y-10 w-[260px]"
                 draggable={false}
@@ -117,7 +136,12 @@ export default function DialogSheetContent({
                     </DropdownMenu>
                     <Dialog open={OCRDialogOpen} onOpenChange={setOCRDialogOpen}>
                         <DialogTrigger asChild>
-                            <ImageOCRUploader onTextExtracted={handleTextExtracted} />
+                            <ImageOCRUploader
+                                onTextExtracted={handleTextExtracted}
+                                position={position}
+                                setAlertDialogBoolean={setAlertDialogBoolean}
+                                setAlertDialogError={setAlertDialogError}
+                            />
                         </DialogTrigger>
 
                         <DialogContent className="w-full max-w-2xl sm:max-w-xl">
@@ -138,38 +162,34 @@ export default function DialogSheetContent({
                                     <Button
                                         variant="outline"
                                         className="w-32 font-normal"
-                                        disabled={!ocrResult.length || position=="N/A"}
+                                        disabled={!ocrResult.length}
                                         onClick={async () => {
-                                            if(position === "N/A"){
-                                                console.error("Please select a banner")
-                                            }
-                                            else {
-                                                try {
-                                                    await appendCharactersToSheetWithOCR(
-                                                        currentBanner,
-                                                        currentSheetName, // tab name
-                                                        ocrResult.reverse(),
-                                                        position,
-                                                        currentBannerSublabel
-                                                    );
-                                                    datasets.forEach((ds: {
-                                                        sheetName: string;
-                                                    }, i: number) => {
-                                                        if (ds.sheetName) fetchData(ds.sheetName, i);
-                                                    });
-                                                    selectedCharacters.fill({
-                                                        src: "./src/assets/chicons/basic.png",
-                                                        modalsrc: "./src/assets/persicons/basic.png",
-                                                        rarity: "none",
-                                                        name: "Clear",
-                                                        codename: "N/A",
-                                                        affinity: "Support",
-                                                    });
-                                                    setPosition("N/A");
-                                                    setDialogOpen(false);
-                                                } catch (err) {
-                                                    console.error("Failed to send data", err);
-                                                }
+                                            try {
+                                                await appendCharactersToSheetWithOCR(
+                                                    currentBanner,
+                                                    currentSheetName, // tab name
+                                                    ocrResult.reverse(),
+                                                    position,
+                                                    currentBannerSublabel
+                                                );
+                                                datasets.forEach((ds: {
+                                                    sheetName: string;
+                                                }, i: number) => {
+                                                    if (ds.sheetName) fetchData(ds.sheetName, i);
+                                                });
+                                                selectedCharacters.fill({
+                                                    src: "./src/assets/chicons/basic.png",
+                                                    modalsrc: "./src/assets/persicons/basic.png",
+                                                    rarity: "none",
+                                                    name: "Clear",
+                                                    codename: "N/A",
+                                                    affinity: "Support",
+                                                });
+                                                setPosition("N/A");
+                                                setDialogOpen(false);
+                                            } catch {
+                                                setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");
+                                                setAlertDialogBoolean(true)
                                             }
                                         }}
                                     >
@@ -198,7 +218,6 @@ export default function DialogSheetContent({
                             rare: "shadow-lg shadow-yellow-400",
                             superrare: "shadow-xl shadow-purple-500",
                         };
-                        // @ts-ignore
                         const glowClass = rarityGlow[selectedCharacters[i].rarity];
 
                         return (
@@ -265,7 +284,8 @@ export default function DialogSheetContent({
                         className="w-32 font-normal"
                         onClick={async () => {
                             if(position === "N/A"){
-                                console.error("Please select a banner")
+                                setAlertDialogError("Please select a character banner before submitting data!");
+                                setAlertDialogBoolean(true)
                             }
                             else {
                                 try {
@@ -293,8 +313,9 @@ export default function DialogSheetContent({
                                     });
                                     setPosition("N/A");
                                     setDialogOpen(false);
-                                } catch (err) {
-                                    console.error("Failed to send data", err);
+                                } catch {
+                                    setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");
+                                    setAlertDialogBoolean(true)
                                 }
                             }
                         }}
@@ -303,11 +324,25 @@ export default function DialogSheetContent({
                     </Button>
                 </div>
             </div>
-            <CharacterPicker
-                isOpen={pickerOpenForIndex !== null}
-                onClose={() => setPickerOpenForIndex(null)}
-                onSelect={handleCharacterSelect}
-            />
+            <div className="dialogs">
+                <CharacterPicker
+                    isOpen={pickerOpenForIndex !== null}
+                    onClose={() => setPickerOpenForIndex(null)}
+                    onSelect={handleCharacterSelect}
+                />
+                <AlertDialog open={alertDialogBoolean} onOpenChange={setAlertDialogBoolean}>
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Error</AlertDialogTitle>
+                            <AlertDialogDescription>{alertDialogError}</AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Dismiss</AlertDialogCancel>
+                            {/* <AlertDialogAction onClick={() => setAlertDialogBoolean(false)}>Okay</AlertDialogAction> */}
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
+            </div>
         </DialogContent>
     );
 }
