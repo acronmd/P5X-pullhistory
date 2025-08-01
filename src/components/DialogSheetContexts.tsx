@@ -29,26 +29,26 @@ import {AlertDialogFooter, AlertDialogHeader} from "@/components/ui/alert-dialog
 
 type Props = {
     bgImage: string;
-    banners: never[];
+    banners: any[];
     currentBanner: string;
     currentBannerSublabel: string;
     currentSheetName: string;
     position: string;
     setPosition: (val: string) => void;
-    date: Date | null;
+    date: Date | undefined;
     setDate: (d: Date | null) => void;
     time: string;
     setTime: (val: string) => void;
     setOpenDatePicker: (val: boolean) => void;
-    appendCharactersToSheet: (...args: never[]) => Promise<void>;
-    selectedCharacters: never[];
+    appendCharactersToSheet: (...args: any[]) => Promise<void>;
+    selectedCharacters: any[];
     setDialogOpen: (val: boolean) => void;
-    datasets: never[];
-    fetchData: (...args: never[]) => void;
+    datasets: any[];
+    fetchData: (...args: any[]) => void;
     openCharacterPicker: (index: number) => void;
     pickerOpenForIndex: number | null;
     setPickerOpenForIndex: (val: number | null) => void;
-    handleCharacterSelect: (val: never) => void;
+    handleCharacterSelect: (val: any) => void;
 };
 
 export default function DialogSheetContent({
@@ -218,6 +218,8 @@ export default function DialogSheetContent({
                             rare: "shadow-lg shadow-yellow-400",
                             superrare: "shadow-xl shadow-purple-500",
                         };
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                        // @ts-expect-error
                         const glowClass = rarityGlow[selectedCharacters[i].rarity];
 
                         return (
@@ -261,6 +263,7 @@ export default function DialogSheetContent({
                                     selected={date}
                                     captionLayout="dropdown"
                                     onSelect={(date) => {
+                                        // @ts-expect-error
                                         setDate(date)
                                         setOpenDatePicker(false)
                                     }}

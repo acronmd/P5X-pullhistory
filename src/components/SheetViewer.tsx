@@ -132,7 +132,7 @@ const SheetStats: React.FC = () => {
     useEffect(() => {
         if (!sharedSpreadsheetId) return; // Ignore initial or empty state
 
-        datasets.forEach((ds, i) => {
+        datasets.forEach((ds: { sheetName: string; }, i: number) => {
             if (ds.sheetName) fetchData(ds.sheetName, i);
         });
     }, [sharedSpreadsheetId, datasets]);
@@ -439,7 +439,7 @@ const SheetStats: React.FC = () => {
                 }
 
                 // 3. Update datasets with sheet names
-                const updatedDatasets = datasets.map((ds, index) => ({
+                const updatedDatasets = datasets.map((ds: any, index: number) => ({
                     ...ds,
                     sheetName: sheetNames[index + 1],  // You could match names more intelligently if needed
                 }));
