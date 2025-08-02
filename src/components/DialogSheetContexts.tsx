@@ -26,6 +26,8 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import {AlertDialogFooter, AlertDialogHeader} from "@/components/ui/alert-dialog.tsx";
+import { Checkbox } from "@/components/ui/checkbox"
+import { Label } from "@/components/ui/label"
 
 type Props = {
     bgImage: string;
@@ -77,6 +79,7 @@ export default function DialogSheetContent({
 
     const [ocrResult, setOcrResult] = useState<pullData[]>([]);
     const [OCRDialogOpen, setOCRDialogOpen] = useState(false);
+    const [isChecked, setIsChecked] = useState(false);
 
     useEffect(() => {
         if (ocrResult.length > 0 && ocrResult.length < 10) {
@@ -104,7 +107,7 @@ export default function DialogSheetContent({
             style={{ backgroundImage: `url(${bgImage})` }}
         >
             <img
-                src="@/assets/texts/history.png"
+                src="./src/assets/texts/history.png"
                 alt="History"
                 className="absolute top-[-40px] left-1/2 -translate-x-33 -translate-y-10 w-[260px]"
                 draggable={false}
@@ -157,49 +160,64 @@ export default function DialogSheetContent({
                                       : 'No text extracted yet.'}
                             </pre>
 
-                            <DialogClose asChild>
-                                <div className={"w-full flex gap-4"}>
-                                    <Button
-                                        variant="outline"
-                                        className="w-32 font-normal"
-                                        disabled={!ocrResult.length}
-                                        onClick={async () => {
-                                            try {
-                                                await appendCharactersToSheetWithOCR(
-                                                    currentBanner,
-                                                    currentSheetName, // tab name
-                                                    ocrResult.reverse(),
-                                                    position,
-                                                    currentBannerSublabel
-                                                );
-                                                datasets.forEach((ds: {
-                                                    sheetName: string;
-                                                }, i: number) => {
-                                                    if (ds.sheetName) fetchData(ds.sheetName, i);
-                                                });
-                                                selectedCharacters.fill({
-                                                    src: "./src/assets/chicons/basic.png",
-                                                    modalsrc: "./src/assets/persicons/basic.png",
-                                                    rarity: "none",
-                                                    name: "Clear",
-                                                    codename: "N/A",
-                                                    affinity: "Support",
-                                                });
-                                                setPosition("N/A");
-                                                setDialogOpen(false);
-                                            } catch {
-                                                setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");
-                                                setAlertDialogBoolean(true)
-                                            }
-                                        }}
-                                    >
-                                        Submit to Sheet
-                                    </Button>
+                            <div className="w-full flex items-center justify-between">
+                                <div className="flex gap-4 items-center">
+                                    <DialogClose asChild>
+                                        <Button
+                                            variant="outline"
+                                            className="w-32 font-normal"
+                                            disabled={!ocrResult.length}
+                                            onClick={async () => {
+                                                try {
+                                                    await appendCharactersToSheetWithOCR(
+                                                        currentBanner,
+                                                        currentSheetName, // tab name
+                                                        ocrResult.reverse(),
+                                                        position,
+                                                        currentBannerSublabel
+                                                    );
+                                                    datasets.forEach((ds: {
+                                                        sheetName: string;
+                                                    }, i: number) => {
+                                                        if (ds.sheetName) fetchData(ds.sheetName, i);
+                                                    });
+                                                    selectedCharacters.fill({
+                                                        src: "./src/assets/chicons/basic.png",
+                                                        modalsrc: "./src/assets/persicons/basic.png",
+                                                        rarity: "none",
+                                                        name: "Clear",
+                                                        codename: "N/A",
+                                                        affinity: "Support",
+                                                    });
+                                                    if( !isChecked ) {
+                                                        setPosition("N/A");
+                                                        setDialogOpen(false);
+                                                    }
+                                                } catch {
+                                                    setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");
+                                                    setAlertDialogBoolean(true)
+                                                }
+                                            }}
+                                        >
+                                            Submit to Sheet
+                                        </Button>
+                                    </DialogClose>
+                                    <div className="flex items-center gap-3">
+                                        <Checkbox
+                                            id="persistent"
+                                            checked={isChecked}
+                                            onCheckedChange={(checked) => setIsChecked(!!checked)}
+                                        />
+                                        <Label htmlFor="persistent">Keep pull window open</Label>
+                                    </div>
+                                </div>
+
+                                <DialogClose asChild>
                                     <Button variant="outline" className="font-normal">
                                         Close
                                     </Button>
-                                </div>
-                            </DialogClose>
+                                </DialogClose>
+                            </div>
                         </DialogContent>
                     </Dialog>
                 </div>
