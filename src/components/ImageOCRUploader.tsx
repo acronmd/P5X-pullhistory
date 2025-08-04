@@ -25,6 +25,8 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Bicom": "Bicorn",
     "Yulimi Fujikawa": "Yukimi Fujikawa",
     "saki Mitama": "Saki Mitama",
+    "Makoto Niijima" : "Makoto Nijima",
+
     "Toshia Sumi": "Toshiya Sumi",
     "Pixy": "Pixie",
     "Nekamata": "Nekomata",

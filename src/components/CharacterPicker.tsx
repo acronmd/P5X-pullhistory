@@ -22,12 +22,13 @@ export const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/yui.png", modalsrc: "./src/assets/chicons/modal/yui.png", rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
   { src: "./src/assets/chicons/minami.png", modalsrc: "./src/assets/chicons/modal/minami.png", rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
   { src: "./src/assets/chicons/yusuke.png", modalsrc: "./src/assets/chicons/modal/yusuke.png", rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
-  { src: "./src/assets/chicons/makoto.png", modalsrc: "./src/assets/chicons/modal/makoto.png", rarity: "superrare", name: "Makoto Nijima", codename: "Fox", affinity: "Ice" },
+  { src: "./src/assets/chicons/makoto.png", modalsrc: "./src/assets/chicons/modal/makoto.png", rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
   { src: "./src/assets/chicons/morgana.png", modalsrc: "./src/assets/chicons/modal/morgana.png", rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
   { src: "./src/assets/chicons/ryuji.png", modalsrc: "./src/assets/chicons/modal/ryuji.png", rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
   { src: "./src/assets/chicons/ann.png", modalsrc: "./src/assets/chicons/modal/ann.png", rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },
   { src: "./src/assets/chicons/haruna.png", modalsrc: "./src/assets/chicons/modal/haruna.png", rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
   { src: "./src/assets/chicons/li.png", modalsrc: "./src/assets/chicons/modal/li.png", rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
+
   { src: "./src/assets/chicons/lufel.png", modalsrc: "./src/assets/chicons/modal/lufel.png", rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
   { src: "./src/assets/chicons/seiji.png", modalsrc: "./src/assets/chicons/modal/seiji.png", rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
   { src: "./src/assets/chicons/kiyoshi.png", modalsrc: "./src/assets/chicons/modal/kiyoshi.png", rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
@@ -40,6 +41,7 @@ export const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/miyu.png", modalsrc: "./src/assets/chicons/modal/miyu.png", rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
   { src: "./src/assets/chicons/kayo.png", modalsrc: "./src/assets/chicons/modal/kayo.png", rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
   { src: "./src/assets/chicons/yukimi.png", modalsrc: "./src/assets/chicons/modal/yukimi.png", rarity: "rare", name: "Yukimi Fujikawa", codename: "Yuki", affinity: "Bless" },
+  { src: "./src/assets/chicons/chizuko.png", modalsrc: "./src/assets/chicons/modal/chizuko.png", rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
 
   /* Cleave */
   { src: "./src/assets/persicons/inugami.png", modalsrc: "./src/assets/persicons/modal/inugami.png", rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },

@@ -27,6 +27,15 @@ import {
     TableCell,
 } from "@/components/ui/table";
 
+import Autoplay from "embla-carousel-autoplay"
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+
 import { Separator } from "@/components/ui/separator"
 
 import {type CharacterData } from '@/components/CharacterPicker';
@@ -81,6 +90,84 @@ import {gapi} from "gapi-script";
 import {createPicker, initGoogleClient, loadPicker, signIn} from "@/utils/google.ts";
 import { appendCharactersToSheet} from "@/utils/google.ts";
 import DialogSheetContent from "./DialogSheetContexts";
+
+type heroBanner = {
+    image: string;
+    label: string;
+    start: number; // e.g. 1691062800 (seconds) or 1691062800000 (ms)
+    end: number;
+};
+
+const allHeroBanners: heroBanner[] = [
+    {
+        image: "./src/assets/heros/yui.png",
+        label: "Virtual Netizen - Yui",
+        start: 1752138000,
+        end: 1754532000,
+    },
+    {
+        image: "./src/assets/heros/yusuke.png",
+        label: "Art of the Fox - Yusuke Kitagawa",
+        start: 1753344000,
+        end: 1755741600,
+    },
+    {
+        image: "./src/assets/heros/makoto.png",
+        label: "Fist of The Phantom Star - Makoto Nijima",
+        start: 1754298000,
+        end: 1756951200,
+    },
+    // ... more banners
+];
+
+const now = Date.now(); // milliseconds
+
+const activeBanners = allHeroBanners.filter(banner => {
+    const start = banner.start < 1e12 ? banner.start * 1000 : banner.start; // Convert to ms if in seconds
+    const end = banner.end < 1e12 ? banner.end * 1000 : banner.end;
+    return now >= start && now <= end;
+});
+
+type Item = {
+    src: string;
+    alt: string;
+    row: number;
+    value: number;
+}
+
+const itemInventory: Item[] = [
+    {
+       src: "./src/assets/jewels.png",
+       alt: "Gems",
+       row: 1,
+       value: 500,
+    },
+    {
+        src: "./src/assets/jewels.png",
+        alt: "Jewels",
+        row: 2,
+        value: 20000,
+    },
+    {
+        src: "./src/assets/limited-ticket.png",
+        alt: "Limited Ticket",
+        row: 3,
+        value: 10,
+    },
+    {
+        src: "./src/assets/low_weapons-ticket.png",
+        alt: "Weapon Ticket",
+        row: 4,
+        value: 8,
+    },
+    {
+        src: "./src/assets/standard-ticket.png",
+        alt: "Standard Ticket",
+        row: 5,
+        value: 100,
+    }
+]
+
 
 type SheetRow = string[];
 
@@ -140,6 +227,7 @@ const SheetStats: React.FC = () => {
     const [isSignedIn, setIsSignedIn] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const [isReversed, setIsReversed] = useState(true);
 
     type Stats = {
         total: number;
@@ -459,6 +547,9 @@ const SheetStats: React.FC = () => {
         });
     };
 
+    const plugin = React.useRef(
+        Autoplay({ delay: 4000, stopOnInteraction: true })
+    )
 
     return (
         <div >
@@ -481,238 +572,321 @@ const SheetStats: React.FC = () => {
                     </Button>
                 </div>
             ) : (
-                <div className={"flex flex-col gap-4"}>
-                    <div className="flex flex-wrap gap-6 justify-center px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto">
-                        {datasets.map((ds: {
-                            id: string;
-                            sheetName: string;
-                            source: string | undefined;
-                            sublabel: string;
-                            label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
-                            pity4: string;
-                            pity5: string;
-                            altText: string;},
-                            i: number) => (
-                            <Card key={i} className="w-full sm:flex-1 sm:min-w-[350px] sm:max-w-[500px] flex flex-col">
-                                <CardHeader>
-                                    <CardTitle>
-                                        <div className="flex items-center justify-between w-full">
-                                            <div className="flex items-center gap-2">
-                                                <img
-                                                    src={ds.source}
-                                                    alt={ds.altText}
-                                                    className="w-8 h-8 object-contain"
-                                                />
-                                                <span className={"text-xl"}>{ds.label}</span>
-                                            </div>
-                                            <div className="flex items-center gap-2">
-                                                {/* Add Pull History Button */}
-                                                <Dialog open={dialogOpen} onOpenChange={(open) => {
-                                                    setDialogOpen(open);
-                                                    if (!open) {
-                                                        setPosition("N/A")
-                                                        selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
-                                                    }
-                                                }}>
-                                                    <DialogTrigger asChild>
-                                                        <Button
-                                                            variant="outline"
-                                                            size="icon"
-                                                            className="p-1"
-                                                            title="Add Row"
-                                                            onClick={() => {
-                                                                setCurrentBanner(ds.sheetName);
-                                                                setCurrentBannerSublabel(ds.sublabel);
-                                                                setCurrentSheetName(ds.sheetName);
-                                                            }}
-                                                        >
+                <div className={"flex flex-col gap-6"}>
+                    <div className={"flex flex-col items-center"}>
+                        <div className={"flex flex-row gap-20 items-center w-screen justify-center px-10"}>
+                            <div className="max-w-[550px]">
+                                <Carousel
+                                    plugins={[plugin.current]}
+                                    onMouseEnter={plugin.current.stop}
+                                    onMouseLeave={plugin.current.reset}
+                                >
+                                    <CarouselContent>
+                                        {activeBanners.map((banner, idx) => (
+                                            <CarouselItem key={idx}>
+                                                <div className="aspect-[6/1.2] w-full relative"> {/* Make container relative */}
+                                                    <Card className="h-full w-full p-0 overflow-hidden">
+                                                        <CardContent className="p-0 h-full w-full relative">
                                                             <img
-                                                                src="./src/assets/add-icon.png"
-                                                                alt="Add Row to Spreadsheet"
-                                                                className="w-5 h-5 object-contain"
+                                                                src={banner.image}
+                                                                alt={`Hero ${idx + 1}`}
+                                                                className="h-full w-full object-cover"
                                                             />
-                                                        </Button>
-                                                    </DialogTrigger>
-
-                                                    {/* This is the dialog content that adds new data / pull history to the spreadsheet */}
-                                                    <div>
-                                                        <DialogSheetContent
-                                                            bgImage={bgImage}
-                                                            banners={banners}
-                                                            currentBanner={sharedSpreadsheetId}
-                                                            currentBannerSublabel={currentBannerSublabel}
-                                                            currentSheetName={currentSheetName}
-                                                            position={position}
-                                                            setPosition={setPosition}
-                                                            date={date}
-                                                            setDate={setDate}
-                                                            time={time}
-                                                            setTime={setTime}
-                                                            setOpenDatePicker={setOpenDatePicker}
-                                                            appendCharactersToSheet={appendCharactersToSheet}
-                                                            selectedCharacters={selectedCharacters}
-                                                            setDialogOpen={setDialogOpen}
-                                                            datasets={datasets}
-                                                            fetchData={fetchData}
-                                                            openCharacterPicker={openCharacterPicker}
-                                                            pickerOpenForIndex={pickerOpenForIndex}
-                                                            setPickerOpenForIndex={setPickerOpenForIndex}
-                                                            handleCharacterSelect={handleCharacterSelect}
-                                                        />
-                                                    </div>
-                                                </Dialog>
-                                            </div>
-                                        </div>
-                                    </CardTitle>
-                                </CardHeader>
-                                <CardContent className="grid gap-4 flex-grow overflow-auto">
-                                    <Tabs defaultValue="totals">
-                                        <TabsList className="w-full grid grid-cols-2">
-                                            <TabsTrigger value="totals">Totals</TabsTrigger>
-                                            <TabsTrigger value="statistics">Statistics</TabsTrigger>
-                                        </TabsList>
-
-                                        <TabsContent value="totals">
-                                            <div className="flex flex-col justify-center gap-2 mt-4">
-                                                <StatCard
-                                                    label={`Lifetime Pulls`}
-                                                    sublabel={
-                                                    <>
-                                                        <img
-                                                            src="./src/assets/jewels.png"
-                                                            alt="Meta Jewels"
-                                                            className="w-4 h-4 object-contain"
-                                                        />
-                                                        <span>{(allStats[i].total * 150).toLocaleString()}</span>
-                                                    </>
-                                                    }
-                                                    value={allStats[i]?.total ?? 0}
-                                                    bg="bg-gray-100"
-                                                    className="w-full min-h-[30px]"  // example width and min height
-                                                />
-                                                <StatCard
-                                                    label={`4-Star Pity`}
-                                                    sublabel={`Guaranteed at ` + ds.pity4}
-                                                    value={allStats[i]?.sinceLast4 ?? -1}
-                                                    bg="bg-yellow-100"
-                                                    className="w-full min-h-[30px]"
-                                                />
-                                                <StatCard
-                                                    label={`5-Star Pity`}
-                                                    sublabel={`Guaranteed at ` + ds.pity5}
-                                                    value={allStats[i]?.sinceLast5 ?? -1}
-                                                    bg="bg-purple-100"
-                                                    className="w-full"
-                                                />
-                                            </div>
-                                        </TabsContent>
-
-                                        <TabsContent value="statistics">
-                                            <div className="mt-4 overflow-x-auto">
-                                                <table className="min-w-full text-sm border border-border text-left">
-                                                    <thead className="bg-muted">
-                                                    <tr>
-                                                        <th className="px-4 py-2 border-b">Rarity</th>
-                                                        <th className="px-4 py-2 border-b">Count</th>
-                                                        <th className="px-4 py-2 border-b">Percent</th>
-                                                        <th className="px-4 py-2 border-b">Pity Avg</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    {Object.entries(allStats[i].rarityCounts).map(([rarity, count]) => (
-                                                        <tr key={rarity}>
-                                                            <td className="px-4 py-2 border-b">{rarity}★</td>
-                                                            <td className="px-4 py-2 border-b">{count}</td>
-                                                            <td className="px-4 py-2 border-b">
-                                                                {allStats[i].rarityPercents[rarity].toFixed(2)}%
-                                                            </td>
-                                                            <td className="px-4 py-2 border-b">
-                                                                {rarity === '5'
-                                                                    ? allStats[i].avgPity5.toFixed(2)
-                                                                    : rarity === '4'
-                                                                        ? allStats[i].avgPity4.toFixed(2)
-                                                                        : '—'}
-                                                            </td>
-                                                        </tr>
-                                                    ))}
-                                                    </tbody>
-                                                </table>
-                                                {allStats[i]?.recent5Stars.length > 0 && (
-                                                    <div className="mt-4 flex flex-wrap gap-2">
-                                                        {allStats[i].recent5Stars.map((pull, idx) => (
-                                                            <div
-                                                                key={idx}
-                                                                className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
-                                                            >
-                                                                {pull.name} at {pull.pity} pity
+                                                            {/* Overlay box */}
+                                                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 text-white text-sm px-2 py-1 flex justify-between">
+                                                                <span className="font-semibold">{banner.label}</span>
+                                                                <span>
+                                                                    Active until{" "}
+                                                                    {new Date(banner.end < 1e12 ? banner.end * 1000 : banner.end).toLocaleString("en-US", {
+                                                                        month: "short",   // "Aug"
+                                                                        day: "numeric",   // "6"
+                                                                        year: "numeric",  // "2025"
+                                                                        hour: "numeric",  // "9"
+                                                                        minute: "2-digit",// "00"
+                                                                        hour12: true      // "PM"
+                                                                    })}
+                                                                </span>
                                                             </div>
-                                                        ))}
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </TabsContent>
-                                    </Tabs>
-                                </CardContent>
-                                <CardFooter className="flex justify-between items-center text-md text-muted-foreground flex-shrink-0 h-14">
-                                    {/* Left side: Pull History */}
-                                    <div>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm">Pull History</Button>
-                                            </DialogTrigger>
-
-                                            <DialogContent className="w-full sm:max-w-[75vw] max-h-[80vh] p-0 m-0 bg-white flex flex-col">
-                                                {/* Sticky Dialog Header */}
-                                                <DialogHeader className="bg-white border-b px-6 py-4">
-                                                    <DialogTitle className="text-center">Pull History - {ds.label}</DialogTitle>
-                                                </DialogHeader>
-
-                                                {/* Scrollable table area */}
-                                                <div className="overflow-y-auto overflow-x-auto flex-grow">
-                                                    <Table className="min-w-full border-collapse">
-                                                        <TableHeader>
-                                                            <TableRow className="sticky top-0 z-20 bg-white border-b border-border">
-                                                                <TableHead className="text-center px-4 py-2">Pull Number</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
-                                                            </TableRow>
-                                                        </TableHeader>
-                                                        <TableBody>
-                                                            {allPulls[i]?.map((row, index) => (
-                                                                <TableRow
-                                                                    key={index}
-                                                                    className={`cursor-default ${rowClassForRarity(row[0]?.trim() || '')}`}
-                                                                    style={{
-                                                                        boxShadow: `0 0 0 2px ${rarityBorderColor(row[0]?.trim() || '')}`
-                                                                    }}
-                                                                    tabIndex={-1}
-                                                                >
-                                                                    <TableCell className="text-center px-4 py-2">{index + 1}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
-                                                                </TableRow>
-                                                            ))}
-                                                        </TableBody>
-                                                    </Table>
-
+                                                        </CardContent>
+                                                    </Card>
                                                 </div>
-                                            </DialogContent>
-                                        </Dialog>
+                                            </CarouselItem>
+                                        ))}
+
+                                    </CarouselContent>
+                                    <CarouselPrevious />
+                                    <CarouselNext />
+                                </Carousel>
+                            </div>
+                            <div className={"flex gap-10"}>
+                                {itemInventory.map((item) => (
+                                    <div className={"relative"}>
+                                        {/* Capsule Box */}
+                                        <div className="bg-foreground rounded-full px-10 py-1.5 shadow-md text-center text-white font-semibold relative z-10 min-w-[7rem]">
+                                            {Number(item.value).toLocaleString()}
+                                        </div>
+
+                                        {/* Left Icon */}
+                                        <div className="absolute left-[-1rem] top-1/2 -translate-y-6 z-20">
+                                            <img
+                                                src={item.src}
+                                                alt={item.alt}
+                                                className="w-12 h-12 object-contain"
+                                            />
+                                        </div>
+
+                                        {/* Right Button */}
+                                        <Button
+                                            className="absolute right-[-1rem] top-5 -translate-y-5 -translate-x-3 bg-foreground hover:bg-gray-700 text-white rounded-full w-9 h-9 flex items-center justify-center z-20 shadow"
+                                        >
+                                            +
+                                        </Button>
                                     </div>
-                                    <div>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm">Pity Planner</Button>
-                                            </DialogTrigger>
-                                        </Dialog>
-                                    </div>
-                                </CardFooter>
-                            </Card>
-                        ))}
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex flex-wrap gap-6 justify-center px-4 sm:px-6 lg:px-8 max-w-screen-2xl mx-auto">
+                            {datasets.map((ds: {
+                                id: string;
+                                sheetName: string;
+                                source: string | undefined;
+                                sublabel: string;
+                                label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
+                                pity4: string;
+                                pity5: string;
+                                altText: string;},
+                                i: number) => (
+                                <Card key={i} className="w-full sm:flex-1 sm:min-w-[350px] sm:max-w-[500px] flex flex-col">
+                                    <CardHeader>
+                                        <CardTitle>
+                                            <div className="flex items-center justify-between w-full">
+                                                <div className="flex items-center gap-2">
+                                                    <img
+                                                        src={ds.source}
+                                                        alt={ds.altText}
+                                                        className="w-8 h-8 object-contain"
+                                                    />
+                                                    <span className={"text-xl"}>{ds.label}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    {/* Add Pull History Button */}
+                                                    <Dialog open={dialogOpen} onOpenChange={(open) => {
+                                                        setDialogOpen(open);
+                                                        if (!open) {
+                                                            setPosition("N/A")
+                                                            selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
+                                                        }
+                                                    }}>
+                                                        <DialogTrigger asChild>
+                                                            <Button
+                                                                variant="outline"
+                                                                size="icon"
+                                                                className="p-1"
+                                                                title="Add Row"
+                                                                onClick={() => {
+                                                                    setCurrentBanner(ds.sheetName);
+                                                                    setCurrentBannerSublabel(ds.sublabel);
+                                                                    setCurrentSheetName(ds.sheetName);
+                                                                }}
+                                                            >
+                                                                <img
+                                                                    src="./src/assets/add-icon.png"
+                                                                    alt="Add Row to Spreadsheet"
+                                                                    className="w-5 h-5 object-contain"
+                                                                />
+                                                            </Button>
+                                                        </DialogTrigger>
+
+                                                        {/* This is the dialog content that adds new data / pull history to the spreadsheet */}
+                                                        <div>
+                                                            <DialogSheetContent
+                                                                bgImage={bgImage}
+                                                                banners={banners}
+                                                                currentBanner={sharedSpreadsheetId}
+                                                                currentBannerSublabel={currentBannerSublabel}
+                                                                currentSheetName={currentSheetName}
+                                                                position={position}
+                                                                setPosition={setPosition}
+                                                                date={date}
+                                                                setDate={setDate}
+                                                                time={time}
+                                                                setTime={setTime}
+                                                                setOpenDatePicker={setOpenDatePicker}
+                                                                appendCharactersToSheet={appendCharactersToSheet}
+                                                                selectedCharacters={selectedCharacters}
+                                                                setDialogOpen={setDialogOpen}
+                                                                datasets={datasets}
+                                                                fetchData={fetchData}
+                                                                openCharacterPicker={openCharacterPicker}
+                                                                pickerOpenForIndex={pickerOpenForIndex}
+                                                                setPickerOpenForIndex={setPickerOpenForIndex}
+                                                                handleCharacterSelect={handleCharacterSelect}
+                                                            />
+                                                        </div>
+                                                    </Dialog>
+                                                </div>
+                                            </div>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="grid gap-4 flex-grow overflow-auto">
+                                        <Tabs defaultValue="totals">
+                                            <TabsList className="w-full grid grid-cols-2">
+                                                <TabsTrigger value="totals">Totals</TabsTrigger>
+                                                <TabsTrigger value="statistics">Statistics</TabsTrigger>
+                                            </TabsList>
+
+                                            <TabsContent value="totals">
+                                                <div className="flex flex-col justify-center gap-2 mt-4">
+                                                    <StatCard
+                                                        label={`Lifetime Pulls`}
+                                                        sublabel={
+                                                        <>
+                                                            <img
+                                                                src="./src/assets/jewels.png"
+                                                                alt="Meta Jewels"
+                                                                className="w-4 h-4 object-contain"
+                                                            />
+                                                            <span>{(allStats[i].total * 150).toLocaleString()}</span>
+                                                        </>
+                                                        }
+                                                        value={allStats[i]?.total ?? 0}
+                                                        bg="bg-gray-100"
+                                                        className="w-full min-h-[30px]"  // example width and min height
+                                                    />
+                                                    <StatCard
+                                                        label={`4-Star Pity`}
+                                                        sublabel={`Guaranteed at ` + ds.pity4}
+                                                        value={allStats[i]?.sinceLast4 ?? -1}
+                                                        bg="bg-yellow-100"
+                                                        className="w-full min-h-[30px]"
+                                                    />
+                                                    <StatCard
+                                                        label={`5-Star Pity`}
+                                                        sublabel={`Guaranteed at ` + ds.pity5}
+                                                        value={allStats[i]?.sinceLast5 ?? -1}
+                                                        bg="bg-purple-100"
+                                                        className="w-full"
+                                                    />
+                                                </div>
+                                            </TabsContent>
+
+                                            <TabsContent value="statistics">
+                                                <div className="mt-4 overflow-x-auto">
+                                                    <table className="min-w-full text-sm border border-border text-left">
+                                                        <thead className="bg-muted">
+                                                        <tr>
+                                                            <th className="px-4 py-2 border-b">Rarity</th>
+                                                            <th className="px-4 py-2 border-b">Count</th>
+                                                            <th className="px-4 py-2 border-b">Percent</th>
+                                                            <th className="px-4 py-2 border-b">Pity Avg</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        {Object.entries(allStats[i].rarityCounts).map(([rarity, count]) => (
+                                                            <tr key={rarity}>
+                                                                <td className="px-4 py-2 border-b">{rarity}★</td>
+                                                                <td className="px-4 py-2 border-b">{count}</td>
+                                                                <td className="px-4 py-2 border-b">
+                                                                    {allStats[i].rarityPercents[rarity].toFixed(2)}%
+                                                                </td>
+                                                                <td className="px-4 py-2 border-b">
+                                                                    {rarity === '5'
+                                                                        ? allStats[i].avgPity5.toFixed(2)
+                                                                        : rarity === '4'
+                                                                            ? allStats[i].avgPity4.toFixed(2)
+                                                                            : '—'}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                        </tbody>
+                                                    </table>
+                                                    {allStats[i]?.recent5Stars.length > 0 && (
+                                                        <div className="mt-4 flex flex-wrap gap-2">
+                                                            {allStats[i].recent5Stars.map((pull, idx) => (
+                                                                <div
+                                                                    key={idx}
+                                                                    className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
+                                                                >
+                                                                    {pull.name} at {pull.pity} pity
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </TabsContent>
+                                        </Tabs>
+                                    </CardContent>
+                                    <CardFooter className="flex justify-between items-center text-md text-muted-foreground flex-shrink-0 h-14">
+                                        {/* Left side: Pull History */}
+                                        <div>
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button variant="outline" size="sm">Pull History</Button>
+                                                </DialogTrigger>
+
+                                                <DialogContent className="w-full sm:max-w-[75vw] max-h-[80vh] p-0 m-0 bg-white flex flex-col">
+                                                    {/* Sticky Dialog Header */}
+                                                    <DialogHeader className="bg-white border-b px-6 py-4">
+                                                        <div className={"flex items-center gap-4"}>
+                                                            <DialogTitle className="text-center">Pull History - {ds.label}</DialogTitle>
+                                                            <Button
+                                                                variant="outline"
+                                                                onClick={() => setIsReversed(prev => !prev)}
+                                                            >
+                                                                Switch to {isReversed ? "Oldest First" : "Newest First"}
+                                                            </Button>
+                                                        </div>
+                                                    </DialogHeader>
+
+                                                    {/* Scrollable table area */}
+                                                    <div className="overflow-y-auto overflow-x-auto flex-grow">
+                                                        <Table className="min-w-full border-collapse">
+                                                            <TableHeader>
+                                                                <TableRow className="sticky top-0 z-20 bg-white border-b border-border">
+                                                                    <TableHead className="text-center px-4 py-2">Pull Number</TableHead>
+                                                                    <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
+                                                                    <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
+                                                                    <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
+                                                                    <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
+                                                                </TableRow>
+                                                            </TableHeader>
+                                                            <TableBody>
+                                                                {(isReversed ? [...allPulls[i]].reverse() : allPulls[i])?.map((row, index) => (
+                                                                    <TableRow
+                                                                        key={index}
+                                                                        className={`cursor-default ${rowClassForRarity(row[0]?.trim() || '')}`}
+                                                                        style={{
+                                                                            boxShadow: `0 0 0 2px ${rarityBorderColor(row[0]?.trim() || '')}`
+                                                                        }}
+                                                                        tabIndex={-1}
+                                                                    >
+                                                                        <TableCell className="text-center px-4 py-2">{isReversed ? allPulls[i].length - index : index + 1}</TableCell>
+                                                                        <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
+                                                                        <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
+                                                                        <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
+                                                                        <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
+                                                                    </TableRow>
+                                                                ))}
+                                                            </TableBody>
+                                                        </Table>
+
+                                                    </div>
+                                                </DialogContent>
+                                            </Dialog>
+                                        </div>
+                                        <div>
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                    <Button variant="outline" size="sm">Pity Planner</Button>
+                                                </DialogTrigger>
+                                            </Dialog>
+                                        </div>
+                                    </CardFooter>
+                                </Card>
+                            ))}
+                        </div>
                     </div>
                     <div>
                         {/* Set Spreadsheet Button */}
@@ -732,8 +906,8 @@ const SheetStats: React.FC = () => {
                         </Button>
                     </div>
                 </div>
-            )}
-        </div>
+                )}
+            </div>
     );
 
 };
