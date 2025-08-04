@@ -174,7 +174,7 @@ type SheetRow = string[];
 const SheetStats: React.FC = () => {
     const defaultDatasets = [
         { id: "", sheetName: "Limited Banner", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: "@/assets/low_limited-ticket.png", altText: "Limited Banner Icon" },
-        { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deal", pity4: 10, pity5: 70, source: "@/assets/low_weapons-ticket.png", altText: "Weapon Banner Icon" },
+        { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deals", pity4: 10, pity5: 70, source: "@/assets/low_weapons-ticket.png", altText: "Weapon Banner Icon" },
         { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: "@/assets/low_standard-ticket.png", altText: "Standard Banner Icon" },
     ];
 
@@ -182,7 +182,7 @@ const SheetStats: React.FC = () => {
         { value: "The Phantom Thieves of Hearts", label: "The Phantom Thieves of Hearts (Beginner Banner)", sublabel: "Phantom Idol" },
         { value: "Phantom Idol Draft X", label: "Phantom Idol Draft X (Standard Banner)", sublabel: "Phantom Idol" },
 
-        { value: "Silent Pistol", label: "Silent Pistol", sublabel: "Arms Deal" },
+        { value: "Silent Pistol", label: "Silent Pistol", sublabel: "Arms Deals" },
 
         { value: "The Phantom Magician", label: "The Phantom Magician (Joker)", sublabel: "Most Wanted Ph. Idol" },
         { value: "Angel's Diagnosis", label: "Angel's Diagnosis (Marian)", sublabel: "Most Wanted Ph. Idol" },
@@ -375,9 +375,6 @@ const SheetStats: React.FC = () => {
         });
 
     }
-
-    //Pull banner info variable
-    const [position, setPosition] = React.useState("N/A")
 
     //Pull date info variable(s)
     const [openDatePicker, setOpenDatePicker] = React.useState(false)
@@ -675,7 +672,6 @@ const SheetStats: React.FC = () => {
                                                     <Dialog open={dialogOpen} onOpenChange={(open) => {
                                                         setDialogOpen(open);
                                                         if (!open) {
-                                                            setPosition("N/A")
                                                             selectedCharacters.fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
                                                         }
                                                     }}>
@@ -707,8 +703,6 @@ const SheetStats: React.FC = () => {
                                                                 currentBanner={sharedSpreadsheetId}
                                                                 currentBannerSublabel={currentBannerSublabel}
                                                                 currentSheetName={currentSheetName}
-                                                                position={position}
-                                                                setPosition={setPosition}
                                                                 date={date}
                                                                 setDate={setDate}
                                                                 time={time}

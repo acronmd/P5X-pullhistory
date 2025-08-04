@@ -2,6 +2,7 @@
 declare const google: any;
 
 import { availableCharacters } from "@/components/CharacterPicker"
+import { availableWeapons} from "@/components/CharacterPicker";
 import type { pullData } from "@/components/ImageOCRUploader"
 
 let accessToken: string | null = null;
@@ -119,12 +120,13 @@ export const signOut = () => {
 
 interface Character {
     name: string;
-    rarity: "none" | "common" | "rare" | "superrare";
+    rarity: "none" | "common" | "standard" | "rare" | "superrare";
 }
 
 const rarityMap: Record<Character["rarity"], number> = {
     none: 0,
     common: 2,
+    standard: 3,
     rare: 4,
     superrare: 5,
 };
@@ -134,7 +136,6 @@ export async function appendCharactersToSheet(
     sheetName: string,
     characters: (Character | null)[],
     bannerSublabel: string,
-    position: string,
     date: Date,
     time: string
 ): Promise<void> {
@@ -151,7 +152,6 @@ export async function appendCharactersToSheet(
         char.name,
         bannerSublabel,
         date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0") + " " + time,
-        position,
     ]);
 
     if (rows.length === 0) return;
@@ -173,7 +173,6 @@ export async function appendCharactersToSheetWithOCR(
     spreadsheetId: string | null,
     sheetName: string,
     ocrResultArray: pullData[],
-    position: string,
     bannerSublabel: string,
 ): Promise<void> {
     const token = getAccessToken();
@@ -182,6 +181,13 @@ export async function appendCharactersToSheetWithOCR(
     const rows = ocrResultArray.map((line) => {
         let rarity = 0;
 
+
+        if (bannerSublabel === "Arms Deals" || bannerSublabel === "Arms Deal") {
+            const matchedWeapon = availableWeapons.find((char) => char.name === line.name);
+            if (matchedWeapon) {
+                rarity = rarityMap[matchedWeapon.rarity];
+            }
+        }
         const matchedCharacter = availableCharacters.find((char) => char.name === line.name);
         if (matchedCharacter) {
             rarity = rarityMap[matchedCharacter.rarity];
@@ -192,7 +198,6 @@ export async function appendCharactersToSheetWithOCR(
             line.name,
             bannerSublabel,
             line.timestampFull,
-            position,
         ];
     });
 

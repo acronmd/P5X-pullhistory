@@ -35,8 +35,6 @@ type Props = {
     currentBanner: string;
     currentBannerSublabel: string;
     currentSheetName: string;
-    position: string;
-    setPosition: (val: string) => void;
     date: Date | undefined;
     setDate: (d: Date | null) => void;
     time: string;
@@ -59,8 +57,6 @@ export default function DialogSheetContent({
                                                currentBanner,
                                                currentBannerSublabel,
                                                currentSheetName,
-                                               position,
-                                               setPosition,
                                                date,
                                                setDate,
                                                time,
@@ -114,43 +110,20 @@ export default function DialogSheetContent({
             />
             <div>
                 <div className={"flex items-center gap-4 mb-6"}>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="min-w-[100px]">Current Banner: {position}</Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                            <DropdownMenuLabel>Banner Selection</DropdownMenuLabel>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuRadioGroup value={position} onValueChange={setPosition}>
-                                {banners
-                                    .filter(b => {
-                                        if (currentBannerSublabel === "Most Wanted Ph. Idol") return b.sublabel === "Most Wanted Ph. Idol";
-                                        if (currentBannerSublabel === "Arms Deal") return b.sublabel === "Arms Deal";
-                                        if (currentBannerSublabel === "Phantom Idol") return b.sublabel === "Phantom Idol";
-                                        return false; // fallback for unknown category
-                                    })
-                                    .map(banner => (
-                                        <DropdownMenuRadioItem key={banner.value} value={banner.value}>
-                                            {banner.label}
-                                        </DropdownMenuRadioItem>
-                                    ))}
-                            </DropdownMenuRadioGroup>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
                     <Dialog open={OCRDialogOpen} onOpenChange={setOCRDialogOpen}>
                         <DialogTrigger asChild>
                             <ImageOCRUploader
                                 onTextExtracted={handleTextExtracted}
-                                position={position}
                                 setAlertDialogBoolean={setAlertDialogBoolean}
                                 setAlertDialogError={setAlertDialogError}
+                                currentBannerSublabel={currentBannerSublabel}
                             />
                         </DialogTrigger>
 
                         <DialogContent className="w-full max-w-2xl sm:max-w-xl">
                             <DialogHeader>
                                 <DialogTitle>
-                                    Extracted Pull Info - {position} ({ocrResult.length} Pulls)
+                                    Extracted Pull Info - {currentBannerSublabel} ({ocrResult.length} Pulls)
                                 </DialogTitle>
                             </DialogHeader>
 
@@ -173,7 +146,6 @@ export default function DialogSheetContent({
                                                         currentBanner,
                                                         currentSheetName, // tab name
                                                         ocrResult.reverse(),
-                                                        position,
                                                         currentBannerSublabel
                                                     );
                                                     datasets.forEach((ds: {
@@ -190,7 +162,6 @@ export default function DialogSheetContent({
                                                         affinity: "Support",
                                                     });
                                                     if( !isChecked ) {
-                                                        setPosition("N/A");
                                                         setDialogOpen(false);
                                                     }
                                                 } catch {
@@ -304,8 +275,8 @@ export default function DialogSheetContent({
                         variant="outline"
                         className="w-32 font-normal"
                         onClick={async () => {
-                            if(position === "N/A"){
-                                setAlertDialogError("Please select a character banner before submitting data!");
+                            if (date == null) {
+                                setAlertDialogError("Please select a date before submitting manual data.");
                                 setAlertDialogBoolean(true)
                             }
                             else {
@@ -315,7 +286,6 @@ export default function DialogSheetContent({
                                         currentSheetName, // tab name
                                         selectedCharacters,
                                         currentBannerSublabel,
-                                        position,
                                         date,
                                         time
                                     );
@@ -332,7 +302,6 @@ export default function DialogSheetContent({
                                         codename: "N/A",
                                         affinity: "Support",
                                     });
-                                    setPosition("N/A");
                                     setDialogOpen(false);
                                 } catch {
                                     setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");

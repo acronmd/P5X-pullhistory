@@ -16,6 +16,14 @@ export type CharacterData = {
   affinity: "Cleave" | "Fire" | "Ice" | "Elec" | "Wind" | "Psi" | "Nuclear" | "Bless" | "Curse" | "Support";
 };
 
+export type WeaponData = {
+  src: string;
+  modalsrc: string;
+  rarity: "none" | "standard" | "rare" | "superrare";
+  name: string;
+  assChara: string;
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/ren.png", modalsrc: "./src/assets/chicons/modal/ren.png", rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
@@ -26,21 +34,21 @@ export const availableCharacters: CharacterData[] = [
   { src: "./src/assets/chicons/morgana.png", modalsrc: "./src/assets/chicons/modal/morgana.png", rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
   { src: "./src/assets/chicons/ryuji.png", modalsrc: "./src/assets/chicons/modal/ryuji.png", rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
   { src: "./src/assets/chicons/ann.png", modalsrc: "./src/assets/chicons/modal/ann.png", rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },
-  { src: "./src/assets/chicons/haruna.png", modalsrc: "./src/assets/chicons/modal/haruna.png", rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
   { src: "./src/assets/chicons/li.png", modalsrc: "./src/assets/chicons/modal/li.png", rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
+  { src: "./src/assets/chicons/haruna.png", modalsrc: "./src/assets/chicons/modal/haruna.png", rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
 
   { src: "./src/assets/chicons/lufel.png", modalsrc: "./src/assets/chicons/modal/lufel.png", rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
-  { src: "./src/assets/chicons/seiji.png", modalsrc: "./src/assets/chicons/modal/seiji.png", rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
-  { src: "./src/assets/chicons/kiyoshi.png", modalsrc: "./src/assets/chicons/modal/kiyoshi.png", rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
-  { src: "./src/assets/chicons/Tomoko.png", modalsrc: "./src/assets/chicons/modal/tomoko.png", rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
-  { src: "./src/assets/chicons/toshiya.png", modalsrc: "./src/assets/chicons/modal/toshiya.png", rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
-  { src: "./src/assets/chicons/shun.png", modalsrc: "./src/assets/chicons/modal/shun.png", rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
-  { src: "./src/assets/chicons/kotone.png", modalsrc: "./src/assets/chicons/modal/kotone.png", rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
-  { src: "./src/assets/chicons/leo.png", modalsrc: "./src/assets/chicons/modal/leo.png", rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
   { src: "./src/assets/chicons/motoha.png", modalsrc: "./src/assets/chicons/modal/motoha.png", rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
-  { src: "./src/assets/chicons/miyu.png", modalsrc: "./src/assets/chicons/modal/miyu.png", rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
+  { src: "./src/assets/chicons/shun.png", modalsrc: "./src/assets/chicons/modal/shun.png", rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
+  { src: "./src/assets/chicons/leo.png", modalsrc: "./src/assets/chicons/modal/leo.png", rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
   { src: "./src/assets/chicons/kayo.png", modalsrc: "./src/assets/chicons/modal/kayo.png", rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
+  { src: "./src/assets/chicons/Tomoko.png", modalsrc: "./src/assets/chicons/modal/tomoko.png", rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
+  { src: "./src/assets/chicons/kiyoshi.png", modalsrc: "./src/assets/chicons/modal/kiyoshi.png", rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
   { src: "./src/assets/chicons/yukimi.png", modalsrc: "./src/assets/chicons/modal/yukimi.png", rarity: "rare", name: "Yukimi Fujikawa", codename: "Yuki", affinity: "Bless" },
+  { src: "./src/assets/chicons/seiji.png", modalsrc: "./src/assets/chicons/modal/seiji.png", rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
+  { src: "./src/assets/chicons/toshiya.png", modalsrc: "./src/assets/chicons/modal/toshiya.png", rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
+  { src: "./src/assets/chicons/kotone.png", modalsrc: "./src/assets/chicons/modal/kotone.png", rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
+  { src: "./src/assets/chicons/miyu.png", modalsrc: "./src/assets/chicons/modal/miyu.png", rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
   { src: "./src/assets/chicons/chizuko.png", modalsrc: "./src/assets/chicons/modal/chizuko.png", rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
 
   /* Cleave */
@@ -91,6 +99,87 @@ export const availableCharacters: CharacterData[] = [
   // Add more characters here as needed
   { src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/modal/basic.png", rarity: "none", name: "Clear", codename: "N/A", affinity: "Support" },
 ];
+
+export const availableWeapons: WeaponData[] = [
+  /* 5-Star Weapons */
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Phoenix Dagger", assChara: "Ren Amamiya" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Cyber Jammers", assChara: "Yui" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Angel Heart", assChara: "Minami Miyashita" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
+
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Rosethorn", assChara: "Ann Takamaki" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Infinite Moment", assChara: "Yaoling Li" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Sweet Pickaxe", assChara: "Haruna Nishimori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Fallen Angel Wing", assChara: "Lufel" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Quasar", assChara: "Motoha Arai" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Permafrost", assChara: "Shun Kano" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Final Buster", assChara: "Leo Kamiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Retro Disco Style", assChara: "Kayo Tomiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Dream and Nightmare", assChara: "Tomoko Noge" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Baptism by Fire", assChara: "Kiyoshi Kurotani" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Karmic Cycle", assChara: "Yukimi Fujikawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Venus Sunrise", assChara: "Seiji Shiratori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Babel's Verdict", assChara: "Toshiya Sumi" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Queen of Winter", assChara: "Kotone Montagne" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Ephemerality", assChara: "Miyu Sahara" },
+  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Jolting Pulse", assChara: "Chizuko Nagao" },
+
+  /* 4-Star Weapons */
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Machete", assChara: "Ren Amamiya" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Meta Directors", assChara: "Yui" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Hymn of Life", assChara: "Minami Miyashita" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Jagato", assChara: "Yusuke Kitagawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Omega Knuckle", assChara: "Makoto Nijima" },
+
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Shamshir", assChara: "Morgana" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Grand Presser", assChara: "Ryuji Sakamoto" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Masquerade Ribbon", assChara: "Ann Takamaki" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Sunstaff", assChara: "Yaoling Li" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Chirpy Pickaxe", assChara: "Haruna Nishimori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Lava Flame", assChara: "Lufel" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Crime and Punishment", assChara: "Motoha Arai" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Demon's Bite", assChara: "Shun Kano" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Justice Lance", assChara: "Leo Kamiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Emerald Charmer", assChara: "Kayo Tomiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Shadow Crowns", assChara: "Tomoko Noge" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Death Stinger", assChara: "Kiyoshi Kurotani" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Heavy Metal Pain", assChara: "Yukimi Fujikawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Knight's Reward", assChara: "Seiji Shiratori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Scarlet Scepter", assChara: "Toshiya Sumi" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Edelweiss", assChara: "Kotone Montagne" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Submarine Sonar", assChara: "Miyu Sahara" },
+  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Gravitational Force", assChara: "Chizuko Nagao" },
+
+  /* 3-Star Weapons */
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Athame", assChara: "Ren Amamiya" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Electric Chakrams", assChara: "Yui" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Portable Trauma Unit", assChara: "Minami Miyashita" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Flash Punch", assChara: "Makoto Nijima" },
+
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "God Saber", assChara: "Morgana" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Gang Star", assChara: "Ryuji Sakamoto" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Spike Whip", assChara: "Ann Takamaki" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Willowstaff", assChara: "Yaoling Li" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Shrill Pickaxe", assChara: "Haruna Nishimori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Break Tonfa", assChara: "Lufel" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Lightning Hammer", assChara: "Motoha Arai" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Steel Tomahawk", assChara: "Shun Kano" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Punish Lance", assChara: "Leo Kamiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Sweety SG", assChara: "Kayo Tomiyama" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Sharp Twinblades", assChara: "Tomoko Noge" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Holy Nail", assChara: "Kiyoshi Kurotani" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Slashing Flail", assChara: "Yukimi Fujikawa" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Elegant Rapier", assChara: "Seiji Shiratori" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Noble Rod", assChara: "Toshiya Sumi" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Royal Saber", assChara: "Kotone Montagne" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "C.A. Explorer", assChara: "Miyu Sahara" },
+  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" }
+
+]
 
 interface CharacterPickerProps {
   isOpen: boolean;

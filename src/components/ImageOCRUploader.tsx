@@ -4,6 +4,7 @@ import Tesseract from 'tesseract.js';
 import { Button } from "@/components/ui/button";
 
 import { availableCharacters } from "@/components/CharacterPicker";
+import { availableWeapons } from "@/components/CharacterPicker"
 import {
     ContextMenu,
     ContextMenuContent,
@@ -12,6 +13,7 @@ import {
 } from "@/components/ui/context-menu"
 
 const CHARACTER_NAMES = availableCharacters.map(c => c.name);
+const WEAPON_NAMES = availableWeapons.map(c => c.name);
 
 const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Agathlon": "Agathion",
@@ -26,11 +28,12 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Yulimi Fujikawa": "Yukimi Fujikawa",
     "saki Mitama": "Saki Mitama",
     "Makoto Niijima" : "Makoto Nijima",
-
-    "Toshia Sumi": "Toshiya Sumi",
-    "Pixy": "Pixie",
-    "Nekamata": "Nekomata",
-    // Add more corrections here
+    "Sweety 5G": "Sweety SG",
+    "shrill" : "Shrill",
+    "Rosethomn" : "Rosethorn",
+    "CA. Explorer" : "C.A. Explorer",
+    "C.A Explorer" : "C.A. Explorer",
+    "CA Explorer" : "C.A. Explorer",
 };
 
 export type pullData = {
@@ -41,9 +44,9 @@ export type pullData = {
 
 type Props = {
     onTextExtracted: (data: pullData[]) => void;
-    position: string;
     setAlertDialogBoolean: (value: boolean) => void
     setAlertDialogError: (error: string) => void
+    currentBannerSublabel: string;
 };
 
 
@@ -58,22 +61,30 @@ function correctMistakenNames(line: string): string {
     return correctedLine;
 }
 
-function parseOcrPulls(rawText: string) {
+function parseOcrPulls(rawText: string, sublabel: string) {
     const lines = rawText.split('\n');
     const pulls = [];
 
     for (const line of lines) {
         const cleaned = correctMistakenNames(line.trim());
 
+        let itemName: string | undefined;
         // Step 1: Find the character name
-        const charName = CHARACTER_NAMES.find(name => cleaned.includes(name));
-        if (!charName) {
+        /* Weapon */
+        if (sublabel == "Arms Deals" || sublabel == "Arms Deal"){
+            itemName = WEAPON_NAMES.find(name => cleaned.includes(name));
+        }
+        /* Limited and Standard */
+        else{
+            itemName = CHARACTER_NAMES.find(name => cleaned.includes(name));
+        }
+        if (itemName == undefined) {
             console.log("Tesseract unknown names: " + line);
             continue;
         }
 
         // Step 2: Slice everything after the character name
-        const afterName = cleaned.slice(cleaned.indexOf(charName) + charName.length).trim();
+        const afterName = cleaned.slice(cleaned.indexOf(itemName) + itemName.length).trim();
 
         // Step 3: Extract timestamp (match format like 00:00:00 or similar)
         const timestampMatch = cleaned.match(/\d{2}:\d{2}:\d{2}/);
@@ -88,8 +99,13 @@ function parseOcrPulls(rawText: string) {
             timestampFull = afterName.slice((timestampIndex - 11), timestampIndex + 8);
         }
 
+        if (timestampFull.length == 0) {
+            console.log(itemName + " was recognized but could not find a timestamp");
+            continue;
+        }
+
         pulls.push({
-            name: charName,
+            name: itemName,
             contractType,
             timestampFull,
         });
@@ -98,17 +114,21 @@ function parseOcrPulls(rawText: string) {
     return pulls;
 }
 
-const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, position, setAlertDialogBoolean, setAlertDialogError }) => {
+const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBoolean, setAlertDialogError, currentBannerSublabel }) => {
+
+    async function tesseractParsing(file: File) {
+        const {data} = await Tesseract.recognize(file, 'eng');
+        ///This is where I can parse data before sending it back
+        const parsedData = parseOcrPulls(data.text, currentBannerSublabel);
+
+        onTextExtracted(parsedData); // send formatted string
+    }
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
-        const { data } = await Tesseract.recognize(file, 'eng');
-        ///This is where I can parse data before sending it back
-        const parsedData = parseOcrPulls(data.text);
-
-        onTextExtracted(parsedData); // send formatted string
+        await tesseractParsing(file);
     };
 
     const handleClipboardImage = async () => {
@@ -120,10 +140,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, position, setAlert
                     const blob = await item.getType(type);
                     const file = new File([blob], "clipboard-image.png", { type: blob.type });
 
-                    // Send to Tesseract and continue processing
-                    const { data } = await Tesseract.recognize(file, 'eng');
-                    const parsedData = parseOcrPulls(data.text);
-                    onTextExtracted(parsedData);
+                    await tesseractParsing(file);
                     return;
                 }
             }
@@ -143,13 +160,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, position, setAlert
                 <ContextMenuTrigger asChild>
                     <Button
                         onClick={() => {
-                            if( position == "N/A" ) {
-                                setAlertDialogError("Please select a character banner before uploading an image!")
-                                setAlertDialogBoolean(true);
-                            }
-                            else {
-                                document.getElementById('ocr-file-input')?.click()}
-                        }
+                            document.getElementById('ocr-file-input')?.click()}
                         }
                         variant="outline"
                         className="w-32 font-normal"
@@ -166,12 +177,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, position, setAlert
                 </ContextMenuTrigger>
                 <ContextMenuContent>
                     <ContextMenuItem onClick={() => {
-                        if (position == "N/A") {
-                            setAlertDialogError("Please select a character banner before uploading an image!")
-                            setAlertDialogBoolean(true);
-                        } else {
-                            handleClipboardImage()
-                        }
+                        handleClipboardImage()
                     }
                     }>
                         Select Image from Clipboard
