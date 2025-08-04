@@ -183,6 +183,7 @@ export async function appendCharactersToSheetWithOCR(
 
 
         if (bannerSublabel === "Arms Deals" || bannerSublabel === "Arms Deal") {
+            bannerSublabel = "Arms Deals";
             const matchedWeapon = availableWeapons.find((char) => char.name === line.name);
             if (matchedWeapon) {
                 rarity = rarityMap[matchedWeapon.rarity];
