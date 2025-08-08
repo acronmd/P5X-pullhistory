@@ -1,13 +1,17 @@
 // src/App.tsx
 import './App.css'
-import SheetViewer from './components/SheetViewer';
+import { Routes, Route, Navigate } from 'react-router-dom'
+import SheetStats from '@/routes/Viewer'
+import Home from '@/routes/Home'
+import LimitedBanner from '@/routes/Limited'
 
-function App() {
+export default function App() {
     return (
-        <div>
-            <SheetViewer />
-        </div>
-    );
+        <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/viewer" element={<SheetStats />} />
+            <Route path="/limited" element={<LimitedBanner />} />
+            <Route path="*" element={<Navigate to="/home" />} />
+        </Routes>
+    )
 }
-
-export default App;
