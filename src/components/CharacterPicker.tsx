@@ -41,7 +41,7 @@ function makePersonaIcon(ch: string, modalFolder = "persicons") {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
-  { ...makeIcon("ren"), rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
+  { src: new URL(`../assets/chicons/ren.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/ren.png`, import.meta.url).href, rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
   { ...makeIcon("yui"), rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
   { ...makeIcon("minami"), rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
   { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
