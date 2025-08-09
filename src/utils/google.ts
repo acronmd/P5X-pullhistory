@@ -94,10 +94,11 @@ export const createPicker = (
 ) => {
     const view = new google.picker.View(google.picker.ViewId.SPREADSHEETS);
 
+    console.log("Using API Key for Picker:", import.meta.env.VITE_GOOGLE_SHEETS_API_KEY);
+
     const picker = new google.picker.PickerBuilder()
         .setOAuthToken(getAccessToken())
         .addView(view)
-        .console.log("Using API Key for Picker:", import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
         .setDeveloperKey(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
         .setCallback((data: any) => {
             if (data.action === google.picker.Action.PICKED) {
