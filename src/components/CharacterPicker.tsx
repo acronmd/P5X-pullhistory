@@ -66,52 +66,52 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("chizuko"), rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
 
   /* Cleave */
-  { ...makeIcon("inugami"), rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
-  { src: "./src/assets/persicons/ippon_datara.png", modalsrc: "./src/assets/persicons/modal/ippon_datara.png", rarity: "common", name: "Ippon-Datara", codename: "N/A", affinity: "Cleave" },
-  { src: "./src/assets/persicons/mandrake.png", modalsrc: "./src/assets/persicons/modal/mandrake.png", rarity: "common", name: "Mandrake", codename: "N/A", affinity: "Cleave" },
-  { src: "./src/assets/persicons/mokoi.png", modalsrc: "./src/assets/persicons/modal/mokoi.png", rarity: "common", name: "Mokoi", codename: "N/A", affinity: "Cleave" },
+  { ...makePersonaIcon("inugami"), rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
+  { ...makePersonaIcon("ippon_datara"), rarity: "common", name: "Ippon-Datara", codename: "N/A", affinity: "Cleave" },
+  { ...makePersonaIcon("mandrake"), rarity: "common", name: "Mandrake", codename: "N/A", affinity: "Cleave" },
+  { ...makePersonaIcon("mokoi"), rarity: "common", name: "Mokoi", codename: "N/A", affinity: "Cleave" },
 
   /* Fire */
-  { src: "./src/assets/persicons/hua_po.png", modalsrc: "./src/assets/persicons/modal/hua_po.png", rarity: "common", name: "Hua Po", codename: "N/A", affinity: "Fire"  },
-  { src: "./src/assets/persicons/orobas.png", modalsrc: "./src/assets/persicons/modal/orobas.png", rarity: "common", name: "Orobas", codename: "N/A", affinity: "Fire"  },
-  { src: "./src/assets/persicons/pyrojack.png", modalsrc: "./src/assets/persicons/modal/pyrojack.png", rarity: "common", name: "Jack-o'-Lantern", codename: "N/A", affinity: "Fire"  },
+  { ...makePersonaIcon("hua_po"), rarity: "common", name: "Hua Po", codename: "N/A", affinity: "Fire"  },
+  { ...makePersonaIcon("orobas"), rarity: "common", name: "Orobas", codename: "N/A", affinity: "Fire"  },
+  { ...makePersonaIcon("pyrojack"), rarity: "common", name: "Jack-o'-Lantern", codename: "N/A", affinity: "Fire"  },
 
   /* Ice */
-  { src: "./src/assets/persicons/andras.png", modalsrc: "./src/assets/persicons/modal/andras.png", rarity: "common", name: "Andras", codename: "N/A", affinity: "Ice"  },
-  { src: "./src/assets/persicons/apsaras.png", modalsrc: "./src/assets/persicons/modal/apsaras.png", rarity: "common", name: "Apsaras", codename: "N/A", affinity: "Ice"  },
-  { src: "./src/assets/persicons/koropokguru.png", modalsrc: "./src/assets/persicons/modal/koropokguru.png", rarity: "common", name: "Koropokguru", codename: "N/A", affinity: "Ice"  },
-  { src: "./src/assets/persicons/kushimitama.png", modalsrc: "./src/assets/persicons/modal/kushimitama.png", rarity: "common", name: "Kushi Mitama", codename: "N/A", affinity: "Ice"  },
-  { src: "./src/assets/persicons/saki_mitama.png", modalsrc: "./src/assets/persicons/modal/saki_mitama.png", rarity: "common", name: "Saki Mitama", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("andras"), rarity: "common", name: "Andras", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("apsaras"), rarity: "common", name: "Apsaras", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("koropokguru"), rarity: "common", name: "Koropokguru", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("kushi_mitama"), rarity: "common", name: "Kushi Mitama", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("saki_mitama"), rarity: "common", name: "Saki Mitama", codename: "N/A", affinity: "Ice"  },
 
   /* Elec */
-  { src: "./src/assets/persicons/agathion.png", modalsrc: "./src/assets/persicons/modal/agathion.png", rarity: "common", name: "Agathion", codename: "N/A", affinity: "Elec"  },
-  { src: "./src/assets/persicons/pixie.png", modalsrc: "./src/assets/persicons/modal/pixie.png", rarity: "common", name: "Pixie", codename: "N/A", affinity: "Elec"  },
-  { src: "./src/assets/persicons/shiisa.png", modalsrc: "./src/assets/persicons/modal/shiisa.png", rarity: "common", name: "Shiisa", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("agathion"), rarity: "common", name: "Agathion", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("pixie"), rarity: "common", name: "Pixie", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("shiisa"), rarity: "common", name: "Shiisa", codename: "N/A", affinity: "Elec"  },
 
   /* Wind */
-  { src: "./src/assets/persicons/bicorn.png", modalsrc: "./src/assets/persicons/modal/bicorn.png", rarity: "common", name: "Bicorn", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/highpixie.png", modalsrc: "./src/assets/persicons/modal/highpixie.png", rarity: "common", name: "High Pixie", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/kelpie.png", modalsrc: "./src/assets/persicons/modal/kelpie.png", rarity: "common", name: "Kelpie", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/kodama.png", modalsrc: "./src/assets/persicons/modal/kodama.png", rarity: "common", name: "Kodama", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/koppa_tengu.png", modalsrc: "./src/assets/persicons/modal/koppa_tengu.png", rarity: "common", name: "Koppa Tengu", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/nekomata.png", modalsrc: "./src/assets/persicons/modal/nekomata.png", rarity: "common", name: "Nekomata", codename: "N/A", affinity: "Wind" },
-  { src: "./src/assets/persicons/sudama.png", modalsrc: "./src/assets/persicons/modal/sudama.png", rarity: "common", name: "Sudama", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("bicorn"), rarity: "common", name: "Bicorn", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("high_pixie"), rarity: "common", name: "High Pixie", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("kelpie"), rarity: "common", name: "Kelpie", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("kodama"), rarity: "common", name: "Kodama", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("koppa_tengu"), rarity: "common", name: "Koppa Tengu", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("nekomata"), rarity: "common", name: "Nekomata", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("sudama"), rarity: "common", name: "Sudama", codename: "N/A", affinity: "Wind" },
 
   /* Psi */
 
   /* Nuclear */
-  { src: "./src/assets/persicons/makami.png", modalsrc: "./src/assets/persicons/modal/makami.png", rarity: "common", name: "Makami", codename: "N/A", affinity: "Nuclear" },
-  { src: "./src/assets/persicons/suzaku.png", modalsrc: "./src/assets/persicons/modal/suzaku.png", rarity: "common", name: "Suzaku", codename: "N/A", affinity: "Nuclear" },
+  { ...makePersonaIcon("makami"), rarity: "common", name: "Makami", codename: "N/A", affinity: "Nuclear" },
+  { ...makePersonaIcon("suzaki"), rarity: "common", name: "Suzaku", codename: "N/A", affinity: "Nuclear" },
 
   /* Bless */
-  { src: "./src/assets/persicons/nigimitama.png", modalsrc: "./src/assets/persicons/modal/nigimitama.png", rarity: "common", name: "Nigi Mitama", codename: "N/A", affinity: "Bless" },
+  { ...makePersonaIcon("nigi_mitama"), rarity: "common", name: "Nigi Mitama", codename: "N/A", affinity: "Bless" },
 
   /* Curse */
-  { src: "./src/assets/persicons/onmoraki.png", modalsrc: "./src/assets/persicons/modal/onmoraki.png", rarity: "common", name: "Onmoraki", codename: "N/A", affinity: "Curse" },
-  { src: "./src/assets/persicons/slime.png", modalsrc: "./src/assets/persicons/modal/slime.png", rarity: "common", name: "Slime", codename: "N/A", affinity: "Curse" },
+  { ...makePersonaIcon("onmoraki"), rarity: "common", name: "Onmoraki", codename: "N/A", affinity: "Curse" },
+  { ...makePersonaIcon("slime"), rarity: "common", name: "Slime", codename: "N/A", affinity: "Curse" },
 
   // Add more characters here as needed
-  { src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/modal/basic.png", rarity: "none", name: "Clear", codename: "N/A", affinity: "Support" },
+  { ...makeIcon("basic"), rarity: "none", name: "Clear", codename: "N/A", affinity: "Support" },
 ];
 
 export const availableWeapons: WeaponData[] = [
