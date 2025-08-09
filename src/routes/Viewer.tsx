@@ -138,31 +138,31 @@ type Item = {
 
 const itemInventory: Item[] = [
     {
-       src: "./src/assets/jewels.png",
+       src: "@/assets/jewels.png",
        alt: "Gems",
        row: 1,
        value: 0,
     },
     {
-        src: "./src/assets/jewels.png",
+        src: "@/assets/jewels.png",
         alt: "Jewels",
         row: 2,
         value: 0,
     },
     {
-        src: "./src/assets/limited-ticket.png",
+        src: "@/assets/limited-ticket.png",
         alt: "Limited Ticket",
         row: 3,
         value: 0,
     },
     {
-        src: "./src/assets/low_weapons-ticket.png",
+        src: "@/assets/low_weapons-ticket.png",
         alt: "Weapon Ticket",
         row: 4,
         value: 0,
     },
     {
-        src: "./src/assets/standard-ticket.png",
+        src: "@/assets/standard-ticket.png",
         alt: "Standard Ticket",
         row: 5,
         value: 0,
