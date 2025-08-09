@@ -96,6 +96,16 @@ import yuiHero from '@/assets/heros/yui.png';
 import yusukeHero from "@/assets/heros/yusuke.png";
 import makotoHero from "@/assets/heros/makoto.png";
 
+import jewelImage from "@/assets/jewels.png";
+import limitedTicketImage from "@/assets/low_limited-ticket.png";
+import weaponTicketImage from "@/assets/low_weapons-ticket.png";
+import standardTicketImage from "@/assets/low_standard-ticket.png";
+
+import addUI from "@/assets/add-icon.png";
+import editUI from "@/assets/edit-icon.png";
+
+import pullhistoryBanner from "@/assets/texts/history.png";
+
 type heroBanner = {
     image: string;
     label: string;
@@ -142,31 +152,31 @@ type Item = {
 
 const itemInventory: Item[] = [
     {
-       src: "@/assets/jewels.png",
+       src: jewelImage,
        alt: "Gems",
        row: 1,
        value: 0,
     },
     {
-        src: "@/assets/jewels.png",
+        src: jewelImage,
         alt: "Jewels",
         row: 2,
         value: 0,
     },
     {
-        src: "@/assets/limited-ticket.png",
+        src: limitedTicketImage,
         alt: "Limited Ticket",
         row: 3,
         value: 0,
     },
     {
-        src: "@/assets/low_weapons-ticket.png",
+        src: weaponTicketImage,
         alt: "Weapon Ticket",
         row: 4,
         value: 0,
     },
     {
-        src: "@/assets/standard-ticket.png",
+        src: standardTicketImage,
         alt: "Standard Ticket",
         row: 5,
         value: 0,
@@ -187,9 +197,9 @@ const SheetStats: React.FC = () => {
     }, [isInitialized, isSignedIn, navigate])
 
     const defaultDatasets = [
-        { id: "", sheetName: "Limited Banner", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: "@/assets/low_limited-ticket.png", altText: "Limited Banner Icon" },
-        { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deals", pity4: 10, pity5: 70, source: "@/assets/low_weapons-ticket.png", altText: "Weapon Banner Icon" },
-        { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: "@/assets/low_standard-ticket.png", altText: "Standard Banner Icon" },
+        { id: "", sheetName: "Limited Banner", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: limitedTicketImage, altText: "Limited Banner Icon" },
+        { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deals", pity4: 10, pity5: 70, source: weaponTicketImage, altText: "Weapon Banner Icon" },
+        { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: standardTicketImage, altText: "Standard Banner Icon" },
     ];
 
     const banners = [
@@ -644,7 +654,7 @@ const SheetStats: React.FC = () => {
                                                             }}
                                                         >
                                                             <img
-                                                                src="./src/assets/add-icon.png"
+                                                                src={addUI}
                                                                 alt="Add Row to Spreadsheet"
                                                                 className="w-5 h-5 object-contain"
                                                             />
@@ -694,7 +704,7 @@ const SheetStats: React.FC = () => {
                                                     sublabel={
                                                     <>
                                                         <img
-                                                            src="./src/assets/jewels.png"
+                                                            src={jewelImage}
                                                             alt="Meta Jewels"
                                                             className="w-4 h-4 object-contain"
                                                         />
@@ -848,7 +858,7 @@ const SheetStats: React.FC = () => {
                         title="Set Spreadsheet via Google Drive"
                     >
                         <img
-                            src="./src/assets/edit-icon.png"
+                            src={editUI}
                             alt="Set Spreadsheet"
                             className="w-6 h-6 object-contain translate-y-[2px]"
                         />
