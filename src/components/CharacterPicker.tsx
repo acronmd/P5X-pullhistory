@@ -24,10 +24,11 @@ export type WeaponData = {
   assChara: string;
 }
 
-function makeIcon(ch: string, modalFolder = "chicons") {
+function makeIcon(name: string) {
+  console.log("makeIcon name:", name);
   return {
-    src: new URL(`./assets/chicons/${ch}.png`, import.meta.url).href,
-    modalsrc: new URL(`./assets/chicons/modal/${ch}.png`, import.meta.url).href
+    src: new URL(`../assets/chicons/${name}.png`, import.meta.url).href,
+    modalsrc: new URL(`../assets/chicons/modal/${name}.png`, import.meta.url).href
   };
 }
 
