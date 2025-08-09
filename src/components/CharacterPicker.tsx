@@ -52,7 +52,7 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("haruna"), rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
 
   { ...makeIcon("lufel"), rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
-  { ...makeIcon("motoho"), rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
+  { ...makeIcon("motoha"), rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
   { ...makeIcon("shun"), rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
   { ...makeIcon("leo"), rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
   { ...makeIcon("kayo"), rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
