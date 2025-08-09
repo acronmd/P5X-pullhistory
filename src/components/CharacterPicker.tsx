@@ -25,17 +25,16 @@ export type WeaponData = {
 }
 
 function makeIcon(name: string) {
-  console.log("makeIcon name:", name);
   return {
     src: new URL(`../assets/chicons/${name}.png`, import.meta.url).href,
     modalsrc: new URL(`../assets/chicons/modal/${name}.png`, import.meta.url).href
   };
 }
 
-function makePersonaIcon(ch: string, modalFolder = "persicons") {
+function makePersonaIcon(name: string) {
   return {
-    src: new URL(`./assets/persicons/${ch}.png`, import.meta.url).href,
-    modalsrc: new URL(`./assets/${modalFolder}/${ch}.png`, import.meta.url).href
+    src: new URL(`../assets/persicons/${name}.png`, import.meta.url).href,
+    modalsrc: new URL(`../assets/persicons/modal/${name}.png`, import.meta.url).href
   };
 }
 
@@ -52,19 +51,19 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("yaoling"), rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
   { ...makeIcon("haruna"), rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
 
-  { src: "./src/assets/chicons/lufel.png", modalsrc: "./src/assets/chicons/modal/lufel.png", rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
-  { src: "./src/assets/chicons/motoha.png", modalsrc: "./src/assets/chicons/modal/motoha.png", rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
-  { src: "./src/assets/chicons/shun.png", modalsrc: "./src/assets/chicons/modal/shun.png", rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
-  { src: "./src/assets/chicons/leo.png", modalsrc: "./src/assets/chicons/modal/leo.png", rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
-  { src: "./src/assets/chicons/kayo.png", modalsrc: "./src/assets/chicons/modal/kayo.png", rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
-  { src: "./src/assets/chicons/Tomoko.png", modalsrc: "./src/assets/chicons/modal/tomoko.png", rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
-  { src: "./src/assets/chicons/kiyoshi.png", modalsrc: "./src/assets/chicons/modal/kiyoshi.png", rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
-  { src: "./src/assets/chicons/yukimi.png", modalsrc: "./src/assets/chicons/modal/yukimi.png", rarity: "rare", name: "Yukimi Fujikawa", codename: "Yuki", affinity: "Bless" },
-  { src: "./src/assets/chicons/seiji.png", modalsrc: "./src/assets/chicons/modal/seiji.png", rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
-  { src: "./src/assets/chicons/toshiya.png", modalsrc: "./src/assets/chicons/modal/toshiya.png", rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
-  { src: "./src/assets/chicons/kotone.png", modalsrc: "./src/assets/chicons/modal/kotone.png", rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
-  { src: "./src/assets/chicons/miyu.png", modalsrc: "./src/assets/chicons/modal/miyu.png", rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
-  { src: "./src/assets/chicons/chizuko.png", modalsrc: "./src/assets/chicons/modal/chizuko.png", rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
+  { ...makeIcon("lufel"), rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
+  { ...makeIcon("motoho"), rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
+  { ...makeIcon("shun"), rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
+  { ...makeIcon("leo"), rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
+  { ...makeIcon("kayo"), rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
+  { ...makeIcon("tomoko"), rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
+  { ...makeIcon("kiyoshi"), rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
+  { ...makeIcon("yukimi"), rarity: "rare", name: "Yukimi Fujikawa", codename: "Yuki", affinity: "Bless" },
+  { ...makeIcon("seiji"), rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
+  { ...makeIcon("toshiya"), rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
+  { ...makeIcon("kotone"), rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
+  { ...makeIcon("miyu"), rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
+  { ...makeIcon("chizuko"), rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
 
   /* Cleave */
   { src: "./src/assets/persicons/inugami.png", modalsrc: "./src/assets/persicons/modal/inugami.png", rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
