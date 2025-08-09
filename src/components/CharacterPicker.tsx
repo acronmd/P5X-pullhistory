@@ -66,7 +66,7 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("chizuko"), rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
 
   /* Cleave */
-  { src: "./src/assets/persicons/inugami.png", modalsrc: "./src/assets/persicons/modal/inugami.png", rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
+  { ...makeIcon("inugami"), rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
   { src: "./src/assets/persicons/ippon_datara.png", modalsrc: "./src/assets/persicons/modal/ippon_datara.png", rarity: "common", name: "Ippon-Datara", codename: "N/A", affinity: "Cleave" },
   { src: "./src/assets/persicons/mandrake.png", modalsrc: "./src/assets/persicons/modal/mandrake.png", rarity: "common", name: "Mandrake", codename: "N/A", affinity: "Cleave" },
   { src: "./src/assets/persicons/mokoi.png", modalsrc: "./src/assets/persicons/modal/mokoi.png", rarity: "common", name: "Mokoi", codename: "N/A", affinity: "Cleave" },
