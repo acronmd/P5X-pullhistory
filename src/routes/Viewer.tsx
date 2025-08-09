@@ -223,10 +223,10 @@ const SheetStats: React.FC = () => {
         return parsed.map((ds: any, i: number) => ({
             sheetName: ds.sheetName ?? defaultDatasets[i]?.sheetName ?? "",
             label: ds.label ?? defaultDatasets[i]?.label ?? "",
-            sublabel: ds.sublabel ?? defaultDatasets[i]?.sublabel ?? "",
+            sublabel: defaultDatasets[i]?.sublabel ?? "",
             pity4: ds.pity4 ?? defaultDatasets[i]?.pity4 ?? 0,
             pity5: ds.pity5 ?? defaultDatasets[i]?.pity5 ?? 0,
-            source: ds.source ?? defaultDatasets[i]?.source ?? "",
+            source: defaultDatasets[i]?.source ?? "",
             altText: ds.altText ?? defaultDatasets[i]?.altText ?? "",
         }));
     });
