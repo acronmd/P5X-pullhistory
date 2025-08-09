@@ -24,9 +24,23 @@ export type WeaponData = {
   assChara: string;
 }
 
+function makeIcon(ch: string, modalFolder = "chicons") {
+  return {
+    src: new URL(`./assets/chicons/${ch}.png`, import.meta.url).href,
+    modalsrc: new URL(`./assets/${modalFolder}/${ch}.png`, import.meta.url).href
+  };
+}
+
+function makePersonaIcon(ch: string, modalFolder = "persicons") {
+  return {
+    src: new URL(`./assets/persicons/${ch}.png`, import.meta.url).href,
+    modalsrc: new URL(`./assets/${modalFolder}/${ch}.png`, import.meta.url).href
+  };
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
-  { src: "./src/assets/chicons/ren.png", modalsrc: "./src/assets/chicons/modal/ren.png", rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
+  { ...makeIcon("ren"), rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
   { src: "./src/assets/chicons/yui.png", modalsrc: "./src/assets/chicons/modal/yui.png", rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
   { src: "./src/assets/chicons/minami.png", modalsrc: "./src/assets/chicons/modal/minami.png", rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
   { src: "./src/assets/chicons/yusuke.png", modalsrc: "./src/assets/chicons/modal/yusuke.png", rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
