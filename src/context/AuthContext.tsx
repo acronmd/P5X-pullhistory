@@ -23,17 +23,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     useEffect(() => {
         async function initialize() {
             try {
-                await initGoogleClient(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+                const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+                console.log("Google Client ID:", clientId);
+
+                if (!clientId) throw new Error("Google Client ID is missing");
+
+                await initGoogleClient(clientId);
                 setIsInitialized(true);
 
                 const token = getAccessToken();
                 setIsSignedIn(!!token);
             } catch (error) {
                 console.error("Failed to initialize Google client:", error);
+                if (error instanceof Error) {
+                    console.error("Error message:", error.message);
+                    console.error("Error stack:", error.stack);
+                } else {
+                    try {
+                        console.error("Error details:", JSON.stringify(error));
+                    } catch {
+                        console.error("Could not stringify error");
+                    }
+                }
             }
         }
         initialize();
     }, []);
+
 
     async function signIn() {
         if (!isInitialized) {
