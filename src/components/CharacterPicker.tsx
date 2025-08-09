@@ -27,7 +27,7 @@ export type WeaponData = {
 function makeIcon(ch: string, modalFolder = "chicons") {
   return {
     src: new URL(`./assets/chicons/${ch}.png`, import.meta.url).href,
-    modalsrc: new URL(`./assets/${modalFolder}/${ch}.png`, import.meta.url).href
+    modalsrc: new URL(`./assets/chicons/modal/${ch}.png`, import.meta.url).href
   };
 }
 
@@ -41,15 +41,15 @@ function makePersonaIcon(ch: string, modalFolder = "persicons") {
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
   { ...makeIcon("ren"), rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
-  { src: "./src/assets/chicons/yui.png", modalsrc: "./src/assets/chicons/modal/yui.png", rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
-  { src: "./src/assets/chicons/minami.png", modalsrc: "./src/assets/chicons/modal/minami.png", rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
-  { src: "./src/assets/chicons/yusuke.png", modalsrc: "./src/assets/chicons/modal/yusuke.png", rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
-  { src: "./src/assets/chicons/makoto.png", modalsrc: "./src/assets/chicons/modal/makoto.png", rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
-  { src: "./src/assets/chicons/morgana.png", modalsrc: "./src/assets/chicons/modal/morgana.png", rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
-  { src: "./src/assets/chicons/ryuji.png", modalsrc: "./src/assets/chicons/modal/ryuji.png", rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
-  { src: "./src/assets/chicons/ann.png", modalsrc: "./src/assets/chicons/modal/ann.png", rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },
-  { src: "./src/assets/chicons/li.png", modalsrc: "./src/assets/chicons/modal/li.png", rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
-  { src: "./src/assets/chicons/haruna.png", modalsrc: "./src/assets/chicons/modal/haruna.png", rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
+  { ...makeIcon("yui"), rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
+  { ...makeIcon("minami"), rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
+  { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
+  { ...makeIcon("makoto"), rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
+  { ...makeIcon("morgana"), rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
+  { ...makeIcon("ryuji"), rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
+  { ...makeIcon("ann"), rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },
+  { ...makeIcon("yaoling"), rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
+  { ...makeIcon("haruna"), rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
 
   { src: "./src/assets/chicons/lufel.png", modalsrc: "./src/assets/chicons/modal/lufel.png", rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
   { src: "./src/assets/chicons/motoha.png", modalsrc: "./src/assets/chicons/modal/motoha.png", rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
