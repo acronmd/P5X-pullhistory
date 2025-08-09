@@ -92,6 +92,10 @@ import { appendCharactersToSheet} from "@/utils/google.ts";
 import DialogSheetContent from "../components/DialogSheetContexts.tsx";
 import {Link, useNavigate} from "react-router-dom";
 
+import yuiHero from '@/assets/heros/yui.png';
+import yusukeHero from "@/assets/heros/yusuke.png";
+import makotoHero from "@/assets/heros/makoto.png";
+
 type heroBanner = {
     image: string;
     label: string;
@@ -101,19 +105,19 @@ type heroBanner = {
 
 const allHeroBanners: heroBanner[] = [
     {
-        image: "./src/assets/heros/yui.png",
+        image: yuiHero,
         label: "Virtual Netizen - Yui",
         start: 1752138000,
         end: 1754532000,
     },
     {
-        image: "./src/assets/heros/yusuke.png",
+        image: yusukeHero,
         label: "Art of the Fox - Yusuke Kitagawa",
         start: 1753344000,
         end: 1755741600,
     },
     {
-        image: "./src/assets/heros/makoto.png",
+        image: makotoHero,
         label: "Fist of The Phantom Star - Makoto Nijima",
         start: 1754298000,
         end: 1756951200,
