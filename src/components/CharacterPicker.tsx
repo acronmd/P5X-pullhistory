@@ -101,7 +101,7 @@ export const availableCharacters: CharacterData[] = [
 
   /* Nuclear */
   { ...makePersonaIcon("makami"), rarity: "common", name: "Makami", codename: "N/A", affinity: "Nuclear" },
-  { ...makePersonaIcon("suzaki"), rarity: "common", name: "Suzaku", codename: "N/A", affinity: "Nuclear" },
+  { ...makePersonaIcon("suzaku"), rarity: "common", name: "Suzaku", codename: "N/A", affinity: "Nuclear" },
 
   /* Bless */
   { ...makePersonaIcon("nigi_mitama"), rarity: "common", name: "Nigi Mitama", codename: "N/A", affinity: "Bless" },
