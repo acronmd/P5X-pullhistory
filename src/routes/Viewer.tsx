@@ -104,7 +104,6 @@ import standardTicketImage from "@/assets/low_standard-ticket.png";
 import addUI from "@/assets/add-icon.png";
 import editUI from "@/assets/edit-icon.png";
 
-import pullhistoryBanner from "@/assets/texts/history.png";
 
 type heroBanner = {
     image: string;
@@ -407,7 +406,7 @@ const SheetStats: React.FC = () => {
     const [currentSheetName, setCurrentSheetName] = useState<string>("");
 
     const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>(
-        Array(10).fill({ src: "./src/assets/chicons/basic.png", modalsrc: "./src/assets/persicons/basic.png", rarity: "none", name:"Clear", affinity: "Support" })
+        Array(10).fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", affinity: "Support" })
     );
 
     // State for modal control

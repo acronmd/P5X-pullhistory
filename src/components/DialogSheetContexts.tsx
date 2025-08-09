@@ -29,6 +29,8 @@ import {AlertDialogFooter, AlertDialogHeader} from "@/components/ui/alert-dialog
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 
+import pullhistoryBanner from "@/assets/texts/history.png";
+
 type Props = {
     bgImage: string;
     banners: any[];
@@ -103,7 +105,7 @@ export default function DialogSheetContent({
             style={{ backgroundImage: `url(${bgImage})` }}
         >
             <img
-                src="./src/assets/texts/history.png"
+                src={pullhistoryBanner}
                 alt="History"
                 className="absolute top-[-40px] left-1/2 -translate-x-33 -translate-y-10 w-[260px]"
                 draggable={false}
