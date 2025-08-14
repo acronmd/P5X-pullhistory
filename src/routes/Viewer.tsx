@@ -40,6 +40,8 @@ import { useAuth } from '@/context/AuthContext';
 
 import {type CharacterData } from '@/components/CharacterPicker.tsx';
 
+import { fetchDataForSheet} from "@/utils/fetchDataLogic.ts";
+
 import bgImage from "@/assets/bg.png";
 
 /// <reference types="gapi" />
@@ -242,7 +244,7 @@ const SheetStats: React.FC = () => {
         if (!sharedSpreadsheetId) return; // Ignore initial or empty state
 
         datasets.forEach((ds: { sheetName: string; }, i: number) => {
-            if (ds.sheetName) fetchData(ds.sheetName, i);
+            if (ds.sheetName) loadAndSetData(ds.sheetName, i);
         });
     }, [sharedSpreadsheetId, datasets]);
 
@@ -275,125 +277,31 @@ const SheetStats: React.FC = () => {
     const [allPulls, setAllPulls] = useState<SheetRow[][]>(datasets.map(() => []));
 
     ///Fetch data variables
-    async function fetchData(sheetName: string, index: number) {
-        await gapi.client.load('sheets', 'v4');
-        const res = await gapi.client.sheets.spreadsheets.values.get({
-            spreadsheetId: sharedSpreadsheetId,
-            range:sheetName,
-        });
-        const data: SheetRow[] = res.result.values || [];
+    async function loadAndSetData(sheetName: string, index: number) {
+        const stats = await fetchDataForSheet(sheetName);
 
-        ///const json = await res.json();
-
-        const total = data.length;
-
-        const counts: Record<string, number> = {};
-        const pityGaps5: number[] = [];
-        const pityGaps4: number[] = [];
-
-        let last5Index: number | null = null;
-        let last4Index: number | null = null;
-
-        let sinceLast5 = -1;
-        let sinceLast4 = -1;
-
-        // Loop for stats
-        for (let i = 0; i < data.length; i++) {
-            const val = data[i][0]?.trim();
-
-            // Count any seen rarity (2, 3, 4, 5)
-            if (val) {
-                counts[val] = (counts[val] || 0) + 1;
-            }
-
-            // 5-star logic
-            if (val === '5') {
-                if (last5Index === null) {
-                    pityGaps5.push(i + 1); // first 5★
-                } else {
-                    pityGaps5.push(i - last5Index);
-                }
-                last5Index = i;
-            }
-
-            // 4-star logic
-            if (val === '4') {
-                if (last4Index === null) {
-                    pityGaps4.push(i + 1); // first 4★
-                } else {
-                    pityGaps4.push(i - last4Index);
-                }
-                last4Index = i;
-            }
-        }
-
-        // Calculate pity since last 5★ / 4★
-        for (let i = data.length - 1; i >= 0; i--) {
-            const val = data[i][0]?.trim();
-
-            if (sinceLast5 === -1 && val === '5') {
-                sinceLast5 = data.length - i - 1;
-            }
-
-            if (sinceLast4 === -1 && val === '4') {
-                sinceLast4 = data.length - i - 1;
-            }
-
-            if (sinceLast5 !== -1 && sinceLast4 !== -1) break;
-        }
-
-        // Average function
-        const avg = (arr: number[]) =>
-            arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
-
-        // Percent calculation
-        const percents: Record<string, number> = {};
-        for (const rarity in counts) {
-            percents[rarity] = (counts[rarity] / total) * 100;
-        }
-
-        let recent5Stars: { name: string; pity: number }[] = [];
-        let pityCounter = 0;
-
-        for (let i = 0; i < data.length; i++) {
-            const val = data[i][0]?.trim();
-
-            pityCounter++; // Increment on every roll
-
-            if (val === '5') {
-                const name = data[i][1]; // Assuming name is in second column
-                recent5Stars.push({
-                    name,
-                    pity: pityCounter, // This is the pity count at which 5★ was pulled
-                });
-
-                pityCounter = 0; // Reset for next cycle
-            }
-        }
-        // Keep only the last 3 pulled 5★s
-        recent5Stars = recent5Stars.slice(-3).reverse();
-
-        // Save to state
         setAllStats(prev => {
             const copy = [...prev];
             copy[index] = {
-                total,
-                sinceLast5,
-                sinceLast4,
-                avgPity5: avg(pityGaps5),
-                avgPity4: avg(pityGaps4),
-                rarityCounts: counts,
-                rarityPercents: percents,
-                recent5Stars: recent5Stars,
+                total: stats.total,
+                sinceLast5: stats.sinceLast5,
+                sinceLast4: stats.sinceLast4,
+                avgPity5: stats.avgPity5,
+                avgPity4: stats.avgPity4,
+                rarityCounts: stats.rarityCounts,
+                rarityPercents: stats.rarityPercents,
+                recent5Stars: stats.all5Stars.slice(-3).reverse(), // if you want recent 5 stars
+                all5Stars: stats.all5Stars,
+                all4Stars: stats.all4Stars,
             };
             return copy;
         });
+
         setAllPulls(prev => {
             const copy = [...prev];
-            copy[index] = data;
+            copy[index] = stats.allPulls;
             return copy;
         });
-
     }
 
     //Pull date info variable(s)
@@ -406,7 +314,7 @@ const SheetStats: React.FC = () => {
     const [currentSheetName, setCurrentSheetName] = useState<string>("");
 
     const [selectedCharacters, setSelectedCharacters] = useState<CharacterData[]>(
-        Array(10).fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", affinity: "Support" })
+        Array(10).fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", affinity: "Support" })
     );
 
     // State for modal control
@@ -532,6 +440,26 @@ const SheetStats: React.FC = () => {
         Autoplay({ delay: 4000, stopOnInteraction: true })
     )
 
+    const [loadingSheet, setLoadingSheet] = useState<string | null>(null);
+
+    async function handleClick(
+        sheetName: string,
+        dataset?: typeof defaultDatasets[number]
+    ) {
+        setLoadingSheet(sheetName);
+
+        const data = await fetchDataForSheet(sheetName);
+
+        setLoadingSheet(null);
+
+        navigate("/limited", {
+            state: {
+                bannerData: data, // the fetched pull data
+                datasetInfo: dataset, // metadata from defaultDatasets
+            },
+        });
+    }
+
     return (
         <div>
             <div className={"flex flex-col gap-6"}>
@@ -613,11 +541,11 @@ const SheetStats: React.FC = () => {
                         {datasets.map((ds: {
                             id: string;
                             sheetName: string;
-                            source: string | undefined;
+                            source: string;
                             sublabel: string;
-                            label: string | number | bigint | boolean | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | Promise<string | number | bigint | boolean | React.ReactPortal | React.ReactElement<unknown, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | null | undefined> | null | undefined;
-                            pity4: string;
-                            pity5: string;
+                            label: string;
+                            pity4: number;
+                            pity5: number;
                             altText: string;},
                             i: number) => (
                             <Card key={i} className="w-full sm:flex-1 sm:min-w-[350px] sm:max-w-[500px] flex flex-col">
@@ -637,7 +565,7 @@ const SheetStats: React.FC = () => {
                                                 <Dialog open={dialogOpen} onOpenChange={(open) => {
                                                     setDialogOpen(open);
                                                     if (!open) {
-                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
+                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
                                                     }
                                                 }}>
                                                     <DialogTrigger asChild>
@@ -677,7 +605,7 @@ const SheetStats: React.FC = () => {
                                                             selectedCharacters={selectedCharacters}
                                                             setDialogOpen={setDialogOpen}
                                                             datasets={datasets}
-                                                            fetchData={fetchData}
+                                                            fetchData={fetchDataForSheet}
                                                             openCharacterPicker={openCharacterPicker}
                                                             pickerOpenForIndex={pickerOpenForIndex}
                                                             setPickerOpenForIndex={setPickerOpenForIndex}
@@ -780,67 +708,13 @@ const SheetStats: React.FC = () => {
                                 <CardFooter className="flex justify-between items-center text-md text-muted-foreground flex-shrink-0 h-14">
                                     {/* Left side: Pull History */}
                                     <div>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm">Pull History</Button>
-                                            </DialogTrigger>
-
-                                            <DialogContent className="w-full sm:max-w-[75vw] max-h-[80vh] p-0 m-0 bg-white flex flex-col">
-                                                {/* Sticky Dialog Header */}
-                                                <DialogHeader className="bg-white border-b px-6 py-4">
-                                                    <div className={"flex items-center gap-4"}>
-                                                        <DialogTitle className="text-center">Pull History - {ds.label}</DialogTitle>
-                                                        <Button
-                                                            variant="outline"
-                                                            onClick={() => setIsReversed(prev => !prev)}
-                                                        >
-                                                            Switch to {isReversed ? "Oldest First" : "Newest First"}
-                                                        </Button>
-                                                    </div>
-                                                </DialogHeader>
-
-                                                {/* Scrollable table area */}
-                                                <div className="overflow-y-auto overflow-x-auto flex-grow">
-                                                    <Table className="min-w-full border-collapse">
-                                                        <TableHeader>
-                                                            <TableRow className="sticky top-0 z-20 bg-white border-b border-border">
-                                                                <TableHead className="text-center px-4 py-2">Pull Number</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
-                                                                <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
-                                                            </TableRow>
-                                                        </TableHeader>
-                                                        <TableBody>
-                                                            {(isReversed ? [...allPulls[i]].reverse() : allPulls[i])?.map((row, index) => (
-                                                                <TableRow
-                                                                    key={index}
-                                                                    className={`cursor-default ${rowClassForRarity(row[0]?.trim() || '')}`}
-                                                                    style={{
-                                                                        boxShadow: `0 0 0 2px ${rarityBorderColor(row[0]?.trim() || '')}`
-                                                                    }}
-                                                                    tabIndex={-1}
-                                                                >
-                                                                    <TableCell className="text-center px-4 py-2">{isReversed ? allPulls[i].length - index : index + 1}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
-                                                                    <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
-                                                                </TableRow>
-                                                            ))}
-                                                        </TableBody>
-                                                    </Table>
-
-                                                </div>
-                                            </DialogContent>
-                                        </Dialog>
-                                    </div>
-                                    <div>
-                                        <Dialog>
-                                            <DialogTrigger asChild>
-                                                <Button variant="outline" size="sm">Pity Planner</Button>
-                                            </DialogTrigger>
-                                        </Dialog>
+                                        <Button
+                                            disabled={loadingSheet === ds.sheetName}
+                                            onClick={() => handleClick(ds.sheetName, ds)}
+                                            className="btn"
+                                        >
+                                            {loadingSheet === ds.sheetName ? "Loading..." : "Open Extended View"}
+                                        </Button>
                                     </div>
                                 </CardFooter>
                             </Card>
@@ -863,9 +737,6 @@ const SheetStats: React.FC = () => {
                         />
                         Set Spreadsheet from Google Drive
                     </Button>
-                    <Link to="/limited">
-                        <Button className="btn">View Limited Banner</Button>
-                    </Link>
                 </div>
             </div>
         </div>

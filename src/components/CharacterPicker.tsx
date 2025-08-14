@@ -10,6 +10,7 @@ import { Input} from "@/components/ui/input";
 export type CharacterData = {
   src: string;
   modalsrc: string;
+  collectionsrc: string;
   rarity: "none" | "common" | "rare" | "superrare";
   name: string;
   codename: string;
@@ -27,7 +28,8 @@ export type WeaponData = {
 function makeIcon(name: string) {
   return {
     src: new URL(`../assets/chicons/${name}.png`, import.meta.url).href,
-    modalsrc: new URL(`../assets/chicons/modal/${name}.png`, import.meta.url).href
+    modalsrc: new URL(`../assets/chicons/modal/${name}.png`, import.meta.url).href,
+    collectionsrc: new URL(`../assets/chicons/collection/${name}.png`, import.meta.url).href
   };
 }
 
