@@ -14,18 +14,7 @@ import {
 import {
     Dialog,
     DialogTrigger,
-    DialogContent,
-    DialogHeader,
-    DialogTitle,
 } from "@/components/ui/dialog.tsx"
-import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-} from "@/components/ui/table.tsx";
 
 import Autoplay from "embla-carousel-autoplay"
 import {
@@ -249,7 +238,6 @@ const SheetStats: React.FC = () => {
     }, [sharedSpreadsheetId, datasets]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [isReversed, setIsReversed] = useState(true);
 
     type Stats = {
         total: number;
@@ -274,7 +262,6 @@ const SheetStats: React.FC = () => {
             recent5Stars: [],
         }))
     );
-    const [allPulls, setAllPulls] = useState<SheetRow[][]>(datasets.map(() => []));
 
     ///Fetch data variables
     async function loadAndSetData(sheetName: string, index: number) {
@@ -294,12 +281,6 @@ const SheetStats: React.FC = () => {
                 all5Stars: stats.all5Stars,
                 all4Stars: stats.all4Stars,
             };
-            return copy;
-        });
-
-        setAllPulls(prev => {
-            const copy = [...prev];
-            copy[index] = stats.allPulls;
             return copy;
         });
     }
@@ -332,38 +313,6 @@ const SheetStats: React.FC = () => {
     // Open modal and specify which character is being edited
     function openCharacterPicker(index: number) {
         setPickerOpenForIndex(index);
-    }
-
-    function starsForRarity(text: string) {
-        // Check if the text is just a number (like '2', '3', '4', '5')
-        const n = parseInt(text, 10);
-        if (!isNaN(n) && n > 0 && n <= 5) {
-            return '★'.repeat(n);
-        }
-        // If not a number or outside expected range, just return original text
-        return text;
-    }
-
-    function rowClassForRarity(rarity: string) {
-        switch (rarity) {
-            case '5':
-                return 'bg-purple-200 hover:bg-purple-200';  // gold background, same on hover
-            case '4':
-                return 'bg-yellow-100 hover:bg-yellow-200';  // purple background, same on hover
-            default:
-                return 'bg-gray-200 hover:bg-gray-200';      // grey background, same on hover
-        }
-    }
-
-    function rarityBorderColor(rarity: string) {
-        switch (rarity) {
-            case '5':
-                return 'border-purple-400'; // gold border color
-            case '4':
-                return 'border-yellow-400'; // purple border color
-            default:
-                return 'border-gray-400';   // gray border color
-        }
     }
 
     function getPityColorClass(pity: number) {

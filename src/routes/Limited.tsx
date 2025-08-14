@@ -48,7 +48,7 @@ function LimitedPage() {
     } = bannerData;
 
     const [show5Stars, setShow5Stars] = useState(true);
-    const [show4Stars, setShow4Stars] = useState(true);
+    const [show4Stars, setShow4Stars] = useState(false);
 
     const combinedStars = [
         ...(show5Stars ? all5Stars : []),
