@@ -36,13 +36,14 @@ function makeIcon(name: string) {
 function makePersonaIcon(name: string) {
   return {
     src: new URL(`../assets/persicons/${name}.png`, import.meta.url).href,
-    modalsrc: new URL(`../assets/persicons/modal/${name}.png`, import.meta.url).href
+    modalsrc: new URL(`../assets/persicons/modal/${name}.png`, import.meta.url).href,
+    collectionsrc: new URL(`../assets/chicons/collection/${name}.png`, import.meta.url).href
   };
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
-  { src: new URL(`../assets/chicons/ren.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/ren.png`, import.meta.url).href, rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
+  { ...makeIcon("ren"), rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
   { ...makeIcon("yui"), rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
   { ...makeIcon("minami"), rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
   { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
