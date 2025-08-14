@@ -97,7 +97,7 @@ function LimitedPage() {
                 </CardContent>
             </Card>
             <div className={"flex flex-col gap-4"}>
-                <div className="mt-4 flex flex-nowrap gap-5">
+                <div className="mt-4 flex flex-wrap lg:flex-nowrap gap-5">
                     <Card className="px-4">
                         <div className={"flex flex-col gap-3"}>
                             <div className={`rounded-xl bg-gray-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
