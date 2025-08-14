@@ -1,18 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import React, {useState} from "react";
-import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card.tsx";
-import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog.tsx";
-import {Button} from "@/components/ui/button.tsx";
-import addUI from "@/assets/add-icon.png";
-import DialogSheetContent from "@/components/DialogSheetContexts.tsx";
-import bgImage from "@/assets/bg.png";
-import {appendCharactersToSheet} from "@/utils/google.ts";
-import {fetchDataForSheet} from "@/utils/fetchDataLogic.ts";
-import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
-import StatCard from "@/components/StatCard.tsx";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card.tsx";
 import jewelImage from "@/assets/jewels.png";
-import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table.tsx";
 
 import { ArrowLeft } from "lucide-react"; // optional icon from lucide
 
@@ -21,6 +11,9 @@ import RarityPieChart from "@/components/PieChart.tsx"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import PullTableCard from "@/components/ViewTable.tsx"
+
+import { formatPullTime } from "@/utils/sharedFunctions.tsx"
+import LuckiestPullsCarousel from "@/components/LuckyPullsCarousel.tsx";
 
 function LimitedPage() {
     const location = useLocation();
@@ -55,43 +48,15 @@ function LimitedPage() {
         ...(show4Stars ? all4Stars : []),
     ].sort((a, b) => b.index - a.index);
 
-    const lowestPityCharacter = all5Stars.reduce((acc, pull) => {
-        // If no pull saved yet, or current pull has lower pity
-        if (!acc || pull.pity < acc.pity) return pull;
+    const top5LowestPityCharacters = [...all5Stars]
+        .sort((a, b) => {
+            // Sort by pity ascending first
+            if (a.pity !== b.pity) return a.pity - b.pity;
+            // If same pity, pick the more recent one (higher index)
+            return b.index - a.index;
+        })
+        .slice(0, 5); // Take the first 5
 
-        // If same pity, pick the more recent one (higher index)
-        if (pull.pity === acc.pity && pull.index > acc.index) return pull;
-
-        return acc;
-    }, null as typeof all5Stars[0] | null);
-
-    function formatPullTime(raw: string) {
-        // Normalize: pad hours/minutes/seconds if needed
-        let [datePart, timePart] = raw.split(" ");
-        let [h, m, s] = timePart.split(":");
-
-        // Pad each part to 2 digits
-        h = h.padStart(2, "0");
-        m = m.padStart(2, "0");
-        s = s.padStart(2, "0");
-
-        const isoString = `${datePart}T${h}:${m}:${s}Z`;
-        const date = new Date(isoString);
-
-        if (isNaN(date.getTime())) return "Invalid date";
-
-        return date.toLocaleString("en-US", {
-            month: "long",   // "August"
-            day: "numeric",  // 4
-            year: "numeric", // 2025
-            hour: "numeric", // 6
-            minute: "2-digit", // 29
-            second: "2-digit", // optional
-            hour12: true,    // AM/PM
-            timeZone: "UTC", // always show UTC
-            timeZoneName: "short" // show "UTC"
-        });
-    }
 
     function getPityColor(pity: number, rarity: number) {
         const maxPity = rarity === 5 ? 80 : 10;
@@ -285,36 +250,8 @@ function LimitedPage() {
                     {/* Rarity Pie CHart */}
                     <RarityPieChart rarityCounts={rarityCounts} />
 
-                    {/* Luckiest Pull Card */}
-                    <Card className="px-4 flex-grow">
-                        <CardHeader>
-                            <CardTitle>Luckiest Pull</CardTitle>
-                        </CardHeader>
-                        <CardContent>
-                            <div className="relative w-full h-full">
-                                <Tooltip>
-                                    <TooltipTrigger>
-                                        <img
-                                            src={lowestPityCharacter?.fullIconUrl}
-                                            className="w-full h-full object-contain"
-                                        />
-                                        <div
-                                            className="absolute top-1 left-1/2 -translate-x-1/2 -translate-y-1.25 text-white px-2 rounded-md text-center font-bold"
-                                        >
-                                            {lowestPityCharacter?.pity}
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="bottom">
-                                        <div className="text-center">
-                                            <p className="font-bold">{lowestPityCharacter?.name}</p>
-                                            <p className="text-sm text-muted-foreground">Pity: {lowestPityCharacter?.pity}</p>
-                                            <p className="text-sm text-muted-foreground">{formatPullTime(lowestPityCharacter?.time)}</p>
-                                        </div>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </div>
-                        </CardContent>
-                    </Card>
+                    {/* Luckiest Pulls Card */}
+                    <LuckiestPullsCarousel pulls={top5LowestPityCharacters}/>
                 </div>
 
                 {/* Example: Show recent 5 and 4 stars */}
