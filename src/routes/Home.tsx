@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { useAuth } from "@/context/AuthContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
@@ -32,10 +32,23 @@ export default function Home() {
                 A P5X Wish Tracker
             </h1>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-                A website that uses Google Drive/Sheets API to store pull data and displays
-                pull statistics, pity tracking, among other info. This app cannot
-                automatically grab pull history but it provides an easy interface to
-                catalogue your data!
+                A P5X Wish Tracker (APT) is a website that uses Google Drive/Sheets API to
+                store pull data and our site itself displays various different things like
+                pull statistics, ongoing banners, pity tracking, luckiest pulls, pull percentages, etc. <br/> <br/>
+                This app cannot automatically grab your pull history, but you
+                can add pulls with screenshots and local image recognition using the built-in {" "}
+                <Link to="/privacy" className="text-blue-600 underline">
+                    Tesseract.js OCR
+                </Link>
+                . You can view our{" "}
+                <Link to="/privacy" className="text-blue-600 underline">
+                 Privacy Policy
+                </Link>
+                {" "}and our{" "}
+                <Link to="/terms" className="text-blue-600 underline">
+                    Terms of Service
+                </Link>
+                {" "}for more information.
             </p>
             <blockquote className="mt-6 border-l-2 pl-6 italic">
                 &quot;Quite possibly the [...] best [...] software I've [...] ever [...]

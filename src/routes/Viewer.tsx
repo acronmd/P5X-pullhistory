@@ -401,7 +401,7 @@ const SheetStats: React.FC = () => {
 
         setLoadingSheet(null);
 
-        navigate("/limited", {
+        navigate("/banner", {
             state: {
                 bannerData: data, // the fetched pull data
                 datasetInfo: dataset, // metadata from defaultDatasets
@@ -410,8 +410,8 @@ const SheetStats: React.FC = () => {
     }
 
     return (
-        <div>
-            <div className={"flex flex-col gap-6"}>
+        <div className={"flex flex-col min-h-screen"}>
+            <div className={"flex flex-col gap-6 flex-1"}>
                 <div className={"flex flex-col items-center"}>
                     <div className={"flex flex-row gap-20 items-center w-screen justify-center px-10"}>
                         <div className="max-w-[550px]">
@@ -662,7 +662,7 @@ const SheetStats: React.FC = () => {
                                             onClick={() => handleClick(ds.sheetName, ds)}
                                             className="btn"
                                         >
-                                            {loadingSheet === ds.sheetName ? "Loading..." : "Open Extended View"}
+                                            {loadingSheet === ds.sheetName ? "Loading..." : "Expanded View"}
                                         </Button>
                                     </div>
                                 </CardFooter>
@@ -673,7 +673,6 @@ const SheetStats: React.FC = () => {
                 <div>
                     {/* Set Spreadsheet Button */}
                     <Button
-                        variant="outline"
                         size="icon"
                         onClick={() => handlePickSheet()}
                         className="w-72"
@@ -682,11 +681,35 @@ const SheetStats: React.FC = () => {
                         <img
                             src={editUI}
                             alt="Set Spreadsheet"
-                            className="w-6 h-6 object-contain translate-y-[2px]"
+                            className="w-6 h-6 object-contain translate-y-[2px] invert"
                         />
                         Set Spreadsheet from Google Drive
                     </Button>
                 </div>
+            </div>
+            <div>
+                <footer className="p-4 text-center text-sm text-gray-500 border-t">
+                    <div className={"flex flex--row gap-10 justify-center"}>
+                        <Link
+                            to="/privacy"
+                            className="hover:underline hover:text-gray-700"
+                        >
+                            Privacy Policy
+                        </Link>
+                        <Link
+                            to="/terms"
+                            className="hover:underline hover:text-gray-700"
+                        >
+                            Terms of Service
+                        </Link>
+                        <a
+                            href="/"
+                            className="hover:underline hover:text-gray-700"
+                        >
+                            Homepage
+                        </a>
+                    </div>
+                </footer>
             </div>
         </div>
     );
