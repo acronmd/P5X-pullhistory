@@ -20,6 +20,7 @@ export type CharacterData = {
 export type WeaponData = {
   src: string;
   modalsrc: string;
+  collectionsrc: string;
   rarity: "none" | "standard" | "rare" | "superrare";
   name: string;
   assChara: string;
@@ -38,6 +39,14 @@ function makePersonaIcon(name: string) {
     src: new URL(`../assets/persicons/${name}.png`, import.meta.url).href,
     modalsrc: new URL(`../assets/persicons/modal/${name}.png`, import.meta.url).href,
     collectionsrc: new URL(`../assets/chicons/collection/${name}.png`, import.meta.url).href
+  };
+}
+
+function makeWeaponIcon(name: string) {
+  return {
+    src: new URL(`../assets/persicons/modal/basic.png`, import.meta.url).href,
+    modalsrc: new URL(`../assets/chicons/weapon/${name}.png`, import.meta.url).href,
+    collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href
   };
 }
 
@@ -121,82 +130,82 @@ export const availableCharacters: CharacterData[] = [
 
 export const availableWeapons: WeaponData[] = [
   /* 5-Star Weapons */
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Phoenix Dagger", assChara: "Ren Amamiya" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Cyber Jammers", assChara: "Yui" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Angel Heart", assChara: "Minami Miyashita" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
+  { ...makeWeaponIcon("ren-5"), rarity: "superrare", name: "Phoenix Dagger", assChara: "Ren Amamiya" },
+  { ...makeWeaponIcon("yui-5"), rarity: "superrare", name: "Cyber Jammers", assChara: "Yui" },
+  { ...makeWeaponIcon("minami-5"), rarity: "superrare", name: "Angel Heart", assChara: "Minami Miyashita" },
+  { ...makeWeaponIcon("yusuke-5"), rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
+  { ...makeWeaponIcon("makoto-5"), rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
 
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Rosethorn", assChara: "Ann Takamaki" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Infinite Moment", assChara: "Yaoling Li" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Sweet Pickaxe", assChara: "Haruna Nishimori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Fallen Angel Wing", assChara: "Lufel" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Quasar", assChara: "Motoha Arai" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Permafrost", assChara: "Shun Kano" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Final Buster", assChara: "Leo Kamiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Retro Disco Style", assChara: "Kayo Tomiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Dream and Nightmare", assChara: "Tomoko Noge" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Baptism by Fire", assChara: "Kiyoshi Kurotani" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Karmic Cycle", assChara: "Yukimi Fujikawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Venus Sunrise", assChara: "Seiji Shiratori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Babel's Verdict", assChara: "Toshiya Sumi" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Queen of Winter", assChara: "Kotone Montagne" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Ephemerality", assChara: "Miyu Sahara" },
-  { src: "NULL", modalsrc: "NULL", rarity: "superrare", name: "Jolting Pulse", assChara: "Chizuko Nagao" },
+  { ...makeWeaponIcon("morgana-5"), rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
+  { ...makeWeaponIcon("ryuji-5"), rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
+  { ...makeWeaponIcon("ann-5"), rarity: "superrare", name: "Rosethorn", assChara: "Ann Takamaki" },
+  { ...makeWeaponIcon("yaoling-5"), rarity: "superrare", name: "Infinite Moment", assChara: "Yaoling Li" },
+  { ...makeWeaponIcon("haruna-5"), rarity: "superrare", name: "Sweet Pickaxe", assChara: "Haruna Nishimori" },
+  { ...makeWeaponIcon("lufel-5"), rarity: "superrare", name: "Fallen Angel Wing", assChara: "Lufel" },
+  { ...makeWeaponIcon("motoha-5"), rarity: "superrare", name: "Quasar", assChara: "Motoha Arai" },
+  { ...makeWeaponIcon("shun-5"), rarity: "superrare", name: "Permafrost", assChara: "Shun Kano" },
+  { ...makeWeaponIcon("leo-5"), rarity: "superrare", name: "Final Buster", assChara: "Leo Kamiyama" },
+  { ...makeWeaponIcon("kayo-5"), rarity: "superrare", name: "Retro Disco Style", assChara: "Kayo Tomiyama" },
+  { ...makeWeaponIcon("tomoko-5"), rarity: "superrare", name: "Dream and Nightmare", assChara: "Tomoko Noge" },
+  { ...makeWeaponIcon("kiyoshi-5"), rarity: "superrare", name: "Baptism by Fire", assChara: "Kiyoshi Kurotani" },
+  { ...makeWeaponIcon("yukimi-5"), rarity: "superrare", name: "Karmic Cycle", assChara: "Yukimi Fujikawa" },
+  { ...makeWeaponIcon("seiji-5"), rarity: "superrare", name: "Venus Sunrise", assChara: "Seiji Shiratori" },
+  { ...makeWeaponIcon("toshiya-5"), rarity: "superrare", name: "Babel's Verdict", assChara: "Toshiya Sumi" },
+  { ...makeWeaponIcon("kotone-5"), rarity: "superrare", name: "Queen of Winter", assChara: "Kotone Montagne" },
+  { ...makeWeaponIcon("miyu-5"), rarity: "superrare", name: "Ephemerality", assChara: "Miyu Sahara" },
+  { ...makeWeaponIcon("chizuko-5"), rarity: "superrare", name: "Jolting Pulse", assChara: "Chizuko Nagao" },
 
   /* 4-Star Weapons */
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Machete", assChara: "Ren Amamiya" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Meta Directors", assChara: "Yui" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Hymn of Life", assChara: "Minami Miyashita" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Jagato", assChara: "Yusuke Kitagawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Omega Knuckle", assChara: "Makoto Nijima" },
+  { ...makeWeaponIcon("ren-4"), rarity: "rare", name: "Machete", assChara: "Ren Amamiya" },
+  { ...makeWeaponIcon("yui-4"), rarity: "rare", name: "Meta Directors", assChara: "Yui" },
+  { ...makeWeaponIcon("minami-4"), rarity: "rare", name: "Hymn of Life", assChara: "Minami Miyashita" },
+  { ...makeWeaponIcon("usuke-4"),rarity: "rare", name: "Jagato", assChara: "Yusuke Kitagawa" },
+  { ...makeWeaponIcon("makoto-4"),rarity: "rare", name: "Omega Knuckle", assChara: "Makoto Nijima" },
 
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Shamshir", assChara: "Morgana" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Grand Presser", assChara: "Ryuji Sakamoto" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Masquerade Ribbon", assChara: "Ann Takamaki" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Sunstaff", assChara: "Yaoling Li" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Chirpy Pickaxe", assChara: "Haruna Nishimori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Lava Flame", assChara: "Lufel" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Crime and Punishment", assChara: "Motoha Arai" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Demon's Bite", assChara: "Shun Kano" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Justice Lance", assChara: "Leo Kamiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Emerald Charmer", assChara: "Kayo Tomiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Shadow Crowns", assChara: "Tomoko Noge" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Death Stinger", assChara: "Kiyoshi Kurotani" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Heavy Metal Pain", assChara: "Yukimi Fujikawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Knight's Reward", assChara: "Seiji Shiratori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Scarlet Scepter", assChara: "Toshiya Sumi" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Edelweiss", assChara: "Kotone Montagne" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Submarine Sonar", assChara: "Miyu Sahara" },
-  { src: "NULL", modalsrc: "NULL", rarity: "rare", name: "Gravitational Force", assChara: "Chizuko Nagao" },
+  { ...makeWeaponIcon("morgana-4"),rarity: "rare", name: "Shamshir", assChara: "Morgana" },
+  { ...makeWeaponIcon("ryuji-4"),rarity: "rare", name: "Grand Presser", assChara: "Ryuji Sakamoto" },
+  { ...makeWeaponIcon("ann-4"),rarity: "rare", name: "Masquerade Ribbon", assChara: "Ann Takamaki" },
+  { ...makeWeaponIcon("yaoling-4"),rarity: "rare", name: "Sunstaff", assChara: "Yaoling Li" },
+  { ...makeWeaponIcon("haruna-4"),rarity: "rare", name: "Chirpy Pickaxe", assChara: "Haruna Nishimori" },
+  { ...makeWeaponIcon("lufel-4"),rarity: "rare", name: "Lava Flame", assChara: "Lufel" },
+  { ...makeWeaponIcon("motoha-4"),rarity: "rare", name: "Crime and Punishment", assChara: "Motoha Arai" },
+  { ...makeWeaponIcon("shun-4"),rarity: "rare", name: "Demon's Bite", assChara: "Shun Kano" },
+  { ...makeWeaponIcon("leo-4"),rarity: "rare", name: "Justice Lance", assChara: "Leo Kamiyama" },
+  { ...makeWeaponIcon("kayo-4"),rarity: "rare", name: "Emerald Charmer", assChara: "Kayo Tomiyama" },
+  { ...makeWeaponIcon("tomoko-4"),rarity: "rare", name: "Shadow Crowns", assChara: "Tomoko Noge" },
+  { ...makeWeaponIcon("kiyoshi-4"),rarity: "rare", name: "Death Stinger", assChara: "Kiyoshi Kurotani" },
+  { ...makeWeaponIcon("yukimi-4"),rarity: "rare", name: "Heavy Metal Pain", assChara: "Yukimi Fujikawa" },
+  { ...makeWeaponIcon("seiji-4"),rarity: "rare", name: "Knight's Reward", assChara: "Seiji Shiratori" },
+  { ...makeWeaponIcon("toshiya-4"),rarity: "rare", name: "Scarlet Scepter", assChara: "Toshiya Sumi" },
+  { ...makeWeaponIcon("kotone-4"),rarity: "rare", name: "Edelweiss", assChara: "Kotone Montagne" },
+  { ...makeWeaponIcon("miyu-4"),rarity: "rare", name: "Submarine Sonar", assChara: "Miyu Sahara" },
+  { ...makeWeaponIcon("chizuko-4"),rarity: "rare", name: "Gravitational Force", assChara: "Chizuko Nagao" },
 
   /* 3-Star Weapons */
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Athame", assChara: "Ren Amamiya" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Electric Chakrams", assChara: "Yui" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Portable Trauma Unit", assChara: "Minami Miyashita" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Flash Punch", assChara: "Makoto Nijima" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Athame", assChara: "Ren Amamiya" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Electric Chakrams", assChara: "Yui" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Portable Trauma Unit", assChara: "Minami Miyashita" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Flash Punch", assChara: "Makoto Nijima" },
 
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "God Saber", assChara: "Morgana" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Gang Star", assChara: "Ryuji Sakamoto" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Spike Whip", assChara: "Ann Takamaki" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Willowstaff", assChara: "Yaoling Li" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Shrill Pickaxe", assChara: "Haruna Nishimori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Break Tonfa", assChara: "Lufel" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Lightning Hammer", assChara: "Motoha Arai" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Steel Tomahawk", assChara: "Shun Kano" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Punish Lance", assChara: "Leo Kamiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Sweety SG", assChara: "Kayo Tomiyama" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Sharp Twinblades", assChara: "Tomoko Noge" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Holy Nail", assChara: "Kiyoshi Kurotani" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Slashing Flail", assChara: "Yukimi Fujikawa" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Elegant Rapier", assChara: "Seiji Shiratori" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Noble Rod", assChara: "Toshiya Sumi" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Royal Saber", assChara: "Kotone Montagne" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "C.A. Explorer", assChara: "Miyu Sahara" },
-  { src: "NULL", modalsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" }
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "God Saber", assChara: "Morgana" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Gang Star", assChara: "Ryuji Sakamoto" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Spike Whip", assChara: "Ann Takamaki" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Willowstaff", assChara: "Yaoling Li" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Shrill Pickaxe", assChara: "Haruna Nishimori" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Break Tonfa", assChara: "Lufel" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Lightning Hammer", assChara: "Motoha Arai" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Steel Tomahawk", assChara: "Shun Kano" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Punish Lance", assChara: "Leo Kamiyama" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Sweety SG", assChara: "Kayo Tomiyama" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Sharp Twinblades", assChara: "Tomoko Noge" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Holy Nail", assChara: "Kiyoshi Kurotani" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Slashing Flail", assChara: "Yukimi Fujikawa" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Elegant Rapier", assChara: "Seiji Shiratori" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Noble Rod", assChara: "Toshiya Sumi" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Royal Saber", assChara: "Kotone Montagne" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "C.A. Explorer", assChara: "Miyu Sahara" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" }
 
 ]
 

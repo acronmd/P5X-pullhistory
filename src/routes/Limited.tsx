@@ -277,7 +277,7 @@ function LimitedPage() {
                         <div
                             className="flex gap-2 overflow-x-auto pb-4"
                         >
-                            {combinedStars.map(({ name, pity, iconUrl, time, rarity }, i) => (
+                            {combinedStars.map(({ name, pity, iconUrl, time, rarity, assChara }, i) => (
                                 <Tooltip key={i}>
                                     <TooltipTrigger asChild>
                                         <div className="relative w-[120px] h-[120px] flex-shrink-0">
@@ -318,7 +318,12 @@ function LimitedPage() {
                                     </TooltipTrigger>
                                     <TooltipContent side="top">
                                         <div className="text-center">
-                                            <p className="font-bold">{name}</p>
+                                            <div className="flex flex-row gap-3 items-center justify-center">
+                                                <p className="font-bold">{name}</p>
+                                                {assChara && (
+                                                    <p className="text-muted-foreground">{assChara.split(" ")[0]} only</p>
+                                                )}
+                                            </div>
                                             <p className="text-sm text-muted-foreground">Pity: {pity}</p>
                                             <p className="text-sm text-muted-foreground">{formatPullTime(time)}</p>
                                         </div>

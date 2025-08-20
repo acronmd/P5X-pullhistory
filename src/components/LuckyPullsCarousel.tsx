@@ -3,12 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
 import { formatPullTime } from "@/utils/sharedFunctions.tsx"
+import React from "react";
 
 interface Pull {
     name: string;
     pity: number;
     index: number;
     fullIconUrl: string;
+    assChara: string;
     time: string;
 }
 
@@ -37,7 +39,12 @@ export default function LuckiestPullsCarousel({ pulls }: Props) {
                                     </TooltipTrigger>
                                     <TooltipContent side="bottom">
                                         <div className="text-center">
-                                            <p className="font-bold">{pull.name}</p>
+                                            <div className="flex flex-row gap-3 items-center justify-center">
+                                                <p className="font-bold">{pull.name}</p>
+                                                {pull.assChara && (
+                                                    <p className="text-muted-foreground">{pull.assChara.split(" ")[0]} only</p>
+                                                )}
+                                            </div>
                                             <p className="text-sm text-muted-foreground">Pity: {pull.pity}</p>
                                             <p className="text-sm text-muted-foreground">{formatPullTime(pull.time)}</p>
                                         </div>

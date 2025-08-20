@@ -1,21 +1,28 @@
 import { availableCharacters } from "@/components/CharacterPicker";
+import { availableWeapons } from "@/components/CharacterPicker";
 
 
-const ICON_MAP: Record<string, string> = availableCharacters.reduce(
-    (map, char) => {
-        map[char.name.toLowerCase()] = char.modalsrc;
+const ICON_DATA: Record<
+    string,
+    { icon: string; fullIcon: string; assChara?: string }
+> = {
+    ...availableCharacters.reduce((map, char) => {
+        map[char.name.toLowerCase()] = {
+            icon: char.modalsrc,
+            fullIcon: char.collectionsrc,
+        };
         return map;
-    },
-    {} as Record<string, string>
-);
-
-const FULLICON_MAP: Record<string, string> = availableCharacters.reduce(
-    (map, char) => {
-        map[char.name.toLowerCase()] = char.collectionsrc;
+    }, {} as Record<string, { icon: string; fullIcon: string }>),
+    ...availableWeapons.reduce((map, weapon) => {
+        map[weapon.name.toLowerCase()] = {
+            icon: weapon.modalsrc,
+            fullIcon: weapon.collectionsrc,
+            assChara: weapon.assChara, // optional
+        };
         return map;
-    },
-    {} as Record<string, string>
-);
+    }, {} as Record<string, { icon: string; fullIcon: string; assChara?: string }>)
+};
+
 
 export async function fetchDataForSheet(sheetName: string) {
     await gapi.client.load("sheets", "v4");
@@ -42,10 +49,13 @@ export async function fetchDataForSheet(sheetName: string) {
     for (let i = 0; i < data.length; i++) {
         const val = String(data[i][0] || "").trim();
         const name = String(data[i][1] || "").trim();
-        const iconUrl = ICON_MAP[name.toLowerCase()] || new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href;
-        const fullIconUrl = FULLICON_MAP[name.toLowerCase()] || new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href;
         pityCounter4++;
         pityCounter5++;
+
+        const entry = ICON_DATA[name.toLowerCase()] || {
+            icon: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href,
+            fullIcon: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href,
+        };
 
         if (val) counts[val] = (counts[val] || 0) + 1;
 
@@ -56,8 +66,9 @@ export async function fetchDataForSheet(sheetName: string) {
                 name,
                 pity: pityCounter5,
                 index: i,
-                iconUrl,
-                fullIconUrl,
+                iconUrl: entry.icon,
+                fullIconUrl: entry.fullIcon,
+                assChara: entry.assChara,
                 time: data[i][3] || "",
                 rarity: 5
             });
@@ -71,8 +82,9 @@ export async function fetchDataForSheet(sheetName: string) {
                 name,
                 pity: pityCounter4,
                 index: i,
-                iconUrl,
-                fullIconUrl,
+                iconUrl: entry.icon,
+                fullIconUrl: entry.fullIcon,
+                assChara: entry.assChara,
                 time: data[i][3] || "",
                 rarity: 4
             });
