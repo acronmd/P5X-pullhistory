@@ -48,6 +48,8 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("minami"), rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
   { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
   { ...makeIcon("makoto"), rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
+  { ...makeIcon("yumi"), rarity: "superrare", name: "Yumi Shiina", codename: "Phoebe", affinity: "Support" },
+
   { ...makeIcon("morgana"), rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
   { ...makeIcon("ryuji"), rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
   { ...makeIcon("ann"), rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },

@@ -86,6 +86,7 @@ import {Link, useNavigate} from "react-router-dom";
 import yuiHero from '@/assets/heros/yui.png';
 import yusukeHero from "@/assets/heros/yusuke.png";
 import makotoHero from "@/assets/heros/makoto.png";
+import yumiHero from "@/assets/heros/yumi.png"
 
 import jewelImage from "@/assets/jewels.png";
 import limitedTicketImage from "@/assets/low_limited-ticket.png";
@@ -120,6 +121,12 @@ const allHeroBanners: heroBanner[] = [
         image: makotoHero,
         label: "Fist of The Phantom Star - Makoto Nijima",
         start: 1754298000,
+        end: 1756951200,
+    },
+    {
+        image: yumiHero,
+        label: "Blissful Mix - Yumi Shiina",
+        start: 1755763200,
         end: 1756951200,
     },
     // ... more banners
