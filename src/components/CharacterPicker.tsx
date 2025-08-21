@@ -97,11 +97,6 @@ export const availableCharacters: CharacterData[] = [
   { ...makePersonaIcon("kushi_mitama"), rarity: "common", name: "Kushi Mitama", codename: "N/A", affinity: "Ice"  },
   { ...makePersonaIcon("saki_mitama"), rarity: "common", name: "Saki Mitama", codename: "N/A", affinity: "Ice"  },
 
-  /* Elec */
-  { ...makePersonaIcon("agathion"), rarity: "common", name: "Agathion", codename: "N/A", affinity: "Elec"  },
-  { ...makePersonaIcon("pixie"), rarity: "common", name: "Pixie", codename: "N/A", affinity: "Elec"  },
-  { ...makePersonaIcon("shiisa"), rarity: "common", name: "Shiisa", codename: "N/A", affinity: "Elec"  },
-
   /* Wind */
   { ...makePersonaIcon("bicorn"), rarity: "common", name: "Bicorn", codename: "N/A", affinity: "Wind" },
   { ...makePersonaIcon("high_pixie"), rarity: "common", name: "High Pixie", codename: "N/A", affinity: "Wind" },
@@ -110,6 +105,11 @@ export const availableCharacters: CharacterData[] = [
   { ...makePersonaIcon("koppa_tengu"), rarity: "common", name: "Koppa Tengu", codename: "N/A", affinity: "Wind" },
   { ...makePersonaIcon("nekomata"), rarity: "common", name: "Nekomata", codename: "N/A", affinity: "Wind" },
   { ...makePersonaIcon("sudama"), rarity: "common", name: "Sudama", codename: "N/A", affinity: "Wind" },
+
+  /* Elec */
+  { ...makePersonaIcon("agathion"), rarity: "common", name: "Agathion", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("pixie"), rarity: "common", name: "Pixie", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("shiisa"), rarity: "common", name: "Shiisa", codename: "N/A", affinity: "Elec"  },
 
   /* Psi */
 
