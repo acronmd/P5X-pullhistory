@@ -127,7 +127,7 @@ const allHeroBanners: heroBanner[] = [
         image: yumiHero,
         label: "Blissful Mix - Yumi Shiina",
         start: 1755763200,
-        end: 1756951200,
+        end: 1758463200,
     },
     // ... more banners
 ];
