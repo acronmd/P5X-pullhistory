@@ -46,7 +46,7 @@ function makeWeaponIcon(name: string) {
   return {
     src: new URL(`../assets/persicons/modal/basic.png`, import.meta.url).href,
     modalsrc: new URL(`../assets/chicons/weapon/${name}.png`, import.meta.url).href,
-    collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href
+    collectionsrc: new URL(`../assets/chicons/collection/${name}.png`, import.meta.url).href
   };
 }
 
