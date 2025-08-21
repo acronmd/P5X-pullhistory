@@ -521,7 +521,7 @@ const SheetStats: React.FC = () => {
                                                 <Dialog open={dialogOpen} onOpenChange={(open) => {
                                                     setDialogOpen(open);
                                                     if (!open) {
-                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", name:"Clear", codename: "N/A", affinity: "Support" });
+                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", codename: "N/A", name:"Clear", affinity: "Support" });
                                                     }
                                                 }}>
                                                     <DialogTrigger asChild>
