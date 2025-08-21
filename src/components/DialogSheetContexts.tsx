@@ -155,14 +155,7 @@ export default function DialogSheetContent({
                                                     }, i: number) => {
                                                         if (ds.sheetName) fetchData(ds.sheetName, i);
                                                     });
-                                                    selectedCharacters.fill({
-                                                        src: "./src/assets/chicons/basic.png",
-                                                        modalsrc: "./src/assets/persicons/basic.png",
-                                                        rarity: "none",
-                                                        name: "Clear",
-                                                        codename: "N/A",
-                                                        affinity: "Support",
-                                                    });
+                                                    selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", codename: "N/A", name:"Clear", affinity: "Support" });
                                                     if( !isChecked ) {
                                                         setDialogOpen(false);
                                                     }
@@ -296,14 +289,7 @@ export default function DialogSheetContent({
                                     }, i: number) => {
                                         if (ds.sheetName) fetchData(ds.sheetName, i);
                                     });
-                                    selectedCharacters.fill({
-                                        src: "./src/assets/chicons/basic.png",
-                                        modalsrc: "./src/assets/persicons/basic.png",
-                                        rarity: "none",
-                                        name: "Clear",
-                                        codename: "N/A",
-                                        affinity: "Support",
-                                    });
+                                    selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", codename: "N/A", name:"Clear", affinity: "Support" });
                                     setDialogOpen(false);
                                 } catch {
                                     setAlertDialogError("Failed to send data to Google Sheets, please refresh the page.");
