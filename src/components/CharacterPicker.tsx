@@ -135,6 +135,7 @@ export const availableWeapons: WeaponData[] = [
   { ...makeWeaponIcon("minami-5"), rarity: "superrare", name: "Angel Heart", assChara: "Minami Miyashita" },
   { ...makeWeaponIcon("yusuke-5"), rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
   { ...makeWeaponIcon("makoto-5"), rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
+  { ...makeWeaponIcon("yumi-5"), rarity: "superrare", name: "Moonlit Feather", assChara: "Yumi Shiina" },
 
   { ...makeWeaponIcon("morgana-5"), rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
   { ...makeWeaponIcon("ryuji-5"), rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
@@ -161,6 +162,7 @@ export const availableWeapons: WeaponData[] = [
   { ...makeWeaponIcon("minami-4"), rarity: "rare", name: "Hymn of Life", assChara: "Minami Miyashita" },
   { ...makeWeaponIcon("usuke-4"),rarity: "rare", name: "Jagato", assChara: "Yusuke Kitagawa" },
   { ...makeWeaponIcon("makoto-4"),rarity: "rare", name: "Omega Knuckle", assChara: "Makoto Nijima" },
+  { ...makeWeaponIcon("yumi-4"),rarity: "rare", name: "Starrynight Soothsayer", assChara: "Yumi Shiina" },
 
   { ...makeWeaponIcon("morgana-4"),rarity: "rare", name: "Shamshir", assChara: "Morgana" },
   { ...makeWeaponIcon("ryuji-4"),rarity: "rare", name: "Grand Presser", assChara: "Ryuji Sakamoto" },
@@ -187,6 +189,7 @@ export const availableWeapons: WeaponData[] = [
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Portable Trauma Unit", assChara: "Minami Miyashita" },
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Flash Punch", assChara: "Makoto Nijima" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Peafowl Cane", assChara: "Yumi Shiina" },
 
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "God Saber", assChara: "Morgana" },
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Gang Star", assChara: "Ryuji Sakamoto" },
