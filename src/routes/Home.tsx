@@ -37,9 +37,9 @@ export default function Home() {
                 pull statistics, ongoing banners, pity tracking, luckiest pulls, pull percentages, etc. <br/> <br/>
                 This app cannot automatically grab your pull history, but you
                 can add pulls with screenshots and local image recognition using the built-in {" "}
-                <Link to="/privacy" className="text-blue-600 underline">
+                <a href={"https://tesseract.projectnaptha.com/"} className="text-blue-600 underline">
                     Tesseract.js OCR
-                </Link>
+                </a>
                 . You can view our{" "}
                 <Link to="/privacy" className="text-blue-600 underline">
                  Privacy Policy
