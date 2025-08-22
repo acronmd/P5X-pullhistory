@@ -20,7 +20,7 @@ export function initGoogleClient(clientId: string): Promise<void> {
                 // Create tokenClient with no callback initially
                 tokenClient = google.accounts.oauth2.initTokenClient({
                     client_id: clientId,
-                    scope: "https://www.googleapis.com/auth/spreadsheets https://www.googleapis.com/auth/drive.readonly",
+                    scope: "https://www.googleapis.com/auth/drive.file",
                     callback: () => {}, // placeholder, will override below
                 });
 
