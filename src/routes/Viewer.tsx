@@ -96,36 +96,61 @@ import standardTicketImage from "@/assets/low_standard-ticket.png";
 import addUI from "@/assets/add-icon.png";
 import editUI from "@/assets/edit-icon.png";
 
-
 type heroBanner = {
     image: string;
     label: string;
+    hero: string;
+    weapon: string;
     start: number; // e.g. 1691062800 (seconds) or 1691062800000 (ms)
     end: number;
 };
 
-const allHeroBanners: heroBanner[] = [
+export const allHeroBanners: heroBanner[] = [
+    {
+        image: yuiHero,
+        label: "Virtual Netizen - Ren",
+        hero: "Ren Amamiya",
+        weapon: "Phoenix Dagger",
+        start: 1752138000,
+        end: 1754532000,
+    },
+    {
+        image: yuiHero,
+        label: "Virtual Netizen - Minami",
+        hero: "Minami Miyashita",
+        weapon: "Angel Heart",
+        start: 1752138000,
+        end: 1754532000,
+    },
     {
         image: yuiHero,
         label: "Virtual Netizen - Yui",
+        hero: "Yui",
+        weapon: "Cyber Jammers",
         start: 1752138000,
         end: 1754532000,
     },
     {
         image: yusukeHero,
         label: "Art of the Fox - Yusuke Kitagawa",
+        hero: "Yusuke Kitagawa",
+        weapon: "Shadowkiller",
         start: 1753344000,
         end: 1755741600,
     },
     {
         image: makotoHero,
         label: "Fist of The Phantom Star - Makoto Nijima",
+        hero: "Makoto Nijima",
+        weapon: "Nuclear Finisher",
         start: 1754298000,
         end: 1756951200,
     },
     {
         image: yumiHero,
         label: "Blissful Mix - Yumi Shiina",
+        hero: "Yumi Shiina",
+        weapon: "Moonlit Feather",
         start: 1755763200,
         end: 1758463200,
     },

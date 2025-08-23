@@ -15,7 +15,17 @@ import PullTableCard from "@/components/ViewTable.tsx"
 import { formatPullTime } from "@/utils/sharedFunctions.tsx"
 import LuckiestPullsCarousel from "@/components/LuckyPullsCarousel.tsx";
 
-function LimitedPage() {
+import { calculatePullStats } from "@/utils/calculatePullStats";
+import { allHeroBanners } from "@/routes/Viewer.tsx";
+
+import { SquareCard } from "@/components/SquareCard.tsx"
+import { MostPulledCard } from "@/components/MostPulledCard";
+import { PityPlanCard } from "@/components/PityPlanCard.tsx";
+
+export default function LimitedPage() {
+    const [viewMode, setViewMode] = useState<"scroll" | "grid">("scroll")
+    const [show5Stars, setShow5Stars] = useState(true);
+    const [show4Stars, setShow4Stars] = useState(false);
     const location = useLocation();
 
     // The data you passed via router state
@@ -40,8 +50,9 @@ function LimitedPage() {
         allPulls,
     } = bannerData;
 
-    const [show5Stars, setShow5Stars] = useState(true);
-    const [show4Stars, setShow4Stars] = useState(false);
+    const { fiftyFiftyWins, fiftyFiftyAttempts, fiftyFiftyRate, mostPulled5Star, mostPulled4Star } =
+        calculatePullStats(all5Stars, all4Stars, allHeroBanners);
+
 
     const combinedStars = [
         ...(show5Stars ? all5Stars : []),
@@ -215,38 +226,6 @@ function LimitedPage() {
                             </div>
                         </div>
                     </Card>
-                    {/*
-                <div>
-                    <table className="min-w-full text-sm border border-border text-left">
-                        <thead className="bg-muted">
-                        <tr>
-                            <th className="px-4 py-2 border-b">Rarity</th>
-                            <th className="px-4 py-2 border-b">Count</th>
-                            <th className="px-4 py-2 border-b">Percent</th>
-                            <th className="px-4 py-2 border-b">Pity Avg</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {Object.entries(rarityCounts).map(([rarity, count]) => (
-                            <tr key={rarity}>
-                                <td className="px-4 py-2 border-b">{rarity}★</td>
-                                <td className="px-4 py-2 border-b">{count}</td>
-                                <td className="px-4 py-2 border-b">
-                                    {rarityPercents[rarity].toFixed(2)}%
-                                </td>
-                                <td className="px-4 py-2 border-b">
-                                    {rarity === '5'
-                                        ? avgPity5.toFixed(2)
-                                        : rarity === '4'
-                                            ? avgPity4.toFixed(2)
-                                            : '—'}
-                                </td>
-                            </tr>
-                        ))}
-                        </tbody>
-                    </table>
-                </div>
-                */}
                     {/* Rarity Pie CHart */}
                     <RarityPieChart rarityCounts={rarityCounts} />
 
@@ -254,85 +233,121 @@ function LimitedPage() {
                     <LuckiestPullsCarousel pulls={top5LowestPityCharacters}/>
                 </div>
 
-                {/* Example: Show recent 5 and 4 stars */}
-                <Card className="p-4">
-                    <CardHeader className="flex justify-between items-center">
-                        <CardTitle>Recently Pulled</CardTitle>
-                        <div className="flex gap-2">
-                            <button
-                                className="px-2 py-1 border rounded"
-                                onClick={() => setShow5Stars((prev) => !prev)}
+                <div className="mt-4 flex flex-wrap lg:flex-nowrap gap-5">
+                    <SquareCard
+                        title="50/50 Wins"
+                        mainValue={`${fiftyFiftyRate.toFixed(2)}%`}
+                        subValue={`${fiftyFiftyWins} / ${fiftyFiftyAttempts}`}
+                        banner={bannerCurrent.label}
+                    />
+                    <PityPlanCard title={"Jewels for 5★ Pity"} mainValue={(bannerCurrent.pity5 - sinceLast5) * 150}/>
+                    <MostPulledCard title={"Most Pulled 5★"} mostPulled={mostPulled5Star}/>
+                    <MostPulledCard title={"Most Pulled 4★"} mostPulled={mostPulled4Star}/>
+
+                </div>
+
+                {/* Show recent 5 and 4 stars */}
+                <div>
+                    <Card className="p-4">
+                        <CardHeader className="flex justify-between items-center">
+                            <CardTitle>Recently Pulled</CardTitle>
+                            <div className="flex gap-2">
+                                <button
+                                    className="px-2 py-1 border rounded"
+                                    onClick={() => setShow5Stars((prev) => !prev)}
+                                >
+                                    {show5Stars ? "Hide 5★" : "Show 5★"}
+                                </button>
+                                <button
+                                    className="px-2 py-1 border rounded"
+                                    onClick={() => setShow4Stars((prev) => !prev)}
+                                >
+                                    {show4Stars ? "Hide 4★" : "Show 4★"}
+                                </button>
+                                <button
+                                    className="px-2 py-1 border rounded"
+                                    onClick={() =>
+                                        setViewMode(viewMode === "scroll" ? "grid" : "scroll")
+                                    }
+                                >
+                                    {viewMode === "scroll" ? "Grid View" : "Scroll View"}
+                                </button>
+                            </div>
+                        </CardHeader>
+
+                        <CardContent>
+                            <div
+                                className={
+                                    viewMode === "scroll"
+                                        ? "flex gap-2 overflow-x-auto pb-4"
+                                        : "grid grid-cols-3 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-9 gap-6"
+                                }
                             >
-                                {show5Stars ? "Hide 5★" : "Show 5★"}
-                            </button>
-                            <button
-                                className="px-2 py-1 border rounded"
-                                onClick={() => setShow4Stars((prev) => !prev)}
-                            >
-                                {show4Stars ? "Hide 4★" : "Show 4★"}
-                            </button>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <div
-                            className="flex gap-2 overflow-x-auto pb-4"
-                        >
-                            {combinedStars.map(({ name, pity, iconUrl, time, rarity, assChara }, i) => (
-                                <Tooltip key={i}>
-                                    <TooltipTrigger asChild>
-                                        <div className="relative w-[120px] h-[120px] flex-shrink-0">
-                                            <div
-                                                style={{
-                                                    position: "relative",
-                                                    width: "120px",
-                                                    height: "120px",
-                                                }}
-                                            >
-                                                <img
-                                                    src={iconUrl}
-                                                    alt={name}
-                                                    style={{
-                                                        width: "100%",
-                                                        height: "100%",
-                                                        objectFit: "contain",
-                                                        display: "block",
-                                                    }}
-                                                />
-                                                <div
-                                                    style={{
-                                                        position: "absolute",
-                                                        bottom: "5px",
-                                                        right: "4px",
-                                                        color: "white",
-                                                        padding: "2px 22px",
-                                                        textShadow: "0 0 4px rgba(255,255,255,0.4)",
-                                                        fontWeight: "bold",
-                                                        fontSize: "0.75rem",
-                                                    }}
-                                                >
-                                                    <span style={{ fontSize: "0.65rem", fontWeight: "bold", color: getPityColor(pity, rarity)}}>pity </span>
-                                                    <span style={{ fontSize: "1rem", fontWeight: "bold", color: getPityColor(pity, rarity) }}>{pity}</span>
+                                {combinedStars.map(
+                                    ({ name, pity, iconUrl, time, rarity, assChara }, i) => (
+                                        <Tooltip key={i}>
+                                            <TooltipTrigger asChild>
+                                                <div className="relative w-[120px] h-[120px] flex-shrink-0">
+                                                    <div style={{ position: "relative", width: "120px", height: "120px", }} >
+                                                        <img
+                                                            src={iconUrl}
+                                                            alt={name}
+                                                            className="w-full h-full object-contain"
+                                                        />
+                                                        <div
+                                                            style={{
+                                                                position: "absolute",
+                                                                bottom: "5px",
+                                                                right: "4px",
+                                                                color: "white",
+                                                                padding: "2px 22px",
+                                                                textShadow: "0 0 4px rgba(255,255,255,0.4)",
+                                                                fontWeight: "bold", fontSize: "0.75rem",
+                                                            }} >
+                                                        <span style={{
+                                                            fontSize: "0.65rem",
+                                                            fontWeight: "bold",
+                                                            color: getPityColor(pity, rarity)}}
+                                                        >
+                                                            pity {" "}
+                                                        </span>
+                                                            <span style={{
+                                                                fontSize: "1rem",
+                                                                fontWeight: "bold",
+                                                                color: getPityColor(pity, rarity) }}
+                                                            >
+                                                            {pity}
+                                                        </span>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </TooltipTrigger>
-                                    <TooltipContent side="top">
-                                        <div className="text-center">
-                                            <div className="flex flex-row gap-3 items-center justify-center">
-                                                <p className="font-bold">{name}</p>
-                                                {assChara && (
-                                                    <p className="text-muted-foreground">{assChara.split(" ")[0]} only</p>
-                                                )}
-                                            </div>
-                                            <p className="text-sm text-muted-foreground">Pity: {pity}</p>
-                                            <p className="text-sm text-muted-foreground">{formatPullTime(time)}</p>
-                                        </div>
-                                    </TooltipContent>
-                                </Tooltip>
-                            ))}
-                        </div>
-                    </CardContent>
-                </Card>
+                                            </TooltipTrigger>
+                                            <TooltipContent side="top">
+                                                <div className="text-center">
+                                                    <div className="flex flex-row gap-3 items-center justify-center">
+                                                        <p className="font-bold">{name}</p>
+                                                        {assChara && (
+                                                            <p className="text-muted-foreground">
+                                                                {assChara.split(" ")[0]} only
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        Pity: {pity}
+                                                    </p>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        {formatPullTime(time)}
+                                                    </p>
+                                                </div>
+                                            </TooltipContent>
+                                        </Tooltip>
+                                    )
+                                )}
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
+
                 <PullTableCard pulls={allPulls} label={bannerCurrent.label} />
             </div>
 
@@ -340,5 +355,3 @@ function LimitedPage() {
         </div>
     );
 }
-
-export default LimitedPage;

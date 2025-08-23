@@ -3,6 +3,16 @@ import {Link, useNavigate} from "react-router-dom";
 import { useAuth } from "@/context/AuthContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import {Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious} from "@/components/ui/carousel.tsx";
+import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
+
+import screenshot1 from "@/assets/screenshots/screenshot1.png";
+import screenshot2 from "@/assets/screenshots/screenshot2.png";
+
+const screenshots = [
+    { src: screenshot1, altText: "Screenshot 1", text: "The APT homepage, showing banner cards, active banners, and more" },
+    { src: screenshot2, altText: "Screenshot 2", text: "The banner detailed view, showing many statistics" },
+]
 
 export default function Home() {
     const { isSignedIn, signIn, isInitialized } = useAuth();
@@ -55,6 +65,30 @@ export default function Home() {
                 used.&quot;
             </blockquote>
             <Separator />
+            <Carousel>
+                <CarouselContent>
+                    {screenshots.map((image, i) => (
+                        <CarouselItem key={i} className="relative w-full h-full">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <img
+                                        src={image.src}
+                                        alt={image.altText}
+                                        className="w-full h-full object-contain"
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent side="top">
+                                    <div className="text-center">
+                                        <p className="font-bold">{image.text}</p>
+                                    </div>
+                                </TooltipContent>
+                            </Tooltip>
+                        </CarouselItem>
+                        ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+            </Carousel>
             <Button onClick={handleSignIn} disabled={isLoading || !isInitialized}>
                 {isLoading ? "Signing in..." : "Sign In with Google"}
             </Button>

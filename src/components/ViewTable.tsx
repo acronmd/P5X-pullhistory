@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { ChevronDown } from "lucide-react"
+
 
 interface PullTableCardProps {
     pulls: any[][]; // the sheet data
@@ -34,44 +36,62 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
 
     const displayedPulls = isReversed ? [...pulls].reverse() : pulls;
 
+    const [isExpanded, setIsExpanded] = useState(false);
+
     return (
         <Card className="w-full">
             <CardHeader className="flex justify-between items-center">
                 <CardTitle>{label} - Pull History</CardTitle>
-                <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setIsReversed(prev => !prev)}
-                >
-                    Switch to {isReversed ? "Oldest First" : "Newest First"}
-                </Button>
+                <div className="flex flex-row gap-5">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsReversed(prev => !prev)}
+                    >
+                        Switch to {isReversed ? "Oldest First" : "Newest First"}
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setIsExpanded(prev => !prev)}
+                    >
+                        {isExpanded ? "Collapse" : "Expand"}
+                        <ChevronDown
+                            className={`h-4 w-4 transition-transform duration-200 ${
+                                isExpanded ? "rotate-180" : ""
+                            }`}
+                        />
+                    </Button>
+                </div>
             </CardHeader>
             <CardContent className="overflow-x-auto">
-                <Table className="min-w-full border-collapse">
-                    <TableHeader>
-                        <TableRow className="bg-gray-100 sticky top-0 z-10">
-                            <TableHead className="text-center px-4 py-2">Pull #</TableHead>
-                            <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
-                            <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
-                            <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
-                            <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {displayedPulls.map((row, index) => (
-                            <TableRow
-                                key={index}
-                                className={`${rowClassForRarity(row[0]?.trim())}`}
-                            >
-                                <TableCell className="text-center px-4 py-2">{isReversed ? pulls.length - index : index + 1}</TableCell>
-                                <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
-                                <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
-                                <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
-                                <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
+                {isExpanded && (
+                    <Table className="min-w-full border-collapse">
+                        <TableHeader>
+                            <TableRow className="bg-gray-100 sticky top-0 z-10">
+                                <TableHead className="text-center px-4 py-2">Pull #</TableHead>
+                                <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
+                                <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
+                                <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
+                                <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                        </TableHeader>
+                        <TableBody>
+                            {displayedPulls.map((row, index) => (
+                                <TableRow
+                                    key={index}
+                                    className={`${rowClassForRarity(row[0]?.trim())}`}
+                                >
+                                    <TableCell className="text-center px-4 py-2">{isReversed ? pulls.length - index : index + 1}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                )}
             </CardContent>
         </Card>
     );

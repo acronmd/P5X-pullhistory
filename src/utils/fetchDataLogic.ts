@@ -1,7 +1,6 @@
 import { availableCharacters } from "@/components/CharacterPicker";
 import { availableWeapons } from "@/components/CharacterPicker";
 
-
 const ICON_DATA: Record<
     string,
     { icon: string; fullIcon: string; assChara?: string }
