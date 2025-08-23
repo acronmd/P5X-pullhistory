@@ -233,7 +233,7 @@ export default function LimitedPage() {
                     <LuckiestPullsCarousel pulls={top5LowestPityCharacters}/>
                 </div>
 
-                <div className="mt-4 flex flex-wrap lg:flex-nowrap gap-5">
+                <div className="flex flex-wrap lg:flex-nowrap gap-5">
                     <SquareCard
                         title="50/50 Wins"
                         mainValue={`${fiftyFiftyRate.toFixed(2)}%`}
