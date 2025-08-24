@@ -26,6 +26,7 @@ export default function LimitedPage() {
     const [viewMode, setViewMode] = useState<"scroll" | "grid">("scroll")
     const [show5Stars, setShow5Stars] = useState(true);
     const [show4Stars, setShow4Stars] = useState(false);
+    const navigate = useNavigate();
     const location = useLocation();
 
     // The data you passed via router state
@@ -50,7 +51,7 @@ export default function LimitedPage() {
         allPulls,
     } = bannerData;
 
-    const { fiftyFiftyWins, fiftyFiftyAttempts, fiftyFiftyRate, mostPulled5Star, mostPulled4Star } =
+    const { fiftyFiftyWins, fiftyFiftyAttempts, fiftyFiftyRate, mostPulled5StarLimited, mostPulled5StarStandard, mostPulled4Star } =
         calculatePullStats(all5Stars, all4Stars, allHeroBanners);
 
 
@@ -92,7 +93,6 @@ export default function LimitedPage() {
         return `rgb(${r}, ${g}, ${b})`;
     }
 
-    const navigate = useNavigate();
 
     return (
         <div>
@@ -240,9 +240,26 @@ export default function LimitedPage() {
                         subValue={`${fiftyFiftyWins} / ${fiftyFiftyAttempts}`}
                         banner={bannerCurrent.label}
                     />
-                    <PityPlanCard title={"Jewels for 5★ Pity"} mainValue={(bannerCurrent.pity5 - sinceLast5) * 150}/>
-                    <MostPulledCard title={"Most Pulled 5★"} mostPulled={mostPulled5Star}/>
-                    <MostPulledCard title={"Most Pulled 4★"} mostPulled={mostPulled4Star}/>
+                    <PityPlanCard
+                        title={"Jewels until 5★ Pity"}
+                        mainValue={(bannerCurrent.pity5 - sinceLast5) * 150}
+                    />
+                    <MostPulledCard
+                        title={"Most Pulled 5★ Limited"}
+                        mostPulled={mostPulled5StarLimited}
+                        width={210}
+                        banner={bannerCurrent.label}
+                    />
+                    <MostPulledCard
+                        title={"Most Pulled 5★ Standard"}
+                        mostPulled={mostPulled5StarStandard}
+                        width={225}
+                    />
+                    <MostPulledCard
+                        title={"Most Pulled 4★"}
+                        mostPulled={mostPulled4Star}
+                        width={165}
+                    />
 
                 </div>
 

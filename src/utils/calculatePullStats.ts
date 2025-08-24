@@ -27,7 +27,8 @@ interface PullStats {
     fiftyFiftyWins: number;
     fiftyFiftyAttempts: number;
     fiftyFiftyRate: number;
-    mostPulled5Star?: MostPulled;
+    mostPulled5StarLimited?: MostPulled;
+    mostPulled5StarStandard?: MostPulled;
     mostPulled4Star?: MostPulled;
 }
 
@@ -40,16 +41,23 @@ export function calculatePullStats(
     let fiftyFiftyAttempts = 0;
     let waitingForGuaranteed = false;
 
-    const counts5: Record<string, { count: number; lastPull: Pull }> = {};
+    const counts5Limited: Record<string, { count: number; lastPull: Pull }> = {};
+    const counts5Standard: Record<string, { count: number; lastPull: Pull }> = {};
     const counts4: Record<string, { count: number; lastPull: Pull }> = {};
 
-    // Count most pulled for 5★
+    // Split 5★ into limited vs standard
     for (const pull of all5Stars) {
-        if (!counts5[pull.name]) {
-            counts5[pull.name] = { count: 0, lastPull: pull };
+        const isLimited = allHeroBanners.some(
+            (b) => b.hero === pull.name || b.weapon === pull.name
+        );
+
+        const target = isLimited ? counts5Limited : counts5Standard;
+
+        if (!target[pull.name]) {
+            target[pull.name] = { count: 0, lastPull: pull };
         }
-        counts5[pull.name].count++;
-        counts5[pull.name].lastPull = pull;
+        target[pull.name].count++;
+        target[pull.name].lastPull = pull;
     }
 
     // Count most pulled for 4★
@@ -61,53 +69,35 @@ export function calculatePullStats(
         counts4[pull.name].lastPull = pull;
     }
 
-    // Determine most pulled 5★
-    const mostPulled5StarData = Object.values(counts5).reduce(
-        (max, cur) => {
-            if (cur.count > max.count) return cur; // higher count wins
-            if (cur.count === max.count) {
-                // tie → prefer newest pull
-                return cur.lastPull.index > max.lastPull.index ? cur : max;
-            }
-            return max;
-        },
-        { count: 0, lastPull: all5Stars[0] } // initial value
-    );
+    function findMostPulled(
+        counts: Record<string, { count: number; lastPull: Pull }>
+    ): MostPulled | undefined {
+        const data = Object.values(counts).reduce(
+            (max, cur) => {
+                if (cur.count > max.count) return cur;
+                if (cur.count === max.count) {
+                    return cur.lastPull.index > max.lastPull.index ? cur : max;
+                }
+                return max;
+            },
+            { count: 0, lastPull: undefined as unknown as Pull }
+        );
 
-    const mostPulled5Star: MostPulled | undefined =
-        mostPulled5StarData.count > 0
+        return data.count > 0
             ? {
-                name: mostPulled5StarData.lastPull.name,
-                count: mostPulled5StarData.count,
-                iconUrl: mostPulled5StarData.lastPull.iconUrl,
-                fullIconUrl: mostPulled5StarData.lastPull.fullIconUrl,
-                time: mostPulled5StarData.lastPull.time,
+                name: data.lastPull.name,
+                count: data.count,
+                iconUrl: data.lastPull.iconUrl,
+                fullIconUrl: data.lastPull.fullIconUrl,
+                time: data.lastPull.time,
+                assChara: data.lastPull.assChara,
             }
             : undefined;
+    }
 
-
-    // Determine most pulled 4★
-    const mostPulled4StarData = Object.values(counts4).reduce(
-        (max, cur) => {
-            if (cur.count > max.count) return cur;
-            if (cur.count === max.count) {
-                return cur.lastPull.index > max.lastPull.index ? cur : max;
-            }
-            return max;
-        },
-        { count: 0, lastPull: all4Stars[0] }
-    );
-
-    const mostPulled4Star: MostPulled | undefined =
-        mostPulled4StarData.count > 0
-            ? {
-                name: mostPulled4StarData.lastPull.name,
-                count: mostPulled4StarData.count,
-                iconUrl: mostPulled4StarData.lastPull.iconUrl,
-                fullIconUrl: mostPulled4StarData.lastPull.fullIconUrl,
-                time: mostPulled4StarData.lastPull.time,
-            }
-            : undefined;
+    const mostPulled5StarLimited = findMostPulled(counts5Limited);
+    const mostPulled5StarStandard = findMostPulled(counts5Standard);
+    const mostPulled4Star = findMostPulled(counts4);
 
 
     // 50/50 calculation
@@ -137,7 +127,8 @@ export function calculatePullStats(
         fiftyFiftyWins,
         fiftyFiftyAttempts,
         fiftyFiftyRate,
-        mostPulled5Star,
+        mostPulled5StarLimited,
+        mostPulled5StarStandard,
         mostPulled4Star,
     };
 }
