@@ -155,15 +155,12 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
     };
 
     return (
-        <div>
-            <ContextMenu>
-                <ContextMenuTrigger asChild>
+        <div className={"flex flex-row gap-5"}>
                     <Button
                         onClick={() => {
                             document.getElementById('ocr-file-input')?.click()}
                         }
                         variant="outline"
-                        className="w-32 font-normal"
                     >
                         Upload Image
                         <input
@@ -174,16 +171,14 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                             style={{ display: 'none' }}
                         />
                     </Button>
-                </ContextMenuTrigger>
-                <ContextMenuContent>
-                    <ContextMenuItem onClick={() => {
+                    <Button
+                        onClick={() => {
                         handleClipboardImage()
-                    }
-                    }>
+                        }}
+                        variant="outline"
+                    >
                         Select Image from Clipboard
-                    </ContextMenuItem>
-                </ContextMenuContent>
-            </ContextMenu>
+                     </Button>
         </div>
     );
 };
