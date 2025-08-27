@@ -95,6 +95,7 @@ import standardTicketImage from "@/assets/low_standard-ticket.png";
 
 import addUI from "@/assets/add-icon.png";
 import editUI from "@/assets/edit-icon.png";
+import externalUI from "@/assets/open-external.png";
 
 type heroBanner = {
     image: string;
@@ -224,24 +225,11 @@ const SheetStats: React.FC = () => {
         { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: standardTicketImage, altText: "Standard Banner Icon" },
     ];
 
-    const banners = [
-        { value: "The Phantom Thieves of Hearts", label: "The Phantom Thieves of Hearts (Beginner Banner)", sublabel: "Phantom Idol" },
-        { value: "Phantom Idol Draft X", label: "Phantom Idol Draft X (Standard Banner)", sublabel: "Phantom Idol" },
-
-        { value: "Silent Pistol", label: "Silent Pistol", sublabel: "Arms Deals" },
-
-        { value: "The Phantom Magician", label: "The Phantom Magician (Joker)", sublabel: "Most Wanted Ph. Idol" },
-        { value: "Angel's Diagnosis", label: "Angel's Diagnosis (Marian)", sublabel: "Most Wanted Ph. Idol" },
-        { value: "Virtual Netizen", label: "Virtual Netizen (Bui)", sublabel: "Most Wanted Ph. Idol" },
-        { value: "Art of the Fox", label: "Art of the Fox (Fox)", sublabel: "Most Wanted Ph. Idol" },
-    ];
-
     ///React useState variables with LOCAL STORAGE NEAR HERE
-    const [datasets, setDatasets] = useState(() => {
+    const loadDatasets = () => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
 
-        // Fill missing fields from defaultDatasets
         return parsed.map((ds: any, i: number) => ({
             sheetName: ds.sheetName ?? defaultDatasets[i]?.sheetName ?? "",
             label: ds.label ?? defaultDatasets[i]?.label ?? "",
@@ -251,7 +239,10 @@ const SheetStats: React.FC = () => {
             source: defaultDatasets[i]?.source ?? "",
             altText: ds.altText ?? defaultDatasets[i]?.altText ?? "",
         }));
-    });
+    };
+
+    const [datasets, setDatasets] = useState(loadDatasets);
+
 
     const [sharedSpreadsheetId, setSharedSpreadsheetId] = useState(() => {
         return localStorage.getItem("sharedSpreadsheetId") ?? "";
@@ -270,6 +261,12 @@ const SheetStats: React.FC = () => {
     }, [sharedSpreadsheetId, datasets]);
 
     const [dialogOpen, setDialogOpen] = useState(false);
+
+    useEffect(() => {
+        if (!dialogOpen) {
+            setDatasets(loadDatasets());
+        }
+    }, [dialogOpen]);
 
     type Stats = {
         total: number;
@@ -573,7 +570,6 @@ const SheetStats: React.FC = () => {
                                                     <div>
                                                         <DialogSheetContent
                                                             bgImage={bgImage}
-                                                            banners={banners}
                                                             currentBanner={sharedSpreadsheetId}
                                                             currentBannerSublabel={currentBannerSublabel}
                                                             currentSheetName={currentSheetName}
@@ -692,7 +688,8 @@ const SheetStats: React.FC = () => {
                                         <Button
                                             disabled={loadingSheet === ds.sheetName}
                                             onClick={() => handleClick(ds.sheetName, ds)}
-                                            className="btn"
+                                            variant="outline"
+                                            title="Add Row"
                                         >
                                             {loadingSheet === ds.sheetName ? "Loading..." : "Expanded View"}
                                         </Button>
@@ -702,12 +699,12 @@ const SheetStats: React.FC = () => {
                         ))}
                     </div>
                 </div>
-                <div>
+                <div className="flex flex-row gap-5 justify-center">
                     {/* Set Spreadsheet Button */}
                     <Button
                         size="icon"
                         onClick={() => handlePickSheet()}
-                        className="w-72"
+                        className="w-auto px-4"
                         title="Set Spreadsheet via Google Drive"
                     >
                         <img
@@ -716,6 +713,21 @@ const SheetStats: React.FC = () => {
                             className="w-6 h-6 object-contain translate-y-[2px] invert"
                         />
                         Set Spreadsheet from Google Drive
+                    </Button>
+                    <Button
+                        size="icon"
+                        className="w-auto px-4"
+                        title="Open Sheet"
+                        onClick={() =>
+                            window.open(`https://docs.google.com/spreadsheets/d/${sharedSpreadsheetId}`, "_blank")
+                        }
+                    >
+                        <img
+                            src={externalUI}
+                            alt="Set Spreadsheet"
+                            className="w-4 h-4ƒexter object-contain invert"
+                        />
+                        Open Spreadsheet
                     </Button>
                 </div>
             </div>

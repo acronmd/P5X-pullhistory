@@ -5,12 +5,8 @@ import { Button } from "@/components/ui/button";
 
 import { availableCharacters } from "@/components/CharacterPicker";
 import { availableWeapons } from "@/components/CharacterPicker"
-import {
-    ContextMenu,
-    ContextMenuContent,
-    ContextMenuItem,
-    ContextMenuTrigger,
-} from "@/components/ui/context-menu"
+
+import fileIconBig from "@/assets/file-icon-big.png";
 
 const CHARACTER_NAMES = availableCharacters.map(c => c.name);
 const WEAPON_NAMES = availableWeapons.map(c => c.name);
@@ -155,32 +151,68 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
     };
 
     return (
-        <div className={"flex flex-row gap-5"}>
+        <div className="flex flex-col gap-6 w-full items-center">
+            {/* Drag & Drop Zone */}
+            <div
+                className="w-[90%] h-72 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center text-center transition p-6 gap-4"
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => {
+                    e.preventDefault();
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        handleFileChange({ target: { files } } as any);
+                    }
+                }}
+            >
+                {/* Optional graphic/icon */}
+                <img
+                    src={fileIconBig}
+                    alt="Upload Icon"
+                    className="w-22 h-22 mb-2"
+                />
+
+                {/* Drag & Drop Text */}
+                <span className="text-sm md:text-md lg:text-lg font-medium text-background">
+                    Drag & Drop Image Here
+                </span>
+
+                {/* Hidden File Input */}
+                <input
+                    type="file"
+                    id="ocr-file-input"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    style={{ display: "none" }}
+                />
+
+                {/* Or separator */}
+                <div className="flex items-center w-full justify-center gap-2 text-background font-medium my-2">
+                    <span className="border-t border-gray-300 flex-1 mt-1"></span>
+                    <span>Or</span>
+                    <span className="border-t border-gray-300 flex-1 mt-1"></span>
+                </div>
+
+                {/* Buttons inside container */}
+                <div className="flex gap-4 w-full justify-center">
                     <Button
-                        onClick={() => {
-                            document.getElementById('ocr-file-input')?.click()}
-                        }
+                        onClick={() => document.getElementById("ocr-file-input")?.click()}
                         variant="outline"
+                        className="flex-1 h-12 text-sm md:text-md lg:text-lg font-medium"
                     >
-                        Upload Image
-                        <input
-                            type="file"
-                            id="ocr-file-input"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            style={{ display: 'none' }}
-                        />
+                        Browse Files
                     </Button>
                     <Button
-                        onClick={() => {
-                        handleClipboardImage()
-                        }}
+                        onClick={handleClipboardImage}
                         variant="outline"
+                        className="flex-1 h-12 text-sm md:text-md lg:text-lg font-medium"
                     >
-                        Select Image from Clipboard
-                     </Button>
+                        Upload from Clipboard
+                    </Button>
+                </div>
+            </div>
         </div>
     );
+
 };
 
 export default ImageOCRUploader;
