@@ -114,7 +114,7 @@ export default function DialogSheetContent({
                 style={{ backgroundImage: `url(${bgImage})` }}
             >
                 <DialogHeader>
-                    <DialogTitle className="text-center text-xl font-bold text-background">
+                    <DialogTitle className="text-center text-xl font-bold text-white">
                         Choose Upload Method
                     </DialogTitle>
                 </DialogHeader>
