@@ -172,7 +172,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                 />
 
                 {/* Drag & Drop Text */}
-                <span className="text-sm md:text-md lg:text-lg font-medium text-background">
+                <span className="text-sm md:text-md lg:text-lg font-medium text-white">
                     Drag & Drop Image Here
                 </span>
 
@@ -186,7 +186,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                 />
 
                 {/* Or separator */}
-                <div className="flex items-center w-full justify-center gap-2 text-background font-medium my-2">
+                <div className="flex items-center w-full justify-center gap-2 text-background font-medium my-2 text-white">
                     <span className="border-t border-gray-300 flex-1 mt-1"></span>
                     <span>Or</span>
                     <span className="border-t border-gray-300 flex-1 mt-1"></span>

@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react"
 
+import '@/colors.css';
 
 interface PullTableCardProps {
     pulls: any[][]; // the sheet data
@@ -23,11 +24,11 @@ function starsForRarity(text: string) {
 function rowClassForRarity(rarity: string) {
     switch (rarity) {
         case '5':
-            return 'bg-purple-200 hover:bg-purple-300';  // gold background, same on hover
+            return 'bg-rarity-5 hover:bg-rarity-5bg';
         case '4':
-            return 'bg-yellow-100 hover:bg-yellow-200';  // purple background, same on hover
+            return 'bg-rarity-4 hover:bg-rarity-4bg';
         default:
-            return 'bg-gray-100 hover:bg-gray-200';      // grey background, same on hover
+            return 'bg-rarity-3 hover:bg-rarity-3bg';
     }
 }
 
@@ -68,7 +69,7 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                 {isExpanded && (
                     <Table className="min-w-full border-collapse">
                         <TableHeader>
-                            <TableRow className="bg-gray-100 sticky top-0 z-10">
+                            <TableRow className="bg-rarity-3 sticky top-0 z-10">
                                 <TableHead className="text-center px-4 py-2">Pull #</TableHead>
                                 <TableHead className="text-center px-4 py-2">Reward Type</TableHead>
                                 <TableHead className="text-center px-4 py-2">Reward Name</TableHead>

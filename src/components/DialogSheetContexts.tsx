@@ -121,7 +121,7 @@ export default function DialogSheetContent({
 
                 <div className="flex gap-6 w-full justify-center">
                     <Button
-                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border hover:bg-neutral-800 flex flex-col items-center p-4"
+                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border bg-neutral-900 hover:bg-neutral-800 flex flex-col items-center p-4"
                         onClick={() => setUploadMode("ocr")}
                     >
                         {/* Image: 60% of the button height */}
@@ -135,12 +135,12 @@ export default function DialogSheetContent({
                         <div className="w-full h-[2px] bg-white my-2" />
 
                         {/* Text: remaining space */}
-                        <span className="text-base sm:text-lg font-semibold text-center">
+                        <span className="text-base sm:text-lg font-semibold text-center text-white">
                             Upload Screenshot
                         </span>
                     </Button>
                     <Button
-                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border hover:bg-neutral-800 flex flex-col items-center p-4"
+                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border bg-neutral-900 hover:bg-neutral-800 flex flex-col items-center p-4"
                         onClick={() => setUploadMode("manual")}
                     >
                         {/* Image: 60% of the button height */}
@@ -154,7 +154,7 @@ export default function DialogSheetContent({
                         <div className="w-full h-[2px] bg-white my-2" />
 
                         {/* Text: remaining space */}
-                        <span className="text-base sm:text-lg font-semibold text-center">
+                        <span className="text-base sm:text-lg font-semibold text-center text-white">
                             Manual Entry
                         </span>
                     </Button>

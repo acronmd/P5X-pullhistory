@@ -33,6 +33,8 @@ import { fetchDataForSheet} from "@/utils/fetchDataLogic.ts";
 
 import bgImage from "@/assets/bg.png";
 
+import '@/colors.css';
+
 /// <reference types="gapi" />
 /// <reference types="gapi.auth2" />
 
@@ -82,6 +84,8 @@ import {createPicker, initGoogleClient, loadPicker, signIn} from "@/utils/google
 import { appendCharactersToSheet} from "@/utils/google.ts";
 import DialogSheetContent from "../components/DialogSheetContexts.tsx";
 import {Link, useNavigate} from "react-router-dom";
+
+import DarkModeToggle from "@/components/DarkModeToggle.tsx"
 
 import yuiHero from '@/assets/heros/yui.png';
 import yusukeHero from "@/assets/heros/yusuke.png";
@@ -490,7 +494,7 @@ const SheetStats: React.FC = () => {
                             {itemInventory.map((item) => (
                                 <div className={"relative"}>
                                     {/* Capsule Box */}
-                                    <div className="bg-foreground rounded-full px-10 py-1.5 shadow-md text-center text-white font-semibold relative z-10 min-w-[7rem]">
+                                    <div className="bg-foreground rounded-full px-10 py-1.5 shadow-md text-center text-background font-semibold relative z-10 min-w-[7rem]">
                                         {Number(item.value).toLocaleString()}
                                     </div>
 
@@ -505,7 +509,7 @@ const SheetStats: React.FC = () => {
 
                                     {/* Right Button */}
                                     <Button
-                                        className="absolute right-[-1rem] top-5 -translate-y-5 -translate-x-3 bg-foreground hover:bg-gray-700 text-white rounded-full w-9 h-9 flex items-center justify-center z-20 shadow"
+                                        className="absolute right-[-1rem] top-5 -translate-y-5 -translate-x-3 bg-foreground hover:bg-gray-700 text-background rounded-full w-9 h-9 flex items-center justify-center z-20 shadow"
                                     >
                                         +
                                     </Button>
@@ -561,7 +565,7 @@ const SheetStats: React.FC = () => {
                                                             <img
                                                                 src={addUI}
                                                                 alt="Add Row to Spreadsheet"
-                                                                className="w-5 h-5 object-contain"
+                                                                className="w-5 h-5 object-contain dark:invert"
                                                             />
                                                         </Button>
                                                     </DialogTrigger>
@@ -616,21 +620,21 @@ const SheetStats: React.FC = () => {
                                                     </>
                                                     }
                                                     value={allStats[i]?.total ?? 0}
-                                                    bg="bg-gray-100"
+                                                    bg="bg-rarity-3"
                                                     className="w-full min-h-[30px]"  // example width and min height
                                                 />
                                                 <StatCard
                                                     label={`4-Star Pity`}
                                                     sublabel={`Guaranteed at ` + ds.pity4}
                                                     value={allStats[i]?.sinceLast4 ?? -1}
-                                                    bg="bg-yellow-100"
+                                                    bg="bg-rarity-4"
                                                     className="w-full min-h-[30px]"
                                                 />
                                                 <StatCard
                                                     label={`5-Star Pity`}
                                                     sublabel={`Guaranteed at ` + ds.pity5}
                                                     value={allStats[i]?.sinceLast5 ?? -1}
-                                                    bg="bg-purple-100"
+                                                    bg="bg-rarity-5"
                                                     className="w-full"
                                                 />
                                             </div>
@@ -710,7 +714,7 @@ const SheetStats: React.FC = () => {
                         <img
                             src={editUI}
                             alt="Set Spreadsheet"
-                            className="w-6 h-6 object-contain translate-y-[2px] invert"
+                            className="w-6 h-6 object-contain translate-y-[2px] invert dark:invert-0"
                         />
                         Set Spreadsheet from Google Drive
                     </Button>
@@ -725,12 +729,13 @@ const SheetStats: React.FC = () => {
                         <img
                             src={externalUI}
                             alt="Set Spreadsheet"
-                            className="w-4 h-4ƒexter object-contain invert"
+                            className="w-4 h-4ƒexter object-contain invert dark:invert-0"
                         />
                         Open Spreadsheet
                     </Button>
                 </div>
             </div>
+            <DarkModeToggle/>
             <div>
                 <footer className="p-4 text-center text-sm text-gray-500 border-t">
                     <div className={"flex flex--row gap-10 justify-center"}>

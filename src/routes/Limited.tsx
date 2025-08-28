@@ -22,6 +22,8 @@ import { SquareCard } from "@/components/SquareCard.tsx"
 import { MostPulledCard } from "@/components/MostPulledCard";
 import { PityPlanCard } from "@/components/PityPlanCard.tsx";
 
+import '@/colors.css';
+
 export default function LimitedPage() {
     const [viewMode, setViewMode] = useState<"scroll" | "grid">("scroll")
     const [show5Stars, setShow5Stars] = useState(true);
@@ -111,7 +113,7 @@ export default function LimitedPage() {
                 <div className="mt-4 flex flex-wrap lg:flex-nowrap gap-5">
                     <Card className="px-4">
                         <div className={"flex flex-col gap-3"}>
-                            <div className={`rounded-xl bg-gray-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-3 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">
@@ -133,7 +135,7 @@ export default function LimitedPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className={`rounded-xl bg-yellow-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-4 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">
@@ -151,7 +153,7 @@ export default function LimitedPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className={`rounded-xl bg-purple-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-5 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">
@@ -173,7 +175,7 @@ export default function LimitedPage() {
                     </Card>
                     <Card className="px-4">
                         <div className={"flex flex-col gap-3"}>
-                            <div className={`rounded-xl bg-gray-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-3 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">
@@ -188,7 +190,7 @@ export default function LimitedPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className={`rounded-xl bg-yellow-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-4 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">
@@ -206,7 +208,7 @@ export default function LimitedPage() {
                                     </div>
                                 </div>
                             </div>
-                            <div className={`rounded-xl bg-purple-100 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
+                            <div className={`rounded-xl bg-rarity-5 p-4 shadow-sm sm:flex-1 sm:min-w-[180px] sm:max-w-[200px] flex flex-col w-full min-h-[30px]`}>
                                 <div className="flex items-center justify-center h-full">
                                     {/* Label section */}
                                     <div className="flex flex-col items-center justify-center text-center">

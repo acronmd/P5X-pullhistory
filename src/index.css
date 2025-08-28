@@ -110,6 +110,21 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+:root {
+  /* Light mode */
+  --color-3star: #F1F2F5; /* light gray */
+  --color-4star: #FBF9BD; /* light yellow */
+  --color-5star: #F0E4FE; /* light purple */
+}
+
+.dark {
+  /* Dark mode */
+  --color-3star: #b5bbcb; /* darker gray */
+  --color-4star: #f5f05d; /* darker yellow */
+  --color-5star: #b982fa; /* darker purple */
+}
+
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

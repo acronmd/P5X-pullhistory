@@ -50,6 +50,7 @@
     "@types/node": "^24.0.11",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "@types/tailwindcss": "^3.0.11",
     "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",

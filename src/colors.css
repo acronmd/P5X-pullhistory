@@ -1,0 +1,26 @@
+:root {
+    --rarity-3: #F1F2F5;
+    --rarity-3bg: #d3d6e0;
+    --rarity-4: #FBF9BD;
+    --rarity-4bg: #f8f58d;
+    --rarity-5: #F0E4FE;
+    --rarity-5bg: #d5b3fc;
+}
+
+/* Dark mode */
+.dark {
+    --rarity-3: #3F4040;
+    --rarity-3bg: #585a5a;
+    --rarity-4: #5A4816;
+    --rarity-4bg: #836920;
+    --rarity-5: #38195E;
+    --rarity-5bg: #502486;
+}
+
+.bg-rarity-3 { background-color: var(--rarity-3); }
+.bg-rarity-4 { background-color: var(--rarity-4); }
+.bg-rarity-5 { background-color: var(--rarity-5); }
+.hover\:bg-rarity-3bg:hover { background-color: var(--rarity-3bg); }
+.hover\:bg-rarity-4bg:hover { background-color: var(--rarity-4bg); }
+.hover\:bg-rarity-5bg:hover { background-color: var(--rarity-5bg); }
+

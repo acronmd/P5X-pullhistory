@@ -9,6 +9,9 @@
     }
   ],
   "compilerOptions": {
+    "moduleResolution": "bundler",
+    "module": "esnext",
+    "types": ["tailwindcss"],
     "noEmitOnError": false,
     "skipLibCheck": true,
     "baseUrl": ".",
