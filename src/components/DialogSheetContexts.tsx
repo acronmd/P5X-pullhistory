@@ -210,7 +210,7 @@ export default function DialogSheetContent({
                                 </DialogTitle>
                             </DialogHeader>
 
-                            <pre className="bg-gray-100 p-4 max-h-[60vh] overflow-auto rounded whitespace-pre-wrap">
+                            <pre className="dark:bg-neutral-900 bg-neutral-100 p-4 max-h-[60vh] overflow-auto rounded whitespace-pre-wrap">
                                   {ocrResult.length > 0
                                       ? ocrResult.map((entry) => `${entry.name} | ${entry.timestampFull}`).join('\n')
                                       : 'No text extracted yet.'}
