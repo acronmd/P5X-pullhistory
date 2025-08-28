@@ -30,6 +30,8 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
 
 import pullhistoryBanner from "@/assets/texts/history.png";
+import screenshotIcon from "@/assets/camera-icon.png";
+import manualIcon from "@/assets/record-icon.png";
 
 type Props = {
     bgImage: string;
@@ -119,16 +121,42 @@ export default function DialogSheetContent({
 
                 <div className="flex gap-6 w-full justify-center">
                     <Button
-                        className="w-[45%] h-40 sm:h-48 lg:h-56 text-lg shadow-lg   border hover:bg-neutral-800"
+                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border hover:bg-neutral-800 flex flex-col items-center p-4"
                         onClick={() => setUploadMode("ocr")}
                     >
-                        Upload Screenshot
+                        {/* Image: 60% of the button height */}
+                        <img
+                            src={screenshotIcon}
+                            alt="Upload Screenshot"
+                            className="h-[60%] w-auto object-contain"
+                        />
+
+                        {/* Separator */}
+                        <div className="w-full h-[2px] bg-white my-2" />
+
+                        {/* Text: remaining space */}
+                        <span className="text-base sm:text-lg font-semibold text-center">
+                            Upload Screenshot
+                        </span>
                     </Button>
                     <Button
-                        className="w-[45%] h-40 sm:h-48 lg:h-56 text-lg shadow-lg   border hover:bg-neutral-800 "
+                        className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border hover:bg-neutral-800 flex flex-col items-center p-4"
                         onClick={() => setUploadMode("manual")}
                     >
-                        Manual Entry
+                        {/* Image: 60% of the button height */}
+                        <img
+                            src={manualIcon}
+                            alt="Manual Entry"
+                            className="h-[60%] w-auto object-contain"
+                        />
+
+                        {/* Separator */}
+                        <div className="w-full h-[2px] bg-white my-2" />
+
+                        {/* Text: remaining space */}
+                        <span className="text-base sm:text-lg font-semibold text-center">
+                            Manual Entry
+                        </span>
                     </Button>
                 </div>
             </DialogContent>
