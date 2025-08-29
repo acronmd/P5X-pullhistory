@@ -98,15 +98,15 @@ export default function LimitedPage() {
 
     return (
         <div>
-            <Card className="sticky top-0 z-50 w-full bg-foreground shadow-md">
+            <Card className="sticky top-0 z-50 w-full bg-coloredbg shadow-md">
                 <CardContent className="flex items-center gap-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                        className="p-2 rounded transition-colors"
                     >
-                        <ArrowLeft className="w-5 h-5 text-background" /> {/* icon color */}
+                        <ArrowLeft className="w-5 h-5 text-white" /> {/* icon color */}
                     </button>
-                    <h1 className="text-lg font-bold text-background">{bannerCurrent.label}</h1> {/* text color */}
+                    <h1 className="text-lg font-bold text-white">{bannerCurrent.label}</h1> {/* text color */}
                 </CardContent>
             </Card>
             <div className={"flex flex-col gap-4"}>

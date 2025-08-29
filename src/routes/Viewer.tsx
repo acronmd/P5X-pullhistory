@@ -494,7 +494,7 @@ const SheetStats: React.FC = () => {
                             {itemInventory.map((item) => (
                                 <div className={"relative"}>
                                     {/* Capsule Box */}
-                                    <div className="bg-foreground rounded-full px-10 py-1.5 shadow-md text-center text-background font-semibold relative z-10 min-w-[7rem]">
+                                    <div className="bg-coloredbg text-white rounded-full px-10 py-1.5 shadow-md text-center text-whitefont-semibold relative z-10 min-w-[7rem]">
                                         {Number(item.value).toLocaleString()}
                                     </div>
 
@@ -509,7 +509,7 @@ const SheetStats: React.FC = () => {
 
                                     {/* Right Button */}
                                     <Button
-                                        className="absolute right-[-1rem] top-5 -translate-y-5 -translate-x-3 bg-foreground hover:bg-gray-700 text-background rounded-full w-9 h-9 flex items-center justify-center z-20 shadow"
+                                        className="absolute right-[-1rem] top-5 -translate-y-5 -translate-x-3 bg-coloredbg hover:bg-gray-700 text-white rounded-full w-9 h-9 flex items-center justify-center z-20 shadow"
                                     >
                                         +
                                     </Button>
@@ -692,8 +692,8 @@ const SheetStats: React.FC = () => {
                                         <Button
                                             disabled={loadingSheet === ds.sheetName}
                                             onClick={() => handleClick(ds.sheetName, ds)}
-                                            variant="outline"
                                             title="Add Row"
+                                            className="text-white bg-coloredbg"
                                         >
                                             {loadingSheet === ds.sheetName ? "Loading..." : "Expanded View"}
                                         </Button>
@@ -708,19 +708,19 @@ const SheetStats: React.FC = () => {
                     <Button
                         size="icon"
                         onClick={() => handlePickSheet()}
-                        className="w-auto px-4"
+                        className="w-auto px-4 bg-coloredbg text-white"
                         title="Set Spreadsheet via Google Drive"
                     >
                         <img
                             src={editUI}
                             alt="Set Spreadsheet"
-                            className="w-6 h-6 object-contain translate-y-[2px] invert dark:invert-0"
+                            className="w-6 h-6 object-contain translate-y-[2px] invert"
                         />
                         Set Spreadsheet from Google Drive
                     </Button>
                     <Button
                         size="icon"
-                        className="w-auto px-4"
+                        className="w-auto px-4 bg-coloredbg text-white"
                         title="Open Sheet"
                         onClick={() =>
                             window.open(`https://docs.google.com/spreadsheets/d/${sharedSpreadsheetId}`, "_blank")
@@ -729,7 +729,7 @@ const SheetStats: React.FC = () => {
                         <img
                             src={externalUI}
                             alt="Set Spreadsheet"
-                            className="w-4 h-4ƒexter object-contain invert dark:invert-0"
+                            className="w-4 h-4ƒexter object-contain invert"
                         />
                         Open Spreadsheet
                     </Button>
