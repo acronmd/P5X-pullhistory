@@ -185,6 +185,8 @@ export const availableWeapons: WeaponData[] = [
   { ...makeWeaponIcon("kotone-4"),rarity: "rare", name: "Edelweiss", assChara: "Kotone Montagne" },
   { ...makeWeaponIcon("miyu-4"),rarity: "rare", name: "Submarine Sonar", assChara: "Miyu Sahara" },
   { ...makeWeaponIcon("chizuko-4"),rarity: "rare", name: "Gravitational Force", assChara: "Chizuko Nagao" },
+  { ...makeWeaponIcon("ayaka-4"),rarity: "rare", name: "Rock 'n' Roller", assChara: "Ayaka Sakai" },
+  { ...makeWeaponIcon("riko-4"),rarity: "rare", name: "Moonlight Needle", assChara: "Riko Tanemura" },
 
   /* 3-Star Weapons */
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Athame", assChara: "Ren Amamiya" },
@@ -211,7 +213,9 @@ export const availableWeapons: WeaponData[] = [
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Noble Rod", assChara: "Toshiya Sumi" },
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Royal Saber", assChara: "Kotone Montagne" },
   { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "C.A. Explorer", assChara: "Miyu Sahara" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" }
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Amped-Up Guitar Axe", assChara: "Ayaka Sakai" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Peculiar Parasol", assChara: "Riko Tanemura" }
 
 ]
 
