@@ -162,11 +162,11 @@ export const allHeroBanners: heroBanner[] = [
     },
     {
         image: ayakaHero,
-        label: "N/A - Ayaka Sakai",
+        label: "Dazzling Encore - Ayaka Sakai",
         hero: "Ayaka Sakai",
-        weapon: "BOOM",
+        weapon: "Superstar",
         start: 1756976400,
-        end: 1758463200,
+        end: 1759968000,
     },
     // ... more banners
 ];

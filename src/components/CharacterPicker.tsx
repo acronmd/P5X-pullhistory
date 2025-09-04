@@ -138,6 +138,7 @@ export const availableWeapons: WeaponData[] = [
   { ...makeWeaponIcon("yusuke-5"), rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
   { ...makeWeaponIcon("makoto-5"), rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
   { ...makeWeaponIcon("yumi-5"), rarity: "superrare", name: "Moonlit Feather", assChara: "Yumi Shiina" },
+  { ...makeWeaponIcon("ayaka-5"), rarity: "superrare", name: "Superstar", assChara: "Ayaka Sakai" },
 
   { ...makeWeaponIcon("morgana-5"), rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
   { ...makeWeaponIcon("ryuji-5"), rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
