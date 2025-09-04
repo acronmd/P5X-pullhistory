@@ -91,6 +91,7 @@ import yuiHero from '@/assets/heros/yui.png';
 import yusukeHero from "@/assets/heros/yusuke.png";
 import makotoHero from "@/assets/heros/makoto.png";
 import yumiHero from "@/assets/heros/yumi.png"
+import ayakaHero from "@/assets/heros/ayaka.png"
 
 import jewelImage from "@/assets/jewels.png";
 import limitedTicketImage from "@/assets/low_limited-ticket.png";
@@ -157,6 +158,14 @@ export const allHeroBanners: heroBanner[] = [
         hero: "Yumi Shiina",
         weapon: "Moonlit Feather",
         start: 1755763200,
+        end: 1758463200,
+    },
+    {
+        image: ayakaHero,
+        label: "N/A - Ayaka Sakai",
+        hero: "Ayaka Sakai",
+        weapon: "BOOM",
+        start: 1756976400,
         end: 1758463200,
     },
     // ... more banners

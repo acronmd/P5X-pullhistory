@@ -58,6 +58,7 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
   { ...makeIcon("makoto"), rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
   { ...makeIcon("yumi"), rarity: "superrare", name: "Yumi Shiina", codename: "Phoebe", affinity: "Support" },
+  { ...makeIcon("ayaka"), rarity: "superrare", name: "Ayaka Sakai", codename: "Chord", affinity: "Elec" },
 
   { ...makeIcon("morgana"), rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
   { ...makeIcon("ryuji"), rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
@@ -78,6 +79,7 @@ export const availableCharacters: CharacterData[] = [
   { ...makeIcon("kotone"), rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
   { ...makeIcon("miyu"), rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
   { ...makeIcon("chizuko"), rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
+  { ...makeIcon("riko"), rarity: "rare", name: "Riko Tanemura", codename: "Wind", affinity: "Support" },
 
   /* Cleave */
   { ...makePersonaIcon("inugami"), rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
