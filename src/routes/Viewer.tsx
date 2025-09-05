@@ -163,7 +163,7 @@ export const allHeroBanners: heroBanner[] = [
     },
     {
         image: renHero,
-        label: "The Phantom Magician - Ren",
+        label: "The Phantom Magician - Ren Amamiya",
         hero: "Ren Amamiya",
         weapon: "Phoenix Dagger",
         start: 1756976400,
