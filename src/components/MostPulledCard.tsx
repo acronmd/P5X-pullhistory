@@ -93,13 +93,13 @@ export function MostPulledCard({ title, mostPulled, width, banner }: MostPulledC
                                 <div className="flex flex-row gap-3 items-center justify-center">
                                     <p className="font-bold">{display.name}</p>
                                     {display.assChara && (
-                                        <p className="text-muted-foreground">
+                                        <p>
                                             {display.assChara.split(" ")[0]} only
                                         </p>
                                     )}
                                 </div>
-                                <p>Pulls: {display.count}</p>
-                                <p className="text-sm text-muted-foreground">
+                                <p className="text-neutral-500">Pulls: {display.count}</p>
+                                <p className="text-sm text-neutral-500">
                                     Last pulled {formatPullTime(display.time)}
                                 </p>
                             </>

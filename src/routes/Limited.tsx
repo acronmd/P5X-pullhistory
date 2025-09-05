@@ -346,15 +346,15 @@ export default function LimitedPage() {
                                                     <div className="flex flex-row gap-3 items-center justify-center">
                                                         <p className="font-bold">{name}</p>
                                                         {assChara && (
-                                                            <p className="text-muted-foreground">
+                                                            <p >
                                                                 {assChara.split(" ")[0]} only
                                                             </p>
                                                         )}
                                                     </div>
-                                                    <p className="text-sm text-muted-foreground">
+                                                    <p className="text-sm text-neutral-500">
                                                         Pity: {pity}
                                                     </p>
-                                                    <p className="text-sm text-muted-foreground">
+                                                    <p className="text-sm text-neutral-500">
                                                         {formatPullTime(time)}
                                                     </p>
                                                 </div>

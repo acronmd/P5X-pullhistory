@@ -8,7 +8,7 @@ export function formatPullTime(raw: string) {
     m = m.padStart(2, "0");
     s = s.padStart(2, "0");
 
-    const isoString = `${datePart}T${h}:${m}:${s}Z`;
+    const isoString = `${datePart}T${h}:${m}:${s}+09:00`;
     const date = new Date(isoString);
 
     if (isNaN(date.getTime())) return "Invalid date";
@@ -21,7 +21,6 @@ export function formatPullTime(raw: string) {
         minute: "2-digit", // 29
         second: "2-digit", // optional
         hour12: true,    // AM/PM
-        timeZone: "UTC", // always show UTC
         timeZoneName: "short" // show "UTC"
     });
 }

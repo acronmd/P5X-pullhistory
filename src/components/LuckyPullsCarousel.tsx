@@ -42,11 +42,11 @@ export default function LuckiestPullsCarousel({ pulls }: Props) {
                                             <div className="flex flex-row gap-3 items-center justify-center">
                                                 <p className="font-bold">{pull.name}</p>
                                                 {pull.assChara && (
-                                                    <p className="text-muted-foreground">{pull.assChara.split(" ")[0]} only</p>
+                                                    <p>{pull.assChara.split(" ")[0]} only</p>
                                                 )}
                                             </div>
-                                            <p className="text-sm text-muted-foreground">Pity: {pull.pity}</p>
-                                            <p className="text-sm text-muted-foreground">{formatPullTime(pull.time)}</p>
+                                            <p className="text-sm text-neutral-500">Pity: {pull.pity}</p>
+                                            <p className="text-sm text-neutral-500">{formatPullTime(pull.time)}</p>
                                         </div>
                                     </TooltipContent>
                                 </Tooltip>
