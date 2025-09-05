@@ -114,14 +114,6 @@ type heroBanner = {
 
 export const allHeroBanners: heroBanner[] = [
     {
-        image: renHero,
-        label: "The Phantom Magician - Ren",
-        hero: "Ren Amamiya",
-        weapon: "Phoenix Dagger",
-        start: 1756976400,
-        end: 1759669200,
-    },
-    {
         image: yuiHero,
         label: "Virtual Netizen - Minami",
         hero: "Minami Miyashita",
@@ -168,6 +160,14 @@ export const allHeroBanners: heroBanner[] = [
         weapon: "Superstar",
         start: 1756976400,
         end: 1759968000,
+    },
+    {
+        image: renHero,
+        label: "The Phantom Magician - Ren",
+        hero: "Ren Amamiya",
+        weapon: "Phoenix Dagger",
+        start: 1756976400,
+        end: 1759669200,
     },
     // ... more banners
 ];

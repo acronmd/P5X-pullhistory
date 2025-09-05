@@ -20,6 +20,7 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Jack-O-Lantern": "Jack-o'-Lantern",
     "Jack-0-Lantern": "Jack-o'-Lantern",
     "Jack-o0-Lantern": "Jack-o'-Lantern",
+    "Jack-0™-Lantern": "Jack-o'-Lantern",
     "Bicom": "Bicorn",
     "Yulimi Fujikawa": "Yukimi Fujikawa",
     "saki Mitama": "Saki Mitama",
@@ -30,6 +31,7 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "CA. Explorer" : "C.A. Explorer",
     "C.A Explorer" : "C.A. Explorer",
     "CA Explorer" : "C.A. Explorer",
+    "Ayaka Sali" : "Ayaka Sakai",
 };
 
 export type pullData = {
