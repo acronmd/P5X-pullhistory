@@ -87,6 +87,7 @@ import {Link, useNavigate} from "react-router-dom";
 
 import DarkModeToggle from "@/components/DarkModeToggle.tsx"
 
+import renHero from '@/assets/heros/ren.png';
 import yuiHero from '@/assets/heros/yui.png';
 import yusukeHero from "@/assets/heros/yusuke.png";
 import makotoHero from "@/assets/heros/makoto.png";
@@ -113,12 +114,12 @@ type heroBanner = {
 
 export const allHeroBanners: heroBanner[] = [
     {
-        image: yuiHero,
-        label: "Virtual Netizen - Ren",
+        image: renHero,
+        label: "The Phantom Magician - Ren",
         hero: "Ren Amamiya",
         weapon: "Phoenix Dagger",
-        start: 1752138000,
-        end: 1754532000,
+        start: 1756976400,
+        end: 1759669200,
     },
     {
         image: yuiHero,

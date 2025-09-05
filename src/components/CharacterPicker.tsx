@@ -158,6 +158,8 @@ export const availableWeapons: WeaponData[] = [
   { ...makeWeaponIcon("kotone-5"), rarity: "superrare", name: "Queen of Winter", assChara: "Kotone Montagne" },
   { ...makeWeaponIcon("miyu-5"), rarity: "superrare", name: "Ephemerality", assChara: "Miyu Sahara" },
   { ...makeWeaponIcon("chizuko-5"), rarity: "superrare", name: "Jolting Pulse", assChara: "Chizuko Nagao" },
+  { ...makeWeaponIcon("riko-5"), rarity: "superrare", name: "Kunoichi: Sky's Edge", assChara: "Riko Tanemura" },
+
 
   /* 4-Star Weapons */
   { ...makeWeaponIcon("ren-4"), rarity: "rare", name: "Machete", assChara: "Ren Amamiya" },
