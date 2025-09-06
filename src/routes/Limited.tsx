@@ -11,6 +11,7 @@ import RarityPieChart from "@/components/PieChart.tsx"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 import PullTableCard from "@/components/ViewTable.tsx"
+import PullCountViewTable from "@/components/PullCountViewTable.tsx"
 
 import { formatPullTime } from "@/utils/sharedFunctions.tsx"
 import LuckiestPullsCarousel from "@/components/LuckyPullsCarousel.tsx";
@@ -53,8 +54,8 @@ export default function LimitedPage() {
         allPulls,
     } = bannerData;
 
-    const { fiftyFiftyWins, fiftyFiftyAttempts, fiftyFiftyRate, mostPulled5StarLimited, mostPulled5StarStandard, mostPulled4Star } =
-        calculatePullStats(all5Stars, all4Stars, allHeroBanners);
+    const { fiftyFiftyWins, fiftyFiftyAttempts, fiftyFiftyRate, mostPulled5StarLimited, mostPulled5StarStandard, mostPulled4Star, allMostPulled } =
+        calculatePullStats(allPulls, all5Stars, all4Stars, allHeroBanners);
 
 
     const combinedStars = [
@@ -368,6 +369,7 @@ export default function LimitedPage() {
                 </div>
 
                 <PullTableCard pulls={allPulls} label={bannerCurrent.label} />
+                <PullCountViewTable pulls={allMostPulled} label={bannerCurrent.label} />
             </div>
 
             {/* You can add tables, charts, etc. using allPulls and the rest of data */}
