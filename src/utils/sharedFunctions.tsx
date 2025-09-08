@@ -75,8 +75,8 @@ export function formatContractTypeSublabel(contractType: string) {
 }
 
 const languageColumns: Record<number, number> = {
-    1: 5, // English
-    2: 6, // Korean
+    1: 6, // English
+    2: 7, // Korean
 };
 
 const defaultLanguageColumn = 4; // fallback default name

@@ -47,7 +47,7 @@ export async function fetchDataForSheet(sheetName: string) {
 
     for (let i = 0; i < data.length; i++) {
         const rarityVal = String(data[i][0] || "").trim();
-        const name_en = String(data[i][5] || "").trim();
+        const name_en = String(data[i][6] || "").trim();
         pityCounter4++;
         pityCounter5++;
 
@@ -62,9 +62,9 @@ export async function fetchDataForSheet(sheetName: string) {
             pityGaps5.push(last5Index === null ? i + 1 : i - last5Index);
             last5Index = i;
             all5Stars.push({
-                name: data[i][4],
-                name_en: data[i][5],
-                name_ko: data[i][6],
+                name: data[i][5],
+                name_en: data[i][6],
+                name_ko: data[i][7],
                 pity: pityCounter5,
                 index: i,
                 iconUrl: entry.icon,
@@ -72,7 +72,8 @@ export async function fetchDataForSheet(sheetName: string) {
                 assChara: entry.assChara,
                 time: data[i][2] || "",
                 rarity: 5,
-                id: data[i][3]
+                id: data[i][3],
+                gachaId: data[i][4]
             });
             pityCounter5 = 0;
         }
@@ -81,9 +82,9 @@ export async function fetchDataForSheet(sheetName: string) {
             pityGaps4.push(last4Index === null ? i + 1 : i - last4Index);
             last4Index = i;
             all4Stars.push({
-                name: data[i][4],
-                name_en: data[i][5],
-                name_ko: data[i][6],
+                name: data[i][5],
+                name_en: data[i][6],
+                name_ko: data[i][7],
                 pity: pityCounter4,
                 index: i,
                 iconUrl: entry.icon,
@@ -91,7 +92,8 @@ export async function fetchDataForSheet(sheetName: string) {
                 assChara: entry.assChara,
                 time: data[i][2] || "",
                 rarity: 4,
-                id: data[i][3]
+                id: data[i][3],
+                globalId: data[i][4]
             });
             pityCounter4 = 0;
         }

@@ -3,6 +3,7 @@ interface Pull {
     name_en: string;
     name_ko: string;
     id: number;
+    gachaId: number;
     rarity: 4 | 5;
     index: number;
     time: string;
@@ -22,6 +23,7 @@ interface MostPulled {
     name_en: string;
     name_ko: string;
     id: number;
+    gachaId: number;
     count: number;
     iconUrl: string;
     fullIconUrl: string;
@@ -61,9 +63,10 @@ export function calculatePullStats(
         rarity: Number(row[0]),       // '4' -> 4
         time: row[2],
         id: row[3],
-        name: row[4],
-        name_en: row[5] as unknown as string,
-        name_ko: row[6] as unknown as string,
+        gachaId: row[4],
+        name: row[5],
+        name_en: row[6] as unknown as string,
+        name_ko: row[7] as unknown as string,
         index: index                   // assign sequential index
     }));
 
@@ -142,6 +145,7 @@ export function calculatePullStats(
                 name_en: data.lastPull.name_en,
                 name_ko: data.lastPull.name_ko,
                 id: data.lastPull.id,
+                gachaId: data.lastPull.gachaId,
                 count: data.count,
                 iconUrl: data.lastPull.iconUrl,
                 fullIconUrl: data.lastPull.fullIconUrl,

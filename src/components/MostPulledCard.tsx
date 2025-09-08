@@ -20,6 +20,7 @@ interface MostPulledCardProps {
         time: string;
         assChara?: string;
         id: number;
+        gachaId: number;
     };
     width: number;
     banner?: string;
@@ -41,6 +42,7 @@ export function MostPulledCard({ title, mostPulled, width, banner }: MostPulledC
             time: "",
             assChara: undefined,
             id: 9999999,
+            gachaId: 999999,
         }
         : mostPulled;
 

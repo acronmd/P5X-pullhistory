@@ -13,8 +13,16 @@ import {
 } from "@/components/ui/tabs.tsx"
 import {
     Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogFooter,
+    DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog.tsx"
+
+import {
+    Input
+} from "@/components/ui/input.tsx";
 
 import Autoplay from "embla-carousel-autoplay"
 import {
@@ -111,6 +119,7 @@ import { transformApiToRowsByBanner } from "@/newAPI/transformApiToRowsByBanner.
 import { appendCharactersToSheetWithAPI } from "@/utils/google.ts"
 import {getLocalizedName} from "@/utils/sharedFunctions.tsx";
 import {useLanguage} from "@/utils/language.tsx";
+import { Loader2 } from "lucide-react";
 
 type heroBanner = {
     image: string;
@@ -268,6 +277,8 @@ const SheetStats: React.FC = () => {
 
     const [datasets, setDatasets] = useState(loadDatasets);
 
+    const [iantLoading, iantSetLoading] = useState(false);
+    const [iantUrl, iantSetUrl] = useState();
 
     const [sharedSpreadsheetId, setSharedSpreadsheetId] = useState(() => {
         return localStorage.getItem("sharedSpreadsheetId") ?? "";
@@ -490,6 +501,15 @@ const SheetStats: React.FC = () => {
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[1].sheetName, weaponRows);
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[2].sheetName, goldRows);
     }
+
+    const handleSync = async () => {
+        iantSetLoading(true);
+        try {
+            await syncFromApi(iantUrl, true);
+        } finally {
+            iantSetLoading(false);
+        }
+    };
 
     return (
         <div className={"flex flex-col min-h-screen"}>
@@ -782,13 +802,40 @@ const SheetStats: React.FC = () => {
                         />
                         Open Spreadsheet
                     </Button>
-                    <Button
-                        onClick={() => syncFromApi("https://euweb.p5xjpupd.com/gacha/getRecords?gachaType=2&page=1&size=10&authKey=Bt2%2FERpjNoKf4HXnto%2BaufUdss9wLpvwpsWZBHyyr1tBdku6FW4X9cqdpKFK9l%2BqW8R4ZBdAW%2FLN%2BraqqA4iIDnNQPFX38a1olNSkmjOWiqDmgDX%2F1ES8PpBQ9WU2Q5gydAyEdGQ9CaGA16MO%2B8p9AZcKpAaIktPV4F8jCMZ%2FIFEbEpDWjA6hHFrkaYUzsRu94lHGZww8XRUzqWibqwkSnipEDgaZjreMQfrDOqSXmC0%2BQ3IMw5NPYYODOt9lzZNpHQs3oYIm0wCRcnrX7hNj2xz8LlB%2BgCDEcsolGWJf8x2olrG%2Fcz19O6VXQBKZaXCLZFHpOMLlNrr8vnRJVmsyesXbUOAw11LqL5sgMKaz%2BzKQUZDxY6Zam40hd6AsKvJ41qBssZGxqU1e3E%2BBrmhibT1KdKnSEN%2B3m1f4Rz1ugsSxYRgnp37ZmTNeXsjDyaiOGAAS8Rnvl7RDyTt7NQ8ta6rueXsnhDVcNJ8Pok6LV42jCHHaEvVRvh9yZaEznrnVdhqSI%2F2cmxPhxP1qY9mRufN4O32UMHaVfc1BnTqrpfEgv7I%2Fff78eUt2zWx%2FcBHYuMKF2krq94xwxSrNqfj1FOHiIO5BKU2I2bPEH%2BhAoLVNeuoiKzcxTR0ibPjPORnB1Ze8uEvK%2F4s0NDS1U705xEUAWPkrhyQ%2B7AEqbH7zB8%3D", true) }
-                        title="API Link"
-                        className="text-white bg-coloredbg"
-                    >
-                        Sync from API Link
-                    </Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="text-white bg-coloredbg">
+                                Sync from API Link
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Enter API URL</DialogTitle>
+                            </DialogHeader>
+                            <Input
+                                type="text"
+                                placeholder="Paste API URL..."
+                                value={iantUrl}
+                                onChange={(e) => iantSetUrl(e.target.value)}
+                            />
+                            <DialogFooter>
+                                <Button
+                                    onClick={handleSync}
+                                    disabled={!iantUrl || iantLoading}
+                                    className="bg-coloredbg text-white"
+                                >
+                                    {iantLoading ? (
+                                        <>
+                                            <Loader2 className="animate-spin w-4 h-4 mr-2" />
+                                            Syncing...
+                                        </>
+                                    ) : (
+                                        "Sync"
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </div>
             <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
