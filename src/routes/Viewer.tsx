@@ -257,23 +257,20 @@ const SheetStats: React.FC = () => {
         { id: "", sheetName: "Limited Banner", label: "Limited Banner", sublabel: "Most Wanted Ph. Idol", pity4: 10, pity5: 80, source: limitedTicketImage, altText: "Limited Banner Icon" },
         { id: "", sheetName: "Weapon Banner", label: "Weapon Banner", sublabel: "Arms Deals", pity4: 10, pity5: 70, source: weaponTicketImage, altText: "Weapon Banner Icon" },
         { id: "", sheetName: "Standard Banner", label: "Standard Banner", sublabel: "Phantom Idol", pity4: 10, pity5: 80, source: standardTicketImage, altText: "Standard Banner Icon" },
+        { id: "", sheetName: "Newcomer Banner", label: "Newcomer Banner", sublabel: "Newcomer Contracts", pity4: 10, pity5: 50, source: standardTicketImage, altText: "Standard Banner Icon" },
     ];
 
-    ///React useState variables with LOCAL STORAGE NEAR HERE
     const loadDatasets = () => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
 
-        return parsed.map((ds: any, i: number) => ({
-            sheetName: ds.sheetName ?? defaultDatasets[i]?.sheetName ?? "",
-            label: ds.label ?? defaultDatasets[i]?.label ?? "",
-            sublabel: defaultDatasets[i]?.sublabel ?? "",
-            pity4: ds.pity4 ?? defaultDatasets[i]?.pity4 ?? 0,
-            pity5: ds.pity5 ?? defaultDatasets[i]?.pity5 ?? 0,
-            source: defaultDatasets[i]?.source ?? "",
-            altText: ds.altText ?? defaultDatasets[i]?.altText ?? "",
+        // Merge cached with default to ensure new banners exist
+        return defaultDatasets.map((ds, i) => ({
+            ...ds,
+            ...parsed[i], // override defaults with cached values if present
         }));
     };
+
 
     const [datasets, setDatasets] = useState(loadDatasets);
 
@@ -436,6 +433,7 @@ const SheetStats: React.FC = () => {
                     sheetName: sheetNames[index + 1],  // You could match names more intelligently if needed
                 }));
 
+
                 // 4. Save spreadsheet ID and datasets
                 localStorage.setItem("sharedSpreadsheetId", spreadsheetId);
                 localStorage.setItem("userDatasets", JSON.stringify(updatedDatasets));
@@ -443,6 +441,7 @@ const SheetStats: React.FC = () => {
                 localStorage.setItem("limitedSheet", sheetNames[1])
                 localStorage.setItem("weaponSheet", sheetNames[2])
                 localStorage.setItem("standardSheet", sheetNames[3])
+                localStorage.setItem("newcomerSheet", sheetNames[4])
 
 
                 setDatasets(updatedDatasets);
@@ -487,6 +486,7 @@ const SheetStats: React.FC = () => {
         const weaponRows = rowsByBanner["Weapon"];
         const fortuneRows = rowsByBanner["Fortune"];
         const goldRows = rowsByBanner["Gold"];
+        const newcomerRows = rowsByBanner["Newcomer"];
 
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
@@ -494,12 +494,15 @@ const SheetStats: React.FC = () => {
         console.log(parsed[0].sheetName);
         console.log(parsed[1].sheetName);
         console.log(parsed[2].sheetName);
+        console.log(parsed[3].sheetName);
 
         console.log(fortuneRows);
 
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[0].sheetName, fortuneRows);
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[1].sheetName, weaponRows);
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[2].sheetName, goldRows);
+        appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[3].sheetName, newcomerRows);
+
     }
 
     const handleSync = async () => {

@@ -68,9 +68,9 @@ export function formatContractTypeSublabel(contractType: string) {
         case "3":
             return "Arms Deals";
         case "4":
-            return "Newcomer Banner";
+            return "Newcomer Contracts";
         case "5":
-            return "Most wanted Ph. Idol";
+            return "Most Wanted Ph. Idol";
     }
 }
 
