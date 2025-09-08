@@ -1,5 +1,8 @@
 interface Pull {
     name: string;
+    name_en: string;
+    name_ko: string;
+    id: number;
     rarity: 4 | 5;
     index: number;
     time: string;
@@ -16,6 +19,9 @@ interface HeroBanner {
 
 interface MostPulled {
     name: string;
+    name_en: string;
+    name_ko: string;
+    id: number;
     count: number;
     iconUrl: string;
     fullIconUrl: string;
@@ -53,7 +59,11 @@ export function calculatePullStats(
 
     const allPullsMapped: Pull[] = allPulls.map((row, index) => ({
         rarity: Number(row[0]),       // '4' -> 4
-        name: row[1] as unknown as string,
+        time: row[2],
+        id: row[3],
+        name: row[4],
+        name_en: row[5] as unknown as string,
+        name_ko: row[6] as unknown as string,
         index: index                   // assign sequential index
     }));
 
@@ -61,25 +71,25 @@ export function calculatePullStats(
     // Split 5★ into limited vs standard
     for (const pull of all5Stars) {
         const isLimited = allHeroBanners.some(
-            (b) => b.hero === pull.name || b.weapon === pull.name
+            (b) => b.hero === pull.name_en || b.weapon === pull.name_en
         );
 
         const target = isLimited ? counts5Limited : counts5Standard;
 
-        if (!target[pull.name]) {
-            target[pull.name] = { count: 0, lastPull: pull };
+        if (!target[pull.name_en]) {
+            target[pull.name_en] = { count: 0, lastPull: pull };
         }
-        target[pull.name].count++;
-        target[pull.name].lastPull = pull;
+        target[pull.name_en].count++;
+        target[pull.name_en].lastPull = pull;
     }
 
     // Count most pulled for 4★
     for (const pull of all4Stars) {
-        if (!counts4[pull.name]) {
-            counts4[pull.name] = { count: 0, lastPull: pull };
+        if (!counts4[pull.name_en]) {
+            counts4[pull.name_en] = { count: 0, lastPull: pull };
         }
-        counts4[pull.name].count++;
-        counts4[pull.name].lastPull = pull;
+        counts4[pull.name_en].count++;
+        counts4[pull.name_en].lastPull = pull;
     }
 
     function getAllPulledCombined(pulls: Pull[]): (Pull & { count: number })[] {
@@ -89,7 +99,7 @@ export function calculatePullStats(
             if( pull.rarity < 4 ) {
                 continue;
             }
-            const key = pull.name; // or some unique identifier
+            const key = pull.name_en; // or some unique identifier
             if (!counts[key]) {
                 counts[key] = { count: 0, lastPull: pull };
             }
@@ -129,11 +139,15 @@ export function calculatePullStats(
         return data.count > 0
             ? {
                 name: data.lastPull.name,
+                name_en: data.lastPull.name_en,
+                name_ko: data.lastPull.name_ko,
+                id: data.lastPull.id,
                 count: data.count,
                 iconUrl: data.lastPull.iconUrl,
                 fullIconUrl: data.lastPull.fullIconUrl,
                 time: data.lastPull.time,
                 assChara: data.lastPull.assChara,
+                rarity: data.lastPull.rarity,
             }
             : undefined;
     }
@@ -147,7 +161,7 @@ export function calculatePullStats(
     // 50/50 calculation
     for (const pull of all5Stars) {
         const isBannerLimited = allHeroBanners.some(
-            (b) => b.hero === pull.name || b.weapon === pull.name
+            (b) => b.hero === pull.name_en || b.weapon === pull.name_en
         );
 
         if (waitingForGuaranteed) {

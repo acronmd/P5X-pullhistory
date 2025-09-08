@@ -4,31 +4,43 @@ import { formatPullTime } from "@/utils/sharedFunctions.tsx"
 
 import defaultModal from "@/assets/chicons/modal/basic.png"
 
+import { getLocalizedName } from "@/utils/sharedFunctions.tsx";
+import {useLanguage} from "@/utils/language.tsx";
+
+
 interface MostPulledCardProps {
     title: string;
     mostPulled?: {
         name: string;
+        name_en: string;
+        name_ko: string;
         count: number;
         iconUrl: string;
         fullIconUrl: string;
         time: string;
         assChara?: string;
+        id: number;
     };
     width: number;
     banner?: string;
 }
 
 export function MostPulledCard({ title, mostPulled, width, banner }: MostPulledCardProps) {
+    const { language } = useLanguage();
+
     const isEmpty = !mostPulled;
 
     const display = isEmpty
         ? {
             name: "No pulls yet",
+            name_en: "No pulls yet",
+            name_ko: "No pulls yet",
             count: 0,
             iconUrl: defaultModal,
             fullIconUrl: defaultModal,
             time: "",
             assChara: undefined,
+            id: 9999999,
         }
         : mostPulled;
 
@@ -91,7 +103,7 @@ export function MostPulledCard({ title, mostPulled, width, banner }: MostPulledC
                         ) : (
                             <>
                                 <div className="flex flex-row gap-3 items-center justify-center">
-                                    <p className="font-bold">{display.name}</p>
+                                    <p className="font-bold">{getLocalizedName(display.id, language)}</p>
                                     {display.assChara && (
                                         <p>
                                             {display.assChara.split(" ")[0]} only

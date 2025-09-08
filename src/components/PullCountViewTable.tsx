@@ -5,15 +5,20 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react"
 
 import '@/colors.css';
+import {getLocalizedName} from "@/utils/sharedFunctions.tsx";
+import {useLanguage} from "@/utils/language.tsx";
 
 interface MostPulled {
     name: string;
+    name_en: string;
+    name_ko: string;
     count: number;
     iconUrl: string;
     fullIconUrl: string;
     time: string;
     assChara?: string;
     rarity?: 4 | 5;
+    id: number;
 }
 
 type MostPulledList = MostPulled[];
@@ -44,6 +49,8 @@ function rowClassForRarity(rarity: number | undefined) {
 }
 
 export default function PullTableCard({ pulls, label }: PullTableCardProps) {
+    const { language } = useLanguage();
+
     const [isReversed, setIsReversed] = useState(false);
 
     const displayedPulls = isReversed ? [...pulls].reverse() : pulls;
@@ -94,7 +101,7 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                                 >
                                     <TableCell className="text-center px-4 py-2">{row.count}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{starsForRarity(row.rarity)}</TableCell>
-                                    <TableCell className="text-center px-4 py-2">{row.name}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{getLocalizedName(row.id, language)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

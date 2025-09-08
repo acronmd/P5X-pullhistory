@@ -4,7 +4,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react"
 
+import { formatUnixToLocal } from "@/utils/sharedFunctions.tsx";
+import { formatPullTime } from "@/utils/sharedFunctions.tsx";
+import { formatContractTypeSublabel } from "@/utils/sharedFunctions.tsx";
+
+import { getCellValueByLanguage } from "@/utils/sharedFunctions.tsx";
+
 import '@/colors.css';
+import {useLanguage} from "@/utils/language.tsx";
 
 interface PullTableCardProps {
     pulls: any[][]; // the sheet data
@@ -33,11 +40,14 @@ function rowClassForRarity(rarity: string) {
 }
 
 export default function PullTableCard({ pulls, label }: PullTableCardProps) {
+    const { language } = useLanguage();
+
     const [isReversed, setIsReversed] = useState(true);
 
     const displayedPulls = isReversed ? [...pulls].reverse() : pulls;
 
     const [isExpanded, setIsExpanded] = useState(false);
+
 
     return (
         <Card className="w-full">
@@ -75,6 +85,7 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                                 <TableHead className="text-center px-4 py-2">Reward Name</TableHead>
                                 <TableHead className="text-center px-4 py-2">Contract Type</TableHead>
                                 <TableHead className="text-center px-4 py-2">Contract Time</TableHead>
+                                <TableHead className="text-center px-4 py-2">Contract ID</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -85,8 +96,9 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                                 >
                                     <TableCell className="text-center px-4 py-2">{isReversed ? pulls.length - index : index + 1}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
-                                    <TableCell className="text-center px-4 py-2">{row[1]}</TableCell>
-                                    <TableCell className="text-center px-4 py-2">{row[2]}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{getCellValueByLanguage(row, language)}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{formatContractTypeSublabel(row[1])}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{formatUnixToLocal(row[2])}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
                                 </TableRow>
                             ))}

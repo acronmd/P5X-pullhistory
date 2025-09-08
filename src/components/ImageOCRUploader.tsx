@@ -8,8 +8,8 @@ import { availableWeapons } from "@/components/CharacterPicker"
 
 import fileIconBig from "@/assets/file-icon-big.png";
 
-const CHARACTER_NAMES = availableCharacters.map(c => c.name);
-const WEAPON_NAMES = availableWeapons.map(c => c.name);
+const CHARACTER_NAMES = availableCharacters.map(c => c.name_en);
+const WEAPON_NAMES = availableWeapons.map(c => c.name_en);
 
 const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Agathlon": "Agathion",

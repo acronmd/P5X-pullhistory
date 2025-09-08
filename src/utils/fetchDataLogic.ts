@@ -6,14 +6,14 @@ const ICON_DATA: Record<
     { icon: string; fullIcon: string; assChara?: string }
 > = {
     ...availableCharacters.reduce((map, char) => {
-        map[char.name.toLowerCase()] = {
+        map[char.name_en.toLowerCase()] = {
             icon: char.modalsrc,
             fullIcon: char.collectionsrc,
         };
         return map;
     }, {} as Record<string, { icon: string; fullIcon: string }>),
     ...availableWeapons.reduce((map, weapon) => {
-        map[weapon.name.toLowerCase()] = {
+        map[weapon.name_en.toLowerCase()] = {
             icon: weapon.modalsrc,
             fullIcon: weapon.collectionsrc,
             assChara: weapon.assChara, // optional
@@ -46,46 +46,52 @@ export async function fetchDataForSheet(sheetName: string) {
     let pityCounter5 = 0;
 
     for (let i = 0; i < data.length; i++) {
-        const val = String(data[i][0] || "").trim();
-        const name = String(data[i][1] || "").trim();
+        const rarityVal = String(data[i][0] || "").trim();
+        const name_en = String(data[i][5] || "").trim();
         pityCounter4++;
         pityCounter5++;
 
-        const entry = ICON_DATA[name.toLowerCase()] || {
+        const entry = ICON_DATA[name_en.toLowerCase()] || {
             icon: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href,
             fullIcon: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href,
         };
 
-        if (val) counts[val] = (counts[val] || 0) + 1;
+        if (rarityVal) counts[rarityVal] = (counts[rarityVal] || 0) + 1;
 
-        if (val === "5") {
+        if (rarityVal === "5") {
             pityGaps5.push(last5Index === null ? i + 1 : i - last5Index);
             last5Index = i;
             all5Stars.push({
-                name,
+                name: data[i][4],
+                name_en: data[i][5],
+                name_ko: data[i][6],
                 pity: pityCounter5,
                 index: i,
                 iconUrl: entry.icon,
                 fullIconUrl: entry.fullIcon,
                 assChara: entry.assChara,
-                time: data[i][3] || "",
-                rarity: 5
+                time: data[i][2] || "",
+                rarity: 5,
+                id: data[i][3]
             });
             pityCounter5 = 0;
         }
 
-        if (val === "4") {
+        if (rarityVal === "4") {
             pityGaps4.push(last4Index === null ? i + 1 : i - last4Index);
             last4Index = i;
             all4Stars.push({
-                name,
+                name: data[i][4],
+                name_en: data[i][5],
+                name_ko: data[i][6],
                 pity: pityCounter4,
                 index: i,
                 iconUrl: entry.icon,
                 fullIconUrl: entry.fullIcon,
                 assChara: entry.assChara,
-                time: data[i][3] || "",
-                rarity: 4
+                time: data[i][2] || "",
+                rarity: 4,
+                id: data[i][3]
             });
             pityCounter4 = 0;
         }

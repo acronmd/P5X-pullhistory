@@ -12,9 +12,11 @@ export type CharacterData = {
   modalsrc: string;
   collectionsrc: string;
   rarity: "none" | "common" | "rare" | "superrare";
-  name: string;
+  name_en: string;
+  name_ko?: string;
   codename: string;
   affinity: "Cleave" | "Fire" | "Ice" | "Elec" | "Wind" | "Psi" | "Nuclear" | "Bless" | "Curse" | "Support";
+  id: number;
 };
 
 export type WeaponData = {
@@ -22,8 +24,10 @@ export type WeaponData = {
   modalsrc: string;
   collectionsrc: string;
   rarity: "none" | "standard" | "rare" | "superrare";
-  name: string;
+  name_en: string;
+  name_ko?: string;
   assChara: string;
+  id: number;
 }
 
 function makeIcon(name: string) {
@@ -52,174 +56,188 @@ function makeWeaponIcon(name: string) {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const availableCharacters: CharacterData[] = [
-  { ...makeIcon("ren"), rarity: "superrare", name: "Ren Amamiya", codename: "Joker", affinity: "Curse" },
-  { ...makeIcon("yui"), rarity: "superrare", name: "Yui", codename: "Bui", affinity: "Elec" },
-  { ...makeIcon("minami"), rarity: "superrare", name: "Minami Miyashita", codename: "Marian", affinity: "Bless" },
-  { ...makeIcon("yusuke"), rarity: "superrare", name: "Yusuke Kitagawa", codename: "Fox", affinity: "Ice" },
-  { ...makeIcon("makoto"), rarity: "superrare", name: "Makoto Nijima", codename: "Queen", affinity: "Nuclear" },
-  { ...makeIcon("yumi"), rarity: "superrare", name: "Yumi Shiina", codename: "Phoebe", affinity: "Support" },
-  { ...makeIcon("ayaka"), rarity: "superrare", name: "Ayaka Sakai", codename: "Chord", affinity: "Elec" },
+  { ...makeIcon("ren"), rarity: "superrare", name_en: "Ren Amamiya", name_ko: "아마미야 렌", codename: "Joker", affinity: "Curse", id: 1261 },
+  { ...makeIcon("yui"), rarity: "superrare", name_en: "Yui", name_ko: "YUI", codename: "Bui", affinity: "Elec", id: 1111 },
+  { ...makeIcon("minami"), rarity: "superrare", name_en: "Minami Miyashita", codename: "Marian", affinity: "Bless", id: 1231 },
+  { ...makeIcon("yusuke"), rarity: "superrare", name_en: "Yusuke Kitagawa", name_ko: "키타가와 유스케", codename: "Fox", affinity: "Ice", id: 1161 },
+  { ...makeIcon("makoto"), rarity: "superrare", name_en: "Makoto Nijima", name_ko: "니지마 마코토", codename: "Queen", affinity: "Nuclear", id: 1201 },
+  { ...makeIcon("yumi"), rarity: "superrare", name_en: "Yumi Shiina", name_ko: "시이나 유우미", codename: "Phoebe", affinity: "Support", id: 1311 },
+  { ...makeIcon("ayaka"), rarity: "superrare", name_en: "Ayaka Sakai", name_ko: "사카이 아야카", codename: "Chord", affinity: "Elec", id: 1321 },
 
-  { ...makeIcon("morgana"), rarity: "superrare", name: "Morgana", codename: "Mona", affinity: "Wind" },
-  { ...makeIcon("ryuji"), rarity: "superrare", name: "Ryuji Sakamoto", codename: "Skull", affinity: "Cleave" },
-  { ...makeIcon("ann"), rarity: "superrare", name: "Ann Takamaki", codename: "Panther", affinity: "Fire" },
-  { ...makeIcon("yaoling"), rarity: "superrare", name: "Yaoling Li", codename: "Rin", affinity: "Curse" },
-  { ...makeIcon("haruna"), rarity: "superrare", name: "Haruna Nishimori", codename: "Riddle", affinity: "Psi" },
+  { ...makeIcon("morgana"), rarity: "superrare", name_en: "Morgana", name_ko: "모르가나", codename: "Mona", affinity: "Wind", id: 1021 },
+  { ...makeIcon("ryuji"), rarity: "superrare", name_en: "Ryuji Sakamoto", name_ko: "사카모토 류지", codename: "Skull", affinity: "Cleave", id: 1011 },
+  { ...makeIcon("ann"), rarity: "superrare", name_en: "Ann Takamaki", codename: "Panther", affinity: "Fire", id: 1191 },
+  { ...makeIcon("yaoling"), rarity: "superrare", name_en: "Yaoling Li", name_ko: "리 야오링", codename: "Rin", affinity: "Curse", id: 1091 },
+  { ...makeIcon("haruna"), rarity: "superrare", name_en: "Haruna Nishimori", name_ko: "니시모리 하루나", codename: "Riddle", affinity: "Psi", id: 1281 },
 
-  { ...makeIcon("lufel"), rarity: "rare", name: "Lufel", codename: "Cattle", affinity: "Fire" },
-  { ...makeIcon("motoha"), rarity: "rare", name: "Motoha Arai", codename: "Closer", affinity: "Elec" },
-  { ...makeIcon("shun"), rarity: "rare", name: "Shun Kano", codename: "Soy", affinity: "Ice" },
-  { ...makeIcon("leo"), rarity: "rare", name: "Leo Kamiyama", codename: "Leon", affinity: "Nuclear" },
-  { ...makeIcon("kayo"), rarity: "rare", name: "Kayo Tomiyama", codename: "Okyaan", affinity: "Support" },
-  { ...makeIcon("tomoko"), rarity: "rare", name: "Tomoko Noge", codename: "Moko", affinity: "Psi" },
-  { ...makeIcon("kiyoshi"), rarity: "rare", name: "Kiyoshi Kurotani", codename: "Key", affinity: "Fire" },
-  { ...makeIcon("yukimi"), rarity: "rare", name: "Yukimi Fujikawa", codename: "Yuki", affinity: "Bless" },
-  { ...makeIcon("seiji"), rarity: "rare", name: "Seiji Shiratori", codename: "Fleuret", affinity: "Wind" },
-  { ...makeIcon("toshiya"), rarity: "rare", name: "Toshiya Sumi", codename: "Sepia", affinity: "Curse" },
-  { ...makeIcon("kotone"), rarity: "rare", name: "Kotone Montagne", codename: "Mont", affinity: "Ice" },
-  { ...makeIcon("miyu"), rarity: "rare", name: "Miyu Sahara", codename: "Puppet", affinity: "Support" },
-  { ...makeIcon("chizuko"), rarity: "rare", name: "Chizuko Nagao", codename: "Vino", affinity: "Nuclear" },
-  { ...makeIcon("riko"), rarity: "rare", name: "Riko Tanemura", codename: "Wind", affinity: "Support" },
+  { ...makeIcon("lufel"), rarity: "rare", name_en: "Lufel", name_ko: "루페르", codename: "Cattle", affinity: "Fire", id: 1041 },
+  { ...makeIcon("motoha"), rarity: "rare", name_en: "Motoha Arai", name_ko: "아라이 모토하", codename: "Closer", affinity: "Elec", id: 1031 },
+  { ...makeIcon("shun"), rarity: "rare", name_en: "Shun Kano", name_ko: "카노 슌", codename: "Soy", affinity: "Ice", id: 1061 },
+  { ...makeIcon("leo"), rarity: "rare", name_en: "Leo Kamiyama", name_ko: "카미야마 레오", codename: "Leon", affinity: "Nuclear", id: 1071 },
+  { ...makeIcon("kayo"), rarity: "rare", name_en: "Kayo Tomiyama", name_ko: "토미야마 카요", codename: "Okyaan", affinity: "Support", id: 1081 },
+  { ...makeIcon("tomoko"), rarity: "rare", name_en: "Tomoko Noge", name_ko: "노게 토모코", codename: "Moko", affinity: "Psi", id: 1101 },
+  { ...makeIcon("kiyoshi"), rarity: "rare", name_en: "Kiyoshi Kurotani", name_ko: "쿠로타니 키요시", codename: "Key", affinity: "Fire", id: 1121 },
+  { ...makeIcon("yukimi"), rarity: "rare", name_en: "Yukimi Fujikawa", name_ko: "후지카와 유키미", codename: "Yuki", affinity: "Bless", id: 1131 },
+  { ...makeIcon("seiji"), rarity: "rare", name_en: "Seiji Shiratori", name_ko: "시라토리 세이지", codename: "Fleuret", affinity: "Wind", id: 1141 },
+  { ...makeIcon("toshiya"), rarity: "rare", name_en: "Toshiya Sumi", name_ko: "스미 토시야", codename: "Sepia", affinity: "Curse", id: 1181 },
+  { ...makeIcon("kotone"), rarity: "rare", name_en: "Kotone Montagne", name_ko: "코토네 몽타뉴", codename: "Mont", affinity: "Ice", id: 1211 },
+  { ...makeIcon("miyu"), rarity: "rare", name_en: "Miyu Sahara", name_ko: "사하라 미유", codename: "Puppet", affinity: "Support", id: 1271 },
+  { ...makeIcon("chizuko"), rarity: "rare", name_en: "Chizuko Nagao", name_ko: "나가오 치즈코", codename: "Vino", affinity: "Nuclear", id: 1301 },
+  { ...makeIcon("riko"), rarity: "rare", name_en: "Riko Tanemura", name_ko: "타네무라 리코", codename: "Wind", affinity: "Support", id: 1051 },
+
+
+  { ...makeIcon("shoki"), rarity: "rare", name_en: "Shoki Ikenami", name_ko: "이케나미 쇼키", codename: "Luce", affinity: "Bless", id: 1221 },
+
+  { ...makeIcon("akihiko"), rarity: "superrare", name_en: "Akihiko Sanada", name_ko: "사나다 아키히코", codename: "Akihiko", affinity: "Elec", id: 1411 },
+  { ...makeIcon("runa"), rarity: "superrare", name_en: "Runa Dogenzaka", name_ko: "도겐자카 루우나", codename: "Howler", affinity: "Fire", id: 1341 },
+  { ...makeIcon("mayumi"), rarity: "superrare", name_en: "Mayumi Hashimoto", name_ko: "하시모토 마유미", codename: "Turbo", affinity: "Cleave", id: 1361 },
 
   /* Cleave */
-  { ...makePersonaIcon("inugami"), rarity: "common", name: "Inugami", codename: "N/A", affinity: "Cleave" },
-  { ...makePersonaIcon("ippon_datara"), rarity: "common", name: "Ippon-Datara", codename: "N/A", affinity: "Cleave" },
-  { ...makePersonaIcon("mandrake"), rarity: "common", name: "Mandrake", codename: "N/A", affinity: "Cleave" },
-  { ...makePersonaIcon("mokoi"), rarity: "common", name: "Mokoi", codename: "N/A", affinity: "Cleave" },
+  { ...makePersonaIcon("inugami"), rarity: "common", name_en: "Inugami", name_ko: "이누가미", codename: "N/A", affinity: "Cleave", id: 157 },
+  { ...makePersonaIcon("ippon_datara"), rarity: "common", name_en: "Ippon-Datara", name_ko: "잇폰다타라", codename: "N/A", affinity: "Cleave", id: 183 },
+  { ...makePersonaIcon("mandrake"), rarity: "common", name_en: "Mandrake", name_ko: "맨드레이크", codename: "N/A", affinity: "Cleave", id: 163 },
+  { ...makePersonaIcon("mokoi"), rarity: "common", name_en: "Mokoi", name_ko: "모코이", codename: "N/A", affinity: "Cleave", id: 129 },
 
   /* Fire */
-  { ...makePersonaIcon("hua_po"), rarity: "common", name: "Hua Po", codename: "N/A", affinity: "Fire"  },
-  { ...makePersonaIcon("orobas"), rarity: "common", name: "Orobas", codename: "N/A", affinity: "Fire"  },
-  { ...makePersonaIcon("pyrojack"), rarity: "common", name: "Jack-o'-Lantern", codename: "N/A", affinity: "Fire"  },
+  { ...makePersonaIcon("hua_po"), rarity: "common", name_en: "Hua Po", name_ko: "화백", codename: "N/A", affinity: "Fire", id: 178  },
+  { ...makePersonaIcon("orobas"), rarity: "common", name_en: "Orobas", name_ko: "오로바스",  codename: "N/A", affinity: "Fire", id: 184  },
+  { ...makePersonaIcon("pyrojack"), rarity: "common", name_en: "Jack-o'-Lantern", name_ko: "잭 오 랜턴", codename: "N/A", affinity: "Fire", id: 111  },
 
   /* Ice */
-  { ...makePersonaIcon("andras"), rarity: "common", name: "Andras", codename: "N/A", affinity: "Ice"  },
-  { ...makePersonaIcon("apsaras"), rarity: "common", name: "Apsaras", codename: "N/A", affinity: "Ice"  },
-  { ...makePersonaIcon("koropokguru"), rarity: "common", name: "Koropokguru", codename: "N/A", affinity: "Ice"  },
-  { ...makePersonaIcon("kushi_mitama"), rarity: "common", name: "Kushi Mitama", codename: "N/A", affinity: "Ice"  },
-  { ...makePersonaIcon("saki_mitama"), rarity: "common", name: "Saki Mitama", codename: "N/A", affinity: "Ice"  },
+  { ...makePersonaIcon("andras"), rarity: "common", name_en: "Andras", name_ko: "안드라스", codename: "N/A", affinity: "Ice", id: 224  },
+  { ...makePersonaIcon("apsaras"), rarity: "common", name_en: "Apsaras", name_ko: "아프사라스", codename: "N/A", affinity: "Ice", id: 192 },
+  { ...makePersonaIcon("koropokguru"), rarity: "common", name_en: "Koropokguru", name_ko: "코로포클", codename: "N/A", affinity: "Ice", id: 179  },
+  { ...makePersonaIcon("kushi_mitama"), rarity: "common", name_en: "Kushi Mitama", name_ko: "쿠시미타마", codename: "N/A", affinity: "Ice", id: 250  },
+  { ...makePersonaIcon("saki_mitama"), rarity: "common", name_en: "Saki Mitama", name_ko: "사키미타마", codename: "N/A", affinity: "Ice", id: 221  },
 
   /* Wind */
-  { ...makePersonaIcon("bicorn"), rarity: "common", name: "Bicorn", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("high_pixie"), rarity: "common", name: "High Pixie", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("kelpie"), rarity: "common", name: "Kelpie", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("kodama"), rarity: "common", name: "Kodama", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("koppa_tengu"), rarity: "common", name: "Koppa Tengu", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("nekomata"), rarity: "common", name: "Nekomata", codename: "N/A", affinity: "Wind" },
-  { ...makePersonaIcon("sudama"), rarity: "common", name: "Sudama", codename: "N/A", affinity: "Wind" },
+  { ...makePersonaIcon("bicorn"), rarity: "common", name_en: "Bicorn", name_ko: '바이콘', codename: "N/A", affinity: "Wind", id: 117 },
+  { ...makePersonaIcon("high_pixie"), rarity: "common", name_en: "High Pixie", name_ko: "하이픽시", codename: "N/A", affinity: "Wind", id: 166 },
+  { ...makePersonaIcon("kelpie"), rarity: "common", name_en: "Kelpie", name_ko: "켈피", codename: "N/A", affinity: "Wind", id: 220 },
+  { ...makePersonaIcon("kodama"), rarity: "common", name_en: "Kodama", name_ko: "코다마", codename: "N/A", affinity: "Wind", id: 193 },
+  { ...makePersonaIcon("koppa_tengu"), rarity: "common", name_en: "Koppa Tengu", name_ko: '콧파텐구', codename: "N/A", affinity: "Wind", id: 180 },
+  { ...makePersonaIcon("nekomata"), rarity: "common", name_en: "Nekomata", name_ko: "네코마타", codename: "N/A", affinity: "Wind", id: 185 },
+  { ...makePersonaIcon("sudama"), rarity: "common", name_en: "Sudama", name_ko: "스다마", codename: "N/A", affinity: "Wind", id: 154 },
 
   /* Elec */
-  { ...makePersonaIcon("agathion"), rarity: "common", name: "Agathion", codename: "N/A", affinity: "Elec"  },
-  { ...makePersonaIcon("pixie"), rarity: "common", name: "Pixie", codename: "N/A", affinity: "Elec"  },
-  { ...makePersonaIcon("shiisa"), rarity: "common", name: "Shiisa", codename: "N/A", affinity: "Elec"  },
+  { ...makePersonaIcon("agathion"), rarity: "common", name_en: "Agathion", name_ko: "아가시온", codename: "N/A", affinity: "Elec", id: 116  },
+  { ...makePersonaIcon("pixie"), rarity: "common", name_en: "Pixie", name_ko: "픽시", codename: "N/A", affinity: "Elec", id: 156  },
+  { ...makePersonaIcon("shiisa"), rarity: "common", name_en: "Shiisa", name_ko: "시사", codename: "N/A", affinity: "Elec", id: 194 },
 
   /* Psi */
 
   /* Nuclear */
-  { ...makePersonaIcon("makami"), rarity: "common", name: "Makami", codename: "N/A", affinity: "Nuclear" },
-  { ...makePersonaIcon("suzaku"), rarity: "common", name: "Suzaku", codename: "N/A", affinity: "Nuclear" },
+  { ...makePersonaIcon("makami"), rarity: "common", name_en: "Makami", name_ko: "마카미", codename: "N/A", affinity: "Nuclear", id: 165 },
+  { ...makePersonaIcon("suzaku"), rarity: "common", name_en: "Suzaku", name_ko: "주작", codename: "N/A", affinity: "Nuclear", id: 143 },
 
   /* Bless */
-  { ...makePersonaIcon("nigi_mitama"), rarity: "common", name: "Nigi Mitama", codename: "N/A", affinity: "Bless" },
+  { ...makePersonaIcon("nigi_mitama"), rarity: "common", name_en: "Nigi Mitama", name_ko: "니기미타마", codename: "N/A", affinity: "Bless", id: 226 },
 
   /* Curse */
-  { ...makePersonaIcon("onmoraki"), rarity: "common", name: "Onmoraki", codename: "N/A", affinity: "Curse" },
-  { ...makePersonaIcon("slime"), rarity: "common", name: "Slime", codename: "N/A", affinity: "Curse" },
+  { ...makePersonaIcon("onmoraki"), rarity: "common", name_en: "Onmoraki", name_ko: "온모라키", codename: "N/A", affinity: "Curse", id: 182 },
+  { ...makePersonaIcon("slime"), rarity: "common", name_en: "Slime", name_ko: '슬라임', codename: "N/A", affinity: "Curse", id: 225 },
 
   // Add more characters here as needed
-  { ...makeIcon("basic"), rarity: "none", name: "Clear", codename: "N/A", affinity: "Support" },
+  { ...makeIcon("basic"), rarity: "none", name_en: "Clear", codename: "N/A", affinity: "Support", id: 9999 },
 ];
 
 export const availableWeapons: WeaponData[] = [
   /* 5-Star Weapons */
-  { ...makeWeaponIcon("ren-5"), rarity: "superrare", name: "Phoenix Dagger", assChara: "Ren Amamiya" },
-  { ...makeWeaponIcon("yui-5"), rarity: "superrare", name: "Cyber Jammers", assChara: "Yui" },
-  { ...makeWeaponIcon("minami-5"), rarity: "superrare", name: "Angel Heart", assChara: "Minami Miyashita" },
-  { ...makeWeaponIcon("yusuke-5"), rarity: "superrare", name: "Shadowkiller", assChara: "Yusuke Kitagawa" },
-  { ...makeWeaponIcon("makoto-5"), rarity: "superrare", name: "Nuclear Finisher", assChara: "Makoto Nijima" },
-  { ...makeWeaponIcon("yumi-5"), rarity: "superrare", name: "Moonlit Feather", assChara: "Yumi Shiina" },
-  { ...makeWeaponIcon("ayaka-5"), rarity: "superrare", name: "Superstar", assChara: "Ayaka Sakai" },
+  { ...makeWeaponIcon("ren-5"), rarity: "superrare", name_en: "Phoenix Dagger", name_ko: "불사조", assChara: "Ren Amamiya", id: 212604 },
+  { ...makeWeaponIcon("yui-5"), rarity: "superrare", name_en: "Cyber Jammers", name_ko: "버츄얼 디스럽터", assChara: "Yui", id: 211104 },
+  { ...makeWeaponIcon("minami-5"), rarity: "superrare", name_en: "Angel Heart", assChara: "Minami Miyashita" },
+  { ...makeWeaponIcon("yusuke-5"), rarity: "superrare", name_en: "Shadowkiller", name_ko: "금빛 그림자", assChara: "Yusuke Kitagawa", id: 211604 },
+  { ...makeWeaponIcon("makoto-5"), rarity: "superrare", name_en: "Nuclear Finisher", name_ko: '종말의 핵열', assChara: "Makoto Nijima", id: 212004 },
+  { ...makeWeaponIcon("yumi-5"), rarity: "superrare", name_en: "Moonlit Feather", name_ko: "월하의 깃털", assChara: "Yumi Shiina", id: 213104 },
+  { ...makeWeaponIcon("ayaka-5"), rarity: "superrare", name_en: "Superstar", name_ko: "샤이닝 스타", assChara: "Ayaka Sakai", id: 213204 },
 
-  { ...makeWeaponIcon("morgana-5"), rarity: "superrare", name: "Golden Legacy", assChara: "Morgana" },
-  { ...makeWeaponIcon("ryuji-5"), rarity: "superrare", name: "Revenge Axe", assChara: "Ryuji Sakamoto" },
-  { ...makeWeaponIcon("ann-5"), rarity: "superrare", name: "Rosethorn", assChara: "Ann Takamaki" },
-  { ...makeWeaponIcon("yaoling-5"), rarity: "superrare", name: "Infinite Moment", assChara: "Yaoling Li" },
-  { ...makeWeaponIcon("haruna-5"), rarity: "superrare", name: "Sweet Pickaxe", assChara: "Haruna Nishimori" },
-  { ...makeWeaponIcon("lufel-5"), rarity: "superrare", name: "Fallen Angel Wing", assChara: "Lufel" },
-  { ...makeWeaponIcon("motoha-5"), rarity: "superrare", name: "Quasar", assChara: "Motoha Arai" },
-  { ...makeWeaponIcon("shun-5"), rarity: "superrare", name: "Permafrost", assChara: "Shun Kano" },
-  { ...makeWeaponIcon("leo-5"), rarity: "superrare", name: "Final Buster", assChara: "Leo Kamiyama" },
-  { ...makeWeaponIcon("kayo-5"), rarity: "superrare", name: "Retro Disco Style", assChara: "Kayo Tomiyama" },
-  { ...makeWeaponIcon("tomoko-5"), rarity: "superrare", name: "Dream and Nightmare", assChara: "Tomoko Noge" },
-  { ...makeWeaponIcon("kiyoshi-5"), rarity: "superrare", name: "Baptism by Fire", assChara: "Kiyoshi Kurotani" },
-  { ...makeWeaponIcon("yukimi-5"), rarity: "superrare", name: "Karmic Cycle", assChara: "Yukimi Fujikawa" },
-  { ...makeWeaponIcon("seiji-5"), rarity: "superrare", name: "Venus Sunrise", assChara: "Seiji Shiratori" },
-  { ...makeWeaponIcon("toshiya-5"), rarity: "superrare", name: "Babel's Verdict", assChara: "Toshiya Sumi" },
-  { ...makeWeaponIcon("kotone-5"), rarity: "superrare", name: "Queen of Winter", assChara: "Kotone Montagne" },
-  { ...makeWeaponIcon("miyu-5"), rarity: "superrare", name: "Ephemerality", assChara: "Miyu Sahara" },
-  { ...makeWeaponIcon("chizuko-5"), rarity: "superrare", name: "Jolting Pulse", assChara: "Chizuko Nagao" },
-  { ...makeWeaponIcon("riko-5"), rarity: "superrare", name: "Kunoichi: Sky's Edge", assChara: "Riko Tanemura" },
+  { ...makeWeaponIcon("morgana-5"), rarity: "superrare", name_en: "Golden Legacy", assChara: "Morgana" },
+  { ...makeWeaponIcon("ryuji-5"), rarity: "superrare", name_en: "Revenge Axe", assChara: "Ryuji Sakamoto" },
+  { ...makeWeaponIcon("ann-5"), rarity: "superrare", name_en: "Rosethorn", assChara: "Ann Takamaki" },
+  { ...makeWeaponIcon("yaoling-5"), rarity: "superrare", name_en: "Infinite Moment", name_ko: "하늘의 일념", assChara: "Yaoling Li", id: 210904 },
+  { ...makeWeaponIcon("haruna-5"), rarity: "superrare", name_en: "Sweet Pickaxe", assChara: "Haruna Nishimori" },
+  { ...makeWeaponIcon("lufel-5"), rarity: "superrare", name_en: "Fallen Angel Wing", assChara: "Lufel" },
+  { ...makeWeaponIcon("motoha-5"), rarity: "superrare", name_en: "Quasar", assChara: "Motoha Arai" },
+  { ...makeWeaponIcon("shun-5"), rarity: "superrare", name_en: "Permafrost", assChara: "Shun Kano" },
+  { ...makeWeaponIcon("leo-5"), rarity: "superrare", name_en: "Final Buster", name_ko: "디스트로이어 MR", assChara: "Leo Kamiyama", id: 210704},
+  { ...makeWeaponIcon("kayo-5"), rarity: "superrare", name_en: "Retro Disco Style", assChara: "Kayo Tomiyama" },
+  { ...makeWeaponIcon("tomoko-5"), rarity: "superrare", name_en: "Dream and Nightmare", assChara: "Tomoko Noge" },
+  { ...makeWeaponIcon("kiyoshi-5"), rarity: "superrare", name_en: "Baptism by Fire", assChara: "Kiyoshi Kurotani" },
+  { ...makeWeaponIcon("yukimi-5"), rarity: "superrare", name_en: "Karmic Cycle", assChara: "Yukimi Fujikawa" },
+  { ...makeWeaponIcon("seiji-5"), rarity: "superrare", name_en: "Venus Sunrise", name_ko: "계몽의 별", assChara: "Seiji Shiratori", id: 211404 },
+  { ...makeWeaponIcon("toshiya-5"), rarity: "superrare", name_en: "Babel's Verdict", assChara: "Toshiya Sumi" },
+  { ...makeWeaponIcon("kotone-5"), rarity: "superrare", name_en: "Queen of Winter", assChara: "Kotone Montagne" },
+  { ...makeWeaponIcon("miyu-5"), rarity: "superrare", name_en: "Ephemerality", assChara: "Miyu Sahara" },
+  { ...makeWeaponIcon("chizuko-5"), rarity: "superrare", name_en: "Jolting Pulse", name_ko: "오버클럭 펄스", assChara: "Chizuko Nagao", id: 213004 },
+  { ...makeWeaponIcon("riko-5"), rarity: "superrare", name_en: "Kunoichi: Sky's Edge", name_ko: "닌자·천공의 날개", assChara: "Riko Tanemura", id: 210504 },
 
 
   /* 4-Star Weapons */
-  { ...makeWeaponIcon("ren-4"), rarity: "rare", name: "Machete", assChara: "Ren Amamiya" },
-  { ...makeWeaponIcon("yui-4"), rarity: "rare", name: "Meta Directors", assChara: "Yui" },
-  { ...makeWeaponIcon("minami-4"), rarity: "rare", name: "Hymn of Life", assChara: "Minami Miyashita" },
-  { ...makeWeaponIcon("usuke-4"),rarity: "rare", name: "Jagato", assChara: "Yusuke Kitagawa" },
-  { ...makeWeaponIcon("makoto-4"),rarity: "rare", name: "Omega Knuckle", assChara: "Makoto Nijima" },
-  { ...makeWeaponIcon("yumi-4"),rarity: "rare", name: "Starrynight Soothsayer", assChara: "Yumi Shiina" },
+  { ...makeWeaponIcon("ren-4"), rarity: "rare", name_en: "Machete", name_ko: "마체테 나이프", assChara: "Ren Amamiya", id: 212603 },
+  { ...makeWeaponIcon("yui-4"), rarity: "rare", name_en: "Meta Directors", name_ko: "미래의 계시", assChara: "Yui", id: 211103 },
+  { ...makeWeaponIcon("minami-4"), rarity: "rare", name_en: "Hymn of Life", assChara: "Minami Miyashita" },
+  { ...makeWeaponIcon("yusuke-4"),rarity: "rare", name_en: "Jagato", name_ko: "거합도", assChara: "Yusuke Kitagawa", id: 211603 },
+  { ...makeWeaponIcon("makoto-4"),rarity: "rare", name_en: "Omega Knuckle", name_ko: "마하 펀치", assChara: "Makoto Nijima", id: 212003 },
+  { ...makeWeaponIcon("yumi-4"),rarity: "rare", name_en: "Starrynight Soothsayer", name_ko: "별밤의 점술가", assChara: "Yumi Shiina", id: 213103 },
 
-  { ...makeWeaponIcon("morgana-4"),rarity: "rare", name: "Shamshir", assChara: "Morgana" },
-  { ...makeWeaponIcon("ryuji-4"),rarity: "rare", name: "Grand Presser", assChara: "Ryuji Sakamoto" },
-  { ...makeWeaponIcon("ann-4"),rarity: "rare", name: "Masquerade Ribbon", assChara: "Ann Takamaki" },
-  { ...makeWeaponIcon("yaoling-4"),rarity: "rare", name: "Sunstaff", assChara: "Yaoling Li" },
-  { ...makeWeaponIcon("haruna-4"),rarity: "rare", name: "Chirpy Pickaxe", assChara: "Haruna Nishimori" },
-  { ...makeWeaponIcon("lufel-4"),rarity: "rare", name: "Lava Flame", assChara: "Lufel" },
-  { ...makeWeaponIcon("motoha-4"),rarity: "rare", name: "Crime and Punishment", assChara: "Motoha Arai" },
-  { ...makeWeaponIcon("shun-4"),rarity: "rare", name: "Demon's Bite", assChara: "Shun Kano" },
-  { ...makeWeaponIcon("leo-4"),rarity: "rare", name: "Justice Lance", assChara: "Leo Kamiyama" },
-  { ...makeWeaponIcon("kayo-4"),rarity: "rare", name: "Emerald Charmer", assChara: "Kayo Tomiyama" },
-  { ...makeWeaponIcon("tomoko-4"),rarity: "rare", name: "Shadow Crowns", assChara: "Tomoko Noge" },
-  { ...makeWeaponIcon("kiyoshi-4"),rarity: "rare", name: "Death Stinger", assChara: "Kiyoshi Kurotani" },
-  { ...makeWeaponIcon("yukimi-4"),rarity: "rare", name: "Heavy Metal Pain", assChara: "Yukimi Fujikawa" },
-  { ...makeWeaponIcon("seiji-4"),rarity: "rare", name: "Knight's Reward", assChara: "Seiji Shiratori" },
-  { ...makeWeaponIcon("toshiya-4"),rarity: "rare", name: "Scarlet Scepter", assChara: "Toshiya Sumi" },
-  { ...makeWeaponIcon("kotone-4"),rarity: "rare", name: "Edelweiss", assChara: "Kotone Montagne" },
-  { ...makeWeaponIcon("miyu-4"),rarity: "rare", name: "Submarine Sonar", assChara: "Miyu Sahara" },
-  { ...makeWeaponIcon("chizuko-4"),rarity: "rare", name: "Gravitational Force", assChara: "Chizuko Nagao" },
-  { ...makeWeaponIcon("ayaka-4"),rarity: "rare", name: "Rock 'n' Roller", assChara: "Ayaka Sakai" },
-  { ...makeWeaponIcon("riko-4"),rarity: "rare", name: "Moonlight Needle", assChara: "Riko Tanemura" },
+  { ...makeWeaponIcon("morgana-4"),rarity: "rare", name_en: "Shamshir", name_ko: "샴시르", assChara: "Morgana", id: 210203 },
+  { ...makeWeaponIcon("ryuji-4"),rarity: "rare", name_en: "Grand Presser", name_ko: "가이아 프레서", assChara: "Ryuji Sakamoto", id: 210103 },
+  { ...makeWeaponIcon("ann-4"),rarity: "rare", name_en: "Masquerade Ribbon", name_ko: "미라지 윕", assChara: "Ann Takamaki", id: 211903 },
+  { ...makeWeaponIcon("yaoling-4"),rarity: "rare", name_en: "Sunstaff", name_ko: "만물의 사계", assChara: "Yaoling Li", id: 210903 },
+  { ...makeWeaponIcon("haruna-4"),rarity: "rare", name_en: "Chirpy Pickaxe", assChara: "Haruna Nishimori" },
+  { ...makeWeaponIcon("lufel-4"),rarity: "rare", name_en: "Lava Flame", name_ko: "용암의 불꽃", assChara: "Lufel", id: 210403 },
+  { ...makeWeaponIcon("motoha-4"),rarity: "rare", name_en: "Crime and Punishment", name_ko: "죄와 벌", assChara: "Motoha Arai", id: 210303 },
+  { ...makeWeaponIcon("shun-4"),rarity: "rare", name_en: "Demon's Bite", name_ko: "마의 습격", assChara: "Shun Kano", id: 210603 },
+  { ...makeWeaponIcon("leo-4"),rarity: "rare", name_en: "Justice Lance", name_ko: "최강 미늘창 X", assChara: "Leo Kamiyama", id: 210703 },
+  { ...makeWeaponIcon("kayo-4"),rarity: "rare", name_en: "Emerald Charmer", name_ko: "형광의 매혹 D4u", assChara: "Kayo Tomiyama", id: 210803 },
+  { ...makeWeaponIcon("tomoko-4"),rarity: "rare", name_en: "Shadow Crowns", name_ko: "섀도 크라운", assChara: "Tomoko Noge", id: 211003 },
+  { ...makeWeaponIcon("kiyoshi-4"),rarity: "rare", name_en: "Death Stinger", name_ko: "불꽃 성정", assChara: "Kiyoshi Kurotani", id: 211203 },
+  { ...makeWeaponIcon("yukimi-4"),rarity: "rare", name_en: "Heavy Metal Pain", name_ko: "메가 카운터", assChara: "Yukimi Fujikawa", id: 211303 },
+  { ...makeWeaponIcon("seiji-4"),rarity: "rare", name_en: "Knight's Reward", name_ko: "수훈의 증명", assChara: "Seiji Shiratori", id: 211403 },
+  { ...makeWeaponIcon("toshiya-4"),rarity: "rare", name_en: "Scarlet Scepter", assChara: "Toshiya Sumi" },
+  { ...makeWeaponIcon("kotone-4"),rarity: "rare", name_en: "Edelweiss", name_ko: "태양의 노래", assChara: "Kotone Montagne", id: 212103 },
+  { ...makeWeaponIcon("miyu-4"),rarity: "rare", name_en: "Submarine Sonar", name_ko: "바다 소나", assChara: "Miyu Sahara", id: 212703 },
+  { ...makeWeaponIcon("chizuko-4"),rarity: "rare", name_en: "Gravitational Force", name_ko: "그래비티 소드", assChara: "Chizuko Nagao", id: 213003 },
+  { ...makeWeaponIcon("ayaka-4"),rarity: "rare", name_en: "Rock 'n' Roller", name_ko: "로큰롤 솔로", assChara: "Ayaka Sakai", id: 213203 },
+  { ...makeWeaponIcon("riko-4"),rarity: "rare", name_en: "Moonlight Needle", assChara: "Riko Tanemura" },
 
   /* 3-Star Weapons */
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Athame", assChara: "Ren Amamiya" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Electric Chakrams", assChara: "Yui" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Portable Trauma Unit", assChara: "Minami Miyashita" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Flash Punch", assChara: "Makoto Nijima" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Peafowl Cane", assChara: "Yumi Shiina" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Athame", assChara: "Ren Amamiya" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Electric Chakrams", assChara: "Yui" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Portable Trauma Unit", assChara: "Minami Miyashita" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Seishiki Sword", assChara: "Yusuke Kitagawa" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Flash Punch", assChara: "Makoto Nijima" },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Peafowl Cane", assChara: "Yumi Shiina" },
 
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "God Saber", assChara: "Morgana" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Gang Star", assChara: "Ryuji Sakamoto" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Spike Whip", assChara: "Ann Takamaki" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Willowstaff", assChara: "Yaoling Li" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Shrill Pickaxe", assChara: "Haruna Nishimori" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Break Tonfa", assChara: "Lufel" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Lightning Hammer", assChara: "Motoha Arai" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Steel Tomahawk", assChara: "Shun Kano" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Punish Lance", assChara: "Leo Kamiyama" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Sweety SG", assChara: "Kayo Tomiyama" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Sharp Twinblades", assChara: "Tomoko Noge" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Holy Nail", assChara: "Kiyoshi Kurotani" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Slashing Flail", assChara: "Yukimi Fujikawa" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Elegant Rapier", assChara: "Seiji Shiratori" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Noble Rod", assChara: "Toshiya Sumi" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Royal Saber", assChara: "Kotone Montagne" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "C.A. Explorer", assChara: "Miyu Sahara" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Cobalt Alloy Bayonet", assChara: "Chizuko Nagao" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Amped-Up Guitar Axe", assChara: "Ayaka Sakai" },
-  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name: "Peculiar Parasol", assChara: "Riko Tanemura" }
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "God Saber", name_ko: "소닉 블레이드", assChara: "Morgana", id: 210202 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Gang Star", name_ko: "헤비 메이스", assChara: "Ryuji Sakamoto", id: 210102 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Spike Whip", name_ko: "쇄분동", assChara: "Ann Takamaki", id: 211902 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Willowstaff", name_ko: '트윈 곤봉', assChara: "Yaoling Li", id: 210902 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Shrill Pickaxe", name_ko: "뾰족 곡괭이", assChara: "Haruna Nishimori", id: 212802 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Break Tonfa", name_ko: "돌격 쌍곤", assChara: "Lufel", id: 210402 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Lightning Hammer", name_ko: "썬더 철퇴", assChara: "Motoha Arai", id: 210302 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Steel Tomahawk", name_ko: "강철 손도끼", assChara: "Shun Kano", id: 210602 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Punish Lance", name_ko: "EX 심판의 창", assChara: "Leo Kamiyama", id: 210702 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Sweety SG", name_ko: "큐트 섹시 SG형", assChara: "Kayo Tomiyama", id: 210802 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Sharp Twinblades", name_ko: "쌍날의 아리아", assChara: "Tomoko Noge", id: 211002 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Holy Nail", name_ko: "석란 성정", assChara: "Kiyoshi Kurotani", id: 211202 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Slashing Flail", name_ko: "가시 모닝스타", assChara: "Yukimi Fujikawa", id: 211302 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Elegant Rapier", name_ko: "클래식 플뢰레", assChara: "Seiji Shiratori", id: 211402 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Noble Rod", name_ko: "노블 소드 스틱", assChara: "Toshiya Sumi", id: 211802 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Royal Saber", name_ko: "로열 사벨", assChara: "Kotone Montagne", id: 212102 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "C.A. Explorer", name_ko: "C.A 정찰 부스터", assChara: "Miyu Sahara", id: 212702 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Cobalt Alloy Bayonet", name_ko: "전략 군용검", assChara: "Chizuko Nagao", id: 213002 },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Amped-Up Guitar Axe", assChara: "Ayaka Sakai",  },
+  { src: "NULL", modalsrc: "NULL", collectionsrc: "NULL", rarity: "standard", name_en: "Peculiar Parasol", name_ko: "토죠카사", assChara: "Riko Tanemura", id: 210502 }
 
 ]
+
+// Auto-generate the map once
+// eslint-disable-next-line react-refresh/only-export-components
+export const IDMap: Record<number, CharacterData | WeaponData> = {
+  ...Object.fromEntries(availableCharacters.map(c => [c.id, c])),
+  ...Object.fromEntries(availableWeapons.map(w => [w.id, w])),
+};
 
 interface CharacterPickerProps {
   isOpen: boolean;
@@ -259,7 +277,7 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({
   if (!isOpen) return null;
 
   const filteredCharacters = availableCharacters.filter((char) => {
-        const labelMatch = char.name.toLowerCase().includes(searchQuery.toLowerCase());
+        const labelMatch = char.name_en.toLowerCase().includes(searchQuery.toLowerCase());
         const codenameMatch =
             char.codename !== "N/A" &&
             char.codename.toLowerCase().includes(searchQuery.toLowerCase());
@@ -287,7 +305,7 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({
             </div>
             <div className="grid grid-cols-3 gap-4 p-4 self-start">
               {filteredCharacters.map((char, i) => {
-                const isSelected = char.name === selectedCharacterName;
+                const isSelected = char.name_en === selectedCharacterName;
                 return (
                     <div
                         key={i}
@@ -306,7 +324,7 @@ const CharacterPicker: React.FC<CharacterPickerProps> = ({
                           className="w-20 h-20 object-contain"
                           draggable={false}
                       />
-                      <span className="mt-1 text-sm capitalize">{char.name}</span>
+                      <span className="mt-1 text-sm capitalize">{char.name_en}</span>
                     </div>
                 );
               })}

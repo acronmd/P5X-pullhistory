@@ -42,6 +42,7 @@ export default function Home() {
                 A P5X Wish Tracker
             </h1>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
+                {/*
                 A P5X Wish Tracker (APT) is a website that uses Google Drive/Sheets API to
                 store pull data and our site itself displays various different things like
                 pull statistics, ongoing banners, pity tracking, luckiest pulls, pull percentages, etc. <br/> <br/>
@@ -59,6 +60,10 @@ export default function Home() {
                     Terms of Service
                 </Link>
                 {" "}for more information.
+                */}
+                A P5X Wish Tracker is currently underdoing development to have compatability with iant's global pulling backend.
+                The site is not in a very usable state (pending frontend changes to accomodate the new backend) and I do NOT advise you to use it until this message has gone away, thank you!
+
             </p>
             <blockquote className="mt-6 border-l-2 pl-6 italic">
                 &quot;Quite possibly the [...] best [...] software I've [...] ever [...]

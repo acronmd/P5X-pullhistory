@@ -85,6 +85,7 @@ import { appendCharactersToSheet} from "@/utils/google.ts";
 import DialogSheetContent from "../components/DialogSheetContexts.tsx";
 import {Link, useNavigate} from "react-router-dom";
 
+import LanguageSelector from "@/components/LanguageSelector.tsx"
 import DarkModeToggle from "@/components/DarkModeToggle.tsx"
 
 import renHero from '@/assets/heros/ren.png';
@@ -102,6 +103,14 @@ import standardTicketImage from "@/assets/low_standard-ticket.png";
 import addUI from "@/assets/add-icon.png";
 import editUI from "@/assets/edit-icon.png";
 import externalUI from "@/assets/open-external.png";
+
+import { fetchApiData } from "@/newAPI/fetchApiData.tsx";
+import { transformBannerData } from "@/newAPI/transformApiToRows.tsx";
+import { transformApiToRowsByBanner } from "@/newAPI/transformApiToRowsByBanner.tsx";
+
+import { appendCharactersToSheetWithAPI } from "@/utils/google.ts"
+import {getLocalizedName} from "@/utils/sharedFunctions.tsx";
+import {useLanguage} from "@/utils/language.tsx";
 
 type heroBanner = {
     image: string;
@@ -224,6 +233,8 @@ const itemInventory: Item[] = [
 type SheetRow = string[];
 
 const SheetStats: React.FC = () => {
+    const { language } = useLanguage();
+
     const { isSignedIn, isInitialized, signIn, signOut } = useAuth();
     const navigate = useNavigate()
 
@@ -290,7 +301,10 @@ const SheetStats: React.FC = () => {
         avgPity4: number;
         rarityCounts: Record<string, number>;    // e.g. { '5': 3, '4': 15, '3': 60, '2': 20 }
         rarityPercents: Record<string, number>;  // e.g. { '5': 4.1, '4': 20.5, ... }
-        recent5Stars: { name: string; pity: number }[];
+        recent5Stars: {
+            name: string; pity: number, id: number }[];
+        all5Stars: any;
+        all4Stars: any;
     };
 
     const [allStats, setAllStats] = useState<Stats[]>(
@@ -303,6 +317,8 @@ const SheetStats: React.FC = () => {
             rarityCounts: {},
             rarityPercents: {},
             recent5Stars: [],
+            all5Stars: [],
+            all4Stars: [],
         }))
     );
 
@@ -452,12 +468,35 @@ const SheetStats: React.FC = () => {
         });
     }
 
+    async function syncFromApi(apiUrl: string, translate: boolean) {
+        const apiData = await fetchApiData(apiUrl, translate);
+        const rowsByBanner = transformApiToRowsByBanner(apiData);
+
+        // Access each banner separately:
+        const weaponRows = rowsByBanner["Weapon"];
+        const fortuneRows = rowsByBanner["Fortune"];
+        const goldRows = rowsByBanner["Gold"];
+
+        const cached = localStorage.getItem("userDatasets");
+        const parsed = cached ? JSON.parse(cached) : defaultDatasets;
+
+        console.log(parsed[0].sheetName);
+        console.log(parsed[1].sheetName);
+        console.log(parsed[2].sheetName);
+
+        console.log(fortuneRows);
+
+        appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[0].sheetName, fortuneRows);
+        appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[1].sheetName, weaponRows);
+        appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[2].sheetName, goldRows);
+    }
+
     return (
         <div className={"flex flex-col min-h-screen"}>
             <div className={"flex flex-col gap-6 flex-1"}>
-                <div className={"flex flex-col items-center"}>
-                    <div className={"flex flex-row gap-20 items-center w-screen justify-center px-10"}>
-                        <div className="max-w-[550px]">
+                <div className={"flex flex-col items-center w-full"}>
+                    <div className="flex flex-row gap-20 items-center justify-center px-4 sm:px-10">
+                        <div className="flex-shrink-0 max-w-[550px] w-full">
                             <Carousel
                                 plugins={[plugin.current]}
                                 onMouseEnter={plugin.current.stop}
@@ -557,7 +596,7 @@ const SheetStats: React.FC = () => {
                                                 <Dialog open={dialogOpen} onOpenChange={(open) => {
                                                     setDialogOpen(open);
                                                     if (!open) {
-                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", codename: "N/A", name:"Clear", affinity: "Support" });
+                                                        selectedCharacters.fill({ src: new URL(`../assets/chicons/basic.png`, import.meta.url).href, modalsrc: new URL(`../assets/chicons/modal/basic.png`, import.meta.url).href, collectionsrc: new URL(`../assets/chicons/collection/basic.png`, import.meta.url).href, rarity: "none", codename: "N/A", name_en:"Clear", affinity: "Support", id: 9999 });
                                                     }
                                                 }}>
                                                     <DialogTrigger asChild>
@@ -687,7 +726,7 @@ const SheetStats: React.FC = () => {
                                                                 key={idx}
                                                                 className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
                                                             >
-                                                                {pull.name} at {pull.pity} pity
+                                                                {getLocalizedName(pull.id, language)} at {pull.pity} pity
                                                             </div>
                                                         ))}
                                                     </div>
@@ -743,9 +782,19 @@ const SheetStats: React.FC = () => {
                         />
                         Open Spreadsheet
                     </Button>
+                    <Button
+                        onClick={() => syncFromApi("https://euweb.p5xjpupd.com/gacha/getRecords?gachaType=2&page=1&size=10&authKey=Bt2%2FERpjNoKf4HXnto%2BaufUdss9wLpvwpsWZBHyyr1tBdku6FW4X9cqdpKFK9l%2BqW8R4ZBdAW%2FLN%2BraqqA4iIDnNQPFX38a1olNSkmjOWiqDmgDX%2F1ES8PpBQ9WU2Q5gydAyEdGQ9CaGA16MO%2B8p9AZcKpAaIktPV4F8jCMZ%2FIFEbEpDWjA6hHFrkaYUzsRu94lHGZww8XRUzqWibqwkSnipEDgaZjreMQfrDOqSXmC0%2BQ3IMw5NPYYODOt9lzZNpHQs3oYIm0wCRcnrX7hNj2xz8LlB%2BgCDEcsolGWJf8x2olrG%2Fcz19O6VXQBKZaXCLZFHpOMLlNrr8vnRJVmsyesXbUOAw11LqL5sgMKaz%2BzKQUZDxY6Zam40hd6AsKvJ41qBssZGxqU1e3E%2BBrmhibT1KdKnSEN%2B3m1f4Rz1ugsSxYRgnp37ZmTNeXsjDyaiOGAAS8Rnvl7RDyTt7NQ8ta6rueXsnhDVcNJ8Pok6LV42jCHHaEvVRvh9yZaEznrnVdhqSI%2F2cmxPhxP1qY9mRufN4O32UMHaVfc1BnTqrpfEgv7I%2Fff78eUt2zWx%2FcBHYuMKF2krq94xwxSrNqfj1FOHiIO5BKU2I2bPEH%2BhAoLVNeuoiKzcxTR0ibPjPORnB1Ze8uEvK%2F4s0NDS1U705xEUAWPkrhyQ%2B7AEqbH7zB8%3D", true) }
+                        title="API Link"
+                        className="text-white bg-coloredbg"
+                    >
+                        Sync from API Link
+                    </Button>
                 </div>
             </div>
-            <DarkModeToggle/>
+            <div className="fixed bottom-4 right-4 flex space-x-2 z-50">
+                <LanguageSelector />
+                <DarkModeToggle />
+            </div>
             <div>
                 <footer className="p-4 text-center text-sm text-gray-500 border-t">
                     <div className={"flex flex--row gap-10 justify-center"}>

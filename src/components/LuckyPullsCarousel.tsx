@@ -2,16 +2,24 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-import { formatPullTime } from "@/utils/sharedFunctions.tsx"
+import {formatPullTime, getLocalizedName} from "@/utils/sharedFunctions.tsx"
+import { getCellValueByLanguage } from "@/utils/sharedFunctions.tsx";
+import { getCharacterName } from "@/utils/sharedFunctions.tsx";
+
 import React from "react";
+
+import {useLanguage} from "@/utils/language.tsx";
 
 interface Pull {
     name: string;
+    name_en: string;
+    name_ko: string;
     pity: number;
     index: number;
     fullIconUrl: string;
     assChara: string;
     time: string;
+    id: number;
 }
 
 interface Props {
@@ -19,6 +27,8 @@ interface Props {
 }
 
 export default function LuckiestPullsCarousel({ pulls }: Props) {
+    const { language } = useLanguage();
+
     return (
         <Card className="px-4 flex-grow">
             <CardHeader>
@@ -33,14 +43,14 @@ export default function LuckiestPullsCarousel({ pulls }: Props) {
                                     <TooltipTrigger asChild>
                                         <img
                                             src={pull.fullIconUrl}
-                                            alt={pull.name}
+                                            alt={getLocalizedName(pull.id, language)}
                                             className="w-full h-full object-contain"
                                         />
                                     </TooltipTrigger>
                                     <TooltipContent side="bottom">
                                         <div className="text-center">
                                             <div className="flex flex-row gap-3 items-center justify-center">
-                                                <p className="font-bold">{pull.name}</p>
+                                                <p className="font-bold">{getLocalizedName(pull.id, language)}</p>
                                                 {pull.assChara && (
                                                     <p>{pull.assChara.split(" ")[0]} only</p>
                                                 )}

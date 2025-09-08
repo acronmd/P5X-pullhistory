@@ -23,9 +23,15 @@ import { SquareCard } from "@/components/SquareCard.tsx"
 import { MostPulledCard } from "@/components/MostPulledCard";
 import { PityPlanCard } from "@/components/PityPlanCard.tsx";
 
+import { getLocalizedName } from "@/utils/sharedFunctions.tsx";
+
+import { useLanguage } from "@/utils/language.tsx";
+
 import '@/colors.css';
 
 export default function LimitedPage() {
+    const { language } = useLanguage();
+
     const [viewMode, setViewMode] = useState<"scroll" | "grid">("scroll")
     const [show5Stars, setShow5Stars] = useState(true);
     const [show4Stars, setShow4Stars] = useState(false);
@@ -95,7 +101,6 @@ export default function LimitedPage() {
 
         return `rgb(${r}, ${g}, ${b})`;
     }
-
 
     return (
         <div>
@@ -304,7 +309,7 @@ export default function LimitedPage() {
                                 }
                             >
                                 {combinedStars.map(
-                                    ({ name, pity, iconUrl, time, rarity, assChara }, i) => (
+                                    ({ name, pity, iconUrl, time, rarity, assChara, id }, i) => (
                                         <Tooltip key={i}>
                                             <TooltipTrigger asChild>
                                                 <div className="relative w-[120px] h-[120px] flex-shrink-0">
@@ -345,7 +350,7 @@ export default function LimitedPage() {
                                             <TooltipContent side="top">
                                                 <div className="text-center">
                                                     <div className="flex flex-row gap-3 items-center justify-center">
-                                                        <p className="font-bold">{name}</p>
+                                                        <p className="font-bold">{getLocalizedName(id, language)}</p>
                                                         {assChara && (
                                                             <p >
                                                                 {assChara.split(" ")[0]} only

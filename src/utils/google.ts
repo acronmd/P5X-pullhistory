@@ -5,6 +5,8 @@ import { availableCharacters } from "@/components/CharacterPicker"
 import { availableWeapons} from "@/components/CharacterPicker";
 import type { pullData } from "@/components/ImageOCRUploader"
 
+import { IDMap } from "@/components/CharacterPicker";
+
 let accessToken: string | null = null;
 
 export let tokenClient: google.accounts.oauth2.TokenClient | null = null;
@@ -184,12 +186,12 @@ export async function appendCharactersToSheetWithOCR(
 
         if (bannerSublabel === "Arms Deals" || bannerSublabel === "Arms Deal") {
             bannerSublabel = "Arms Deals";
-            const matchedWeapon = availableWeapons.find((char) => char.name === line.name);
+            const matchedWeapon = availableWeapons.find((char) => char.name_en === line.name);
             if (matchedWeapon) {
                 rarity = rarityMap[matchedWeapon.rarity];
             }
         }
-        const matchedCharacter = availableCharacters.find((char) => char.name === line.name);
+        const matchedCharacter = availableCharacters.find((char) => char.name_en === line.name);
         if (matchedCharacter) {
             rarity = rarityMap[matchedCharacter.rarity];
         }
@@ -206,6 +208,45 @@ export async function appendCharactersToSheetWithOCR(
 
     console.log(sheetName);
     const range = `${sheetName}!A:E`; // Adjust columns if needed
+
+    await gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range,
+        valueInputOption: "RAW",
+        insertDataOption: "INSERT_ROWS",
+        resource: {
+            values: rows,
+        },
+    });
+}
+
+export async function appendCharactersToSheetWithAPI(
+    spreadsheetId: string,
+    sheetName: string,
+    bannerData: any,
+): Promise<void> {
+    const token = getAccessToken();
+    if (!token) throw new Error("Access token is missing");
+
+    if (!bannerData || bannerData.length === 0) {
+        return;
+    }
+
+    const rows = bannerData.map((pull: any) => {
+        const mapped = IDMap[pull.id];
+        return [
+        pull.rarity,
+        pull.gachaType,
+        pull.timestamp,
+        pull.id,
+        pull.gachaId,
+        pull.name,
+        mapped?.name_en ?? "",
+        mapped?.name_ko ?? "",
+        ]
+    });
+
+    const range = `${sheetName}!A:H`; // Adjust columns if needed
 
     await gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId,
