@@ -2,9 +2,7 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 
-import {formatPullTime, getLocalizedName} from "@/utils/sharedFunctions.tsx"
-import { getCellValueByLanguage } from "@/utils/sharedFunctions.tsx";
-import { getCharacterName } from "@/utils/sharedFunctions.tsx";
+import {formatPullTime, getLocalizedNameFallback} from "@/utils/sharedFunctions.tsx"
 
 import React from "react";
 
@@ -43,14 +41,14 @@ export default function LuckiestPullsCarousel({ pulls }: Props) {
                                     <TooltipTrigger asChild>
                                         <img
                                             src={pull.fullIconUrl}
-                                            alt={getLocalizedName(pull.id, language)}
+                                            alt={getLocalizedNameFallback(pull.id, language, pull.name)}
                                             className="w-full h-full object-contain"
                                         />
                                     </TooltipTrigger>
                                     <TooltipContent side="bottom">
                                         <div className="text-center">
                                             <div className="flex flex-row gap-3 items-center justify-center">
-                                                <p className="font-bold">{getLocalizedName(pull.id, language)}</p>
+                                                <p className="font-bold">{getLocalizedNameFallback(pull.id, language, pull.name)}</p>
                                                 {pull.assChara && (
                                                     <p>{pull.assChara.split(" ")[0]} only</p>
                                                 )}

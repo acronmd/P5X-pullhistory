@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react"
 
 import '@/colors.css';
-import {getLocalizedName} from "@/utils/sharedFunctions.tsx";
+import { getLocalizedNameFallback} from "@/utils/sharedFunctions.tsx";
 import {useLanguage} from "@/utils/language.tsx";
 
 interface MostPulled {
@@ -101,7 +101,7 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                                 >
                                     <TableCell className="text-center px-4 py-2">{row.count}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{starsForRarity(row.rarity)}</TableCell>
-                                    <TableCell className="text-center px-4 py-2">{getLocalizedName(row.id, language)}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{getLocalizedNameFallback(row.id, language, row.name)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

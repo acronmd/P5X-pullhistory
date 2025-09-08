@@ -274,6 +274,7 @@ const SheetStats: React.FC = () => {
 
     const [datasets, setDatasets] = useState(loadDatasets);
 
+    const [ iantDialogOpen, iantSetDialogOpen ] = useState<boolean>(false);
     const [iantLoading, iantSetLoading] = useState(false);
     const [iantUrl, iantSetUrl] = useState();
 
@@ -478,7 +479,11 @@ const SheetStats: React.FC = () => {
         });
     }
 
-    async function syncFromApi(apiUrl: string, translate: boolean) {
+    async function syncFromApi(apiUrl: string | undefined, translate: boolean) {
+        if(apiUrl === undefined){
+            return
+        }
+
         const apiData = await fetchApiData(apiUrl, translate);
         const rowsByBanner = transformApiToRowsByBanner(apiData);
 
@@ -491,13 +496,6 @@ const SheetStats: React.FC = () => {
         const cached = localStorage.getItem("userDatasets");
         const parsed = cached ? JSON.parse(cached) : defaultDatasets;
 
-        console.log(parsed[0].sheetName);
-        console.log(parsed[1].sheetName);
-        console.log(parsed[2].sheetName);
-        console.log(parsed[3].sheetName);
-
-        console.log(fortuneRows);
-
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[0].sheetName, fortuneRows);
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[1].sheetName, weaponRows);
         appendCharactersToSheetWithAPI(sharedSpreadsheetId, parsed[2].sheetName, goldRows);
@@ -505,10 +503,24 @@ const SheetStats: React.FC = () => {
 
     }
 
+    function returnLanguageBool( lang : number | undefined ){
+        switch (lang) {
+            case(1):
+                console.log(lang + " language stuff!")
+                return true;
+            case (2):
+                console.log(lang + " language stuff!")
+                return false;
+            default:
+                console.log(lang + " language stuff!")
+                return true;
+        }
+    }
+
     const handleSync = async () => {
         iantSetLoading(true);
         try {
-            await syncFromApi(iantUrl, true);
+            await syncFromApi(iantUrl, returnLanguageBool(language));
         } finally {
             iantSetLoading(false);
         }
@@ -775,7 +787,7 @@ const SheetStats: React.FC = () => {
                         ))}
                     </div>
                 </div>
-                <div className="flex flex-row gap-5 justify-center">
+                <div className="flex flex-row gap-5 justify-center py-8">
                     {/* Set Spreadsheet Button */}
                     <Button
                         size="icon"
@@ -805,9 +817,20 @@ const SheetStats: React.FC = () => {
                         />
                         Open Spreadsheet
                     </Button>
-                    <Dialog>
+                    <Dialog
+                        open={iantDialogOpen}
+                        onOpenChange={(open) => {
+                            if (!open) {
+                                // Dialog just closed
+                                setDatasets(loadDatasets());
+                            }
+                            iantSetDialogOpen(open);
+                        }}
+                    >
                         <DialogTrigger asChild>
-                            <Button className="text-white bg-coloredbg">
+                            <Button
+                                onClick={() => returnLanguageBool(language)}
+                                className="text-white bg-coloredbg">
                                 Sync from API Link
                             </Button>
                         </DialogTrigger>

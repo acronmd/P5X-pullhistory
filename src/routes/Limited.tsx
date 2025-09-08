@@ -23,7 +23,7 @@ import { SquareCard } from "@/components/SquareCard.tsx"
 import { MostPulledCard } from "@/components/MostPulledCard";
 import { PityPlanCard } from "@/components/PityPlanCard.tsx";
 
-import { getLocalizedName } from "@/utils/sharedFunctions.tsx";
+import { getLocalizedNameFallback } from "@/utils/sharedFunctions.tsx";
 
 import { useLanguage } from "@/utils/language.tsx";
 
@@ -350,7 +350,7 @@ export default function LimitedPage() {
                                             <TooltipContent side="top">
                                                 <div className="text-center">
                                                     <div className="flex flex-row gap-3 items-center justify-center">
-                                                        <p className="font-bold">{getLocalizedName(id, language)}</p>
+                                                        <p className="font-bold">{getLocalizedNameFallback(id, language, name)}</p>
                                                         {assChara && (
                                                             <p >
                                                                 {assChara.split(" ")[0]} only

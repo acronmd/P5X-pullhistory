@@ -1,6 +1,10 @@
 import dummyApiResponse from "@/data/get_records.json";
 
 export async function fetchApiData(apiUrl: string, translate: boolean) {
+    if( translate ){
+        return dummyApiResponse
+    }
+
     const fullUrl = "https://iant.kr:5000/gacha/get_records";
 
     try {

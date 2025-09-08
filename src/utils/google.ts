@@ -91,6 +91,7 @@ export async function loadPicker(): Promise<void> {
     });
 }
 
+/*
 export const createPicker = (
     callback: (spreadsheetId: string) => void
 ) => {
@@ -110,6 +111,30 @@ export const createPicker = (
 
     picker.setVisible(true);
 };
+ */
+
+export const createPicker = (
+    callback: (spreadsheetId: string) => void
+) => {
+    const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
+        .setMode(google.picker.DocsViewMode.CREATE);
+    // The "New" button will automatically appear for Sheets
+
+    const picker = new google.picker.PickerBuilder()
+        .setOAuthToken(getAccessToken())
+        .addView(view)
+        .setDeveloperKey(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
+        .setCallback((data: any) => {
+            if (data.action === google.picker.Action.PICKED) {
+                const doc = data.docs[0];
+                callback(doc.id); // This is the spreadsheetId
+            }
+        })
+        .build();
+
+    picker.setVisible(true);
+};
+
 
 export const signOut = () => {
     const token = gapi.client.getToken();
@@ -219,7 +244,7 @@ export async function appendCharactersToSheetWithOCR(
         },
     });
 }
-
+/*
 export async function appendCharactersToSheetWithAPI(
     spreadsheetId: string,
     sheetName: string,
@@ -259,3 +284,81 @@ export async function appendCharactersToSheetWithAPI(
     });
 }
 
+ */
+
+export async function appendCharactersToSheetWithAPI(
+    spreadsheetId: string,
+    sheetName: string,
+    bannerData: any[],
+): Promise<void> {
+    const token = getAccessToken();
+    if (!token) throw new Error("Access token is missing");
+
+    if (!bannerData || bannerData.length === 0) {
+        return;
+    }
+
+    // Fetch existing rows from the sheet
+    const existingResp = await gapi.client.sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: `${sheetName}!A:H`,
+    });
+
+    const existingValues = existingResp.result.values || [];
+    const existingKeys = new Set(
+        existingValues.map((row) => `${row[3]}-${row[4]}`) // id-gachaId
+    );
+
+    // Find cutoff index = first new row that isn’t already in the sheet
+    const cutoffIndex = bannerData.findIndex(
+        (pull) => !existingKeys.has(`${pull.id}-${pull.gachaId}`)
+    );
+
+    // Map new rows into sheet format
+    const rows = bannerData.map((pull) => {
+        const mapped = IDMap[pull.id];
+        return [
+            pull.rarity,
+            pull.gachaType,
+            pull.timestamp,
+            pull.id,
+            pull.gachaId,
+            pull.name,
+            mapped?.name_en ?? "",
+            mapped?.name_ko ?? "",
+        ];
+    });
+
+    if (cutoffIndex === -1) {
+        // All new rows already exist → nothing to do
+        return;
+    }
+
+    if (cutoffIndex === 0) {
+        // No matches at all → append all to the end
+        await gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!A:H`,
+            valueInputOption: "RAW",
+            insertDataOption: "INSERT_ROWS",
+            resource: { values: rows },
+        });
+    } else {
+        // Found a cutoff point → clear everything after it and append from cutoff
+        const clearRowIndex = existingValues.length; // last used row
+        await gapi.client.sheets.spreadsheets.values.clear({
+            spreadsheetId,
+            range: `${sheetName}!A${cutoffIndex + 1}:H${clearRowIndex}`,
+            resource: {},
+        });
+
+        const newRows = rows.slice(cutoffIndex);
+        await gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!A:H`,
+            valueInputOption: "RAW",
+            insertDataOption: "INSERT_ROWS",
+            resource: { values: newRows },
+        });
+    }
+}

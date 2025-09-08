@@ -4,7 +4,7 @@ import { formatPullTime } from "@/utils/sharedFunctions.tsx"
 
 import defaultModal from "@/assets/chicons/modal/basic.png"
 
-import { getLocalizedName } from "@/utils/sharedFunctions.tsx";
+import { getLocalizedNameFallback} from "@/utils/sharedFunctions.tsx";
 import {useLanguage} from "@/utils/language.tsx";
 
 
@@ -14,8 +14,8 @@ interface MostPulledCardProps {
         name: string;
         name_en: string;
         name_ko: string;
-        count: number;
-        iconUrl: string;
+        count?: number;
+        iconUrl?: string;
         fullIconUrl: string;
         time: string;
         assChara?: string;
@@ -105,7 +105,7 @@ export function MostPulledCard({ title, mostPulled, width, banner }: MostPulledC
                         ) : (
                             <>
                                 <div className="flex flex-row gap-3 items-center justify-center">
-                                    <p className="font-bold">{getLocalizedName(display.id, language)}</p>
+                                    <p className="font-bold">{getLocalizedNameFallback(display.id, language, display.name)}</p>
                                     {display.assChara && (
                                         <p>
                                             {display.assChara.split(" ")[0]} only

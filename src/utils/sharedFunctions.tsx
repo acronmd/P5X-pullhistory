@@ -79,7 +79,7 @@ const languageColumns: Record<number, number> = {
     2: 7, // Korean
 };
 
-const defaultLanguageColumn = 4; // fallback default name
+const defaultLanguageColumn = 5; // fallback default name
 
 export function getCellValueByLanguage(row: any[], languageId: number): string {
     const colIndex = languageColumns[languageId] ?? defaultLanguageColumn;
@@ -118,5 +118,20 @@ export function getLocalizedName(
     }
 
     // Fallback to default name
-    return "Unknown ID";
+
+    return item.name_en || "Unknown";
+}
+
+export function getLocalizedNameFallback(
+    id: number,
+    language: number,
+    pullFallbackName: string
+) : string {
+    const result = getLocalizedName(id, language);
+
+    if( result === "Unknown"){
+        return pullFallbackName + " (" + id + ")";
+    }
+
+    return result;
 }
