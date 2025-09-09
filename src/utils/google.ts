@@ -295,10 +295,11 @@ export async function appendCharactersToSheetWithAPI(
     if (!token) throw new Error("Access token is missing");
 
     if (!bannerData || bannerData.length === 0) {
+        console.log("No banner data provided → nothing to do");
         return;
     }
 
-    // Fetch existing rows from the sheet
+    // 1️⃣ Fetch existing rows from the sheet
     const existingResp = await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId,
         range: `${sheetName}!A:H`,
@@ -306,59 +307,48 @@ export async function appendCharactersToSheetWithAPI(
 
     const existingValues = existingResp.result.values || [];
     const existingKeys = new Set(
-        existingValues.map((row) => `${row[3]}-${row[4]}`) // id-gachaId
+        existingValues.map(row => String(row[4]).trim()) // gachaId
     );
 
-    // Find cutoff index = first new row that isn’t already in the sheet
-    const cutoffIndex = bannerData.findIndex(
-        (pull) => !existingKeys.has(`${pull.id}-${pull.gachaId}`)
-    );
+    console.log(`Loaded ${existingValues.length} existing rows`);
+    console.log("Sample existing keys:", [...existingKeys].slice(0, 5));
 
-    // Map new rows into sheet format
-    const rows = bannerData.map((pull) => {
+    // 2️⃣ Filter bannerData to only include rows not already in the sheet
+    const newRowsData = bannerData.filter(pull => {
+        const key = String(pull.gachaId).trim();
+        return !existingKeys.has(key);
+    });
+
+    console.log(`Found ${newRowsData.length} new rows`);
+    console.log("Sample new keys:", newRowsData.slice(0, 5).map(p => p.gachaId));
+
+    if (newRowsData.length === 0) {
+        console.log("All new rows already exist → nothing to do");
+        return;
+    }
+
+    // 3️⃣ Map new rows into sheet format
+    const rows = newRowsData.map(pull => {
         const mapped = IDMap[pull.id];
         return [
             pull.rarity,
             pull.gachaType,
             pull.timestamp,
             pull.id,
-            pull.gachaId,
+            `${pull.gachaId}`,
             pull.name,
             mapped?.name_en ?? "",
             mapped?.name_ko ?? "",
         ];
     });
 
-    if (cutoffIndex === -1) {
-        // All new rows already exist → nothing to do
-        return;
-    }
-
-    if (cutoffIndex === 0) {
-        // No matches at all → append all to the end
-        await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId,
-            range: `${sheetName}!A:H`,
-            valueInputOption: "RAW",
-            insertDataOption: "INSERT_ROWS",
-            resource: { values: rows },
-        });
-    } else {
-        // Found a cutoff point → clear everything after it and append from cutoff
-        const clearRowIndex = existingValues.length; // last used row
-        await gapi.client.sheets.spreadsheets.values.clear({
-            spreadsheetId,
-            range: `${sheetName}!A${cutoffIndex + 1}:H${clearRowIndex}`,
-            resource: {},
-        });
-
-        const newRows = rows.slice(cutoffIndex);
-        await gapi.client.sheets.spreadsheets.values.append({
-            spreadsheetId,
-            range: `${sheetName}!A:H`,
-            valueInputOption: "RAW",
-            insertDataOption: "INSERT_ROWS",
-            resource: { values: newRows },
-        });
-    }
+    // 4️⃣ Append new rows at the end
+    console.log(`Appending ${rows.length} new rows to sheet "${sheetName}"`);
+    await gapi.client.sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range: `${sheetName}!A:H`,
+        valueInputOption: "RAW",
+        insertDataOption: "INSERT_ROWS",
+        resource: { values: rows },
+    });
 }
