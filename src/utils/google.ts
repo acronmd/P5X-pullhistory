@@ -286,6 +286,13 @@ export async function appendCharactersToSheetWithAPI(
 
  */
 
+// Normalizes a gachaId coming from the sheet or API into a comparable string.
+// Also strips a leading apostrophe if present.
+function normalizeId(v: unknown): string {
+    const s = String(v ?? "").trim();
+    return s.startsWith("'") ? s.slice(1) : s;
+}
+
 export async function appendCharactersToSheetWithAPI(
     spreadsheetId: string,
     sheetName: string,
@@ -293,62 +300,97 @@ export async function appendCharactersToSheetWithAPI(
 ): Promise<void> {
     const token = getAccessToken();
     if (!token) throw new Error("Access token is missing");
-
     if (!bannerData || bannerData.length === 0) {
-        console.log("No banner data provided → nothing to do");
+        console.log("No banner data → nothing to do");
         return;
     }
 
-    // 1️⃣ Fetch existing rows from the sheet
+    // 1) Read existing rows
     const existingResp = await gapi.client.sheets.spreadsheets.values.get({
         spreadsheetId,
         range: `${sheetName}!A:H`,
     });
 
-    const existingValues = existingResp.result.values || [];
-    const existingKeys = new Set(
-        existingValues.map(row => String(row[4]).trim()) // gachaId
-    );
+    const existingValues: string[][] = existingResp.result.values || [];
+    const existingIds = existingValues.map(row => normalizeId(row?.[4]));
 
-    console.log(`Loaded ${existingValues.length} existing rows`);
-    console.log("Sample existing keys:", [...existingKeys].slice(0, 5));
+    // 2) Prepare incoming IDs (strings)
+    const incomingIds = bannerData.map(p => normalizeId(p.gachaId));
+    const incomingIdSet = new Set(incomingIds);
 
-    // 2️⃣ Filter bannerData to only include rows not already in the sheet
-    const newRowsData = bannerData.filter(pull => {
-        const key = String(pull.gachaId).trim();
-        return !existingKeys.has(key);
-    });
+    // 3) Find the FIRST row in the sheet that matches ANY incoming gachaId
+    //    (this is where we start replacing to kill any "garbage" below it)
+    const firstMatchRow = existingIds.findIndex(id => id && incomingIdSet.has(id));
 
-    console.log(`Found ${newRowsData.length} new rows`);
-    console.log("Sample new keys:", newRowsData.slice(0, 5).map(p => p.gachaId));
-
-    if (newRowsData.length === 0) {
-        console.log("All new rows already exist → nothing to do");
-        return;
-    }
-
-    // 3️⃣ Map new rows into sheet format
-    const rows = newRowsData.map(pull => {
+    // 4) Build rows to write. We prefix the gachaId with an apostrophe to force TEXT in Sheets
+    //    so it won’t become 3.94E+16 and break matching later.
+    const rows = bannerData.map(pull => {
         const mapped = IDMap[pull.id];
+        const gachaStr = normalizeId(pull.gachaId);
         return [
             pull.rarity,
             pull.gachaType,
             pull.timestamp,
             pull.id,
-            `${pull.gachaId}`,
+            `'${gachaStr}`,                // <-- force TEXT in Sheets
             pull.name,
             mapped?.name_en ?? "",
             mapped?.name_ko ?? "",
         ];
     });
 
-    // 4️⃣ Append new rows at the end
-    console.log(`Appending ${rows.length} new rows to sheet "${sheetName}"`);
+    // 5) If the sheet is empty, just append everything.
+    if (existingValues.length === 0) {
+        console.log("Sheet empty → append all");
+        await gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!A:H`,
+            valueInputOption: "RAW",
+            insertDataOption: "INSERT_ROWS",
+            resource: { values: rows },
+        });
+        return;
+    }
+
+    // 6) If no match at all, append everything to the end (history cutoff case).
+    if (firstMatchRow === -1) {
+        console.log("No matches → append all at end");
+        await gapi.client.sheets.spreadsheets.values.append({
+            spreadsheetId,
+            range: `${sheetName}!A:H`,
+            valueInputOption: "RAW",
+            insertDataOption: "INSERT_ROWS",
+            resource: { values: rows },
+        });
+        return;
+    }
+
+    // 7) We DO have a match inside the sheet.
+    //    Find where that same ID sits in the incoming list so we align slices.
+    const matchedId = existingIds[firstMatchRow];
+    const startIncomingIdx = incomingIds.indexOf(matchedId); // guaranteed ≥ 0 because of the set check
+
+    // 8) Clear from the first matched row *inclusive* down to the last used row,
+    //    so the matched row (“3” in your example) and everything after it is replaced.
+    const startRow = firstMatchRow + 1;                // 1-based for Sheets
+    const endRow = existingValues.length;
+    console.log(`First match at row ${startRow}. Clearing ${sheetName}!A${startRow}:H${endRow}`);
+    await gapi.client.sheets.spreadsheets.values.clear({
+        spreadsheetId,
+        range: `${sheetName}!A${startRow}:H${endRow}`,
+        resource: {},
+    });
+
+    // 9) Append only the tail of incoming rows starting from the matched ID.
+    const toAppend = rows.slice(startIncomingIdx);
+    console.log(`Appending ${toAppend.length} rows from incoming index ${startIncomingIdx}`);
     await gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId,
-        range: `${sheetName}!A:H`,
+        range: `${sheetName}!A${startRow}:H`,
         valueInputOption: "RAW",
-        insertDataOption: "INSERT_ROWS",
-        resource: { values: rows },
+        insertDataOption: "OVERWRITE", // replaces in-place instead of shifting down
+        resource: { values: toAppend },
     });
+
 }
+
