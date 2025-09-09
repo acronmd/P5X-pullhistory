@@ -17,7 +17,7 @@ import { formatPullTime } from "@/utils/sharedFunctions.tsx"
 import LuckiestPullsCarousel from "@/components/LuckyPullsCarousel.tsx";
 
 import { calculatePullStats } from "@/utils/calculatePullStats";
-import { allHeroBanners } from "@/routes/Viewer.tsx";
+import { allHeroBanners } from "@/utils/allHeroBanners.ts";
 
 import { SquareCard } from "@/components/SquareCard.tsx"
 import { MostPulledCard } from "@/components/MostPulledCard";
@@ -28,6 +28,7 @@ import { getLocalizedNameFallback } from "@/utils/sharedFunctions.tsx";
 import { useLanguage } from "@/utils/language.tsx";
 
 import '@/colors.css';
+import {IDMap} from "@/components/CharacterPicker.tsx";
 
 export default function LimitedPage() {
     const { language } = useLanguage();
@@ -262,6 +263,7 @@ export default function LimitedPage() {
                         title={"Most Pulled 5★ Standard"}
                         mostPulled={mostPulled5StarStandard}
                         width={225}
+                        banner={bannerCurrent.label}
                     />
                     <MostPulledCard
                         title={"Most Pulled 4★"}
@@ -352,8 +354,8 @@ export default function LimitedPage() {
                                                     <div className="flex flex-row gap-3 items-center justify-center">
                                                         <p className="font-bold">{getLocalizedNameFallback(id, language, name)}</p>
                                                         {assChara && (
-                                                            <p >
-                                                                {assChara.split(" ")[0]} only
+                                                            <p>
+                                                                {getLocalizedNameFallback(assChara, language, IDMap[assChara].name_en).split(" ")[0]} only
                                                             </p>
                                                         )}
                                                     </div>

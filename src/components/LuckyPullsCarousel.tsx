@@ -7,6 +7,7 @@ import {formatPullTime, getLocalizedNameFallback} from "@/utils/sharedFunctions.
 import React from "react";
 
 import {useLanguage} from "@/utils/language.tsx";
+import {IDMap} from "@/components/CharacterPicker.tsx";
 
 interface Pull {
     name: string;
@@ -15,7 +16,7 @@ interface Pull {
     pity: number;
     index: number;
     fullIconUrl: string;
-    assChara: string;
+    assChara: number;
     time: string;
     id: number;
 }
@@ -50,7 +51,9 @@ export default function LuckiestPullsCarousel({ pulls }: Props) {
                                             <div className="flex flex-row gap-3 items-center justify-center">
                                                 <p className="font-bold">{getLocalizedNameFallback(pull.id, language, pull.name)}</p>
                                                 {pull.assChara && (
-                                                    <p>{pull.assChara.split(" ")[0]} only</p>
+                                                    <p>
+                                                        {getLocalizedNameFallback(pull.assChara, language, IDMap[pull.assChara].name_en).split(" ")[0]} only
+                                                    </p>
                                                 )}
                                             </div>
                                             <p className="text-sm text-neutral-500">Pity: {pull.pity}</p>

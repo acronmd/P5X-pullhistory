@@ -18,6 +18,7 @@ import {
     DialogFooter,
     DialogTitle,
     DialogTrigger,
+    DialogDescription,
 } from "@/components/ui/dialog.tsx"
 
 import {
@@ -96,13 +97,6 @@ import {Link, useNavigate} from "react-router-dom";
 import LanguageSelector from "@/components/LanguageSelector.tsx"
 import DarkModeToggle from "@/components/DarkModeToggle.tsx"
 
-import renHero from '@/assets/heros/ren.png';
-import yuiHero from '@/assets/heros/yui.png';
-import yusukeHero from "@/assets/heros/yusuke.png";
-import makotoHero from "@/assets/heros/makoto.png";
-import yumiHero from "@/assets/heros/yumi.png"
-import ayakaHero from "@/assets/heros/ayaka.png"
-
 import jewelImage from "@/assets/jewels.png";
 import limitedTicketImage from "@/assets/low_limited-ticket.png";
 import weaponTicketImage from "@/assets/low_weapons-ticket.png";
@@ -117,78 +111,11 @@ import { transformBannerData } from "@/newAPI/transformApiToRows.tsx";
 import { transformApiToRowsByBanner } from "@/newAPI/transformApiToRowsByBanner.tsx";
 
 import { appendCharactersToSheetWithAPI } from "@/utils/google.ts"
-import {getLocalizedName} from "@/utils/sharedFunctions.tsx";
+import { getLocalizedNameFallback} from "@/utils/sharedFunctions.tsx";
 import {useLanguage} from "@/utils/language.tsx";
 import { Loader2 } from "lucide-react";
 
-type heroBanner = {
-    image: string;
-    label: string;
-    hero: string;
-    weapon: string;
-    start: number; // e.g. 1691062800 (seconds) or 1691062800000 (ms)
-    end: number;
-};
-
-export const allHeroBanners: heroBanner[] = [
-    {
-        image: yuiHero,
-        label: "Virtual Netizen - Minami",
-        hero: "Minami Miyashita",
-        weapon: "Angel Heart",
-        start: 1752138000,
-        end: 1754532000,
-    },
-    {
-        image: yuiHero,
-        label: "Virtual Netizen - Yui",
-        hero: "Yui",
-        weapon: "Cyber Jammers",
-        start: 1752138000,
-        end: 1754532000,
-    },
-    {
-        image: yusukeHero,
-        label: "Art of the Fox - Yusuke Kitagawa",
-        hero: "Yusuke Kitagawa",
-        weapon: "Shadowkiller",
-        start: 1753344000,
-        end: 1755741600,
-    },
-    {
-        image: makotoHero,
-        label: "Fist of The Phantom Star - Makoto Nijima",
-        hero: "Makoto Nijima",
-        weapon: "Nuclear Finisher",
-        start: 1754298000,
-        end: 1756951200,
-    },
-    {
-        image: yumiHero,
-        label: "Blissful Mix - Yumi Shiina",
-        hero: "Yumi Shiina",
-        weapon: "Moonlit Feather",
-        start: 1755763200,
-        end: 1758463200,
-    },
-    {
-        image: ayakaHero,
-        label: "Dazzling Encore - Ayaka Sakai",
-        hero: "Ayaka Sakai",
-        weapon: "Superstar",
-        start: 1756976400,
-        end: 1759968000,
-    },
-    {
-        image: renHero,
-        label: "The Phantom Magician - Ren Amamiya",
-        hero: "Ren Amamiya",
-        weapon: "Phoenix Dagger",
-        start: 1756976400,
-        end: 1759669200,
-    },
-    // ... more banners
-];
+import { allHeroBanners } from "@/utils/allHeroBanners.ts";
 
 const now = Date.now(); // milliseconds
 
@@ -761,7 +688,7 @@ const SheetStats: React.FC = () => {
                                                                 key={idx}
                                                                 className={`px-4 py-1 rounded-full border inline-block text-sm font-medium ${getPityColorClass(pull.pity)}`}
                                                             >
-                                                                {getLocalizedName(pull.id, language)} at {pull.pity} pity
+                                                                {getLocalizedNameFallback(pull.id, language, pull.name)} at {pull.pity} pity
                                                             </div>
                                                         ))}
                                                     </div>
@@ -860,6 +787,49 @@ const SheetStats: React.FC = () => {
                                     )}
                                 </Button>
                             </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button
+                                className="bg-coloredbg text-white"
+                            >How to get URL</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md">
+                            <DialogHeader>
+                                <DialogTitle>How to Get Your URL</DialogTitle>
+                                <DialogDescription>
+                                    Follow these steps to find your API URL from P5X:
+                                </DialogDescription>
+                            </DialogHeader>
+                            <ol className="list-decimal list-inside space-y-2">
+                                <li>
+                                    Download {" "}
+                                    <a
+                                        href='https://iant.kr/gacha/P5X_Gacha_Tools.zip'
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="text-blue-600 underline hover:text-blue-800"
+                                    >
+                                        iant's P5X Gacha Tools
+                                    </a>.
+                                </li>
+                                <li>
+                                    Unzip the file and launch the file. (the program requires Administrator because it modifies hosts file to block gacha history url)
+                                </li>
+                                <li>
+                                    Launch the game and navigate to gacha screen and try to load history.
+                                </li>
+                                <li>
+                                    The game will fail to show history in-game.
+                                </li>
+                                <li>
+                                    Press the try get url button in the tool.
+                                </li>
+                                <li>
+                                    Paste it into the input box in the site under 'Sync from API Link' and press Sync.
+                                </li>
+                            </ol>
                         </DialogContent>
                     </Dialog>
                 </div>

@@ -122,6 +122,7 @@ export default function DialogSheetContent({
                 <div className="flex gap-6 w-full justify-center">
                     <Button
                         className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border bg-neutral-900 hover:bg-neutral-800 flex flex-col items-center p-4"
+                        disabled={true}
                         onClick={() => setUploadMode("ocr")}
                     >
                         {/* Image: 60% of the button height */}
@@ -140,6 +141,7 @@ export default function DialogSheetContent({
                         </span>
                     </Button>
                     <Button
+                        disabled={true}
                         className="w-[45%] h-40 sm:h-48 lg:h-56 shadow-lg border bg-neutral-900 hover:bg-neutral-800 flex flex-col items-center p-4"
                         onClick={() => setUploadMode("manual")}
                     >

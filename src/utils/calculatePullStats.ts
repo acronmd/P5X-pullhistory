@@ -13,10 +13,7 @@ interface Pull {
     assChara?: string;
 }
 
-interface HeroBanner {
-    hero?: string;
-    weapon?: string;
-}
+import type { heroBanner } from "@/utils/allHeroBanners.ts";
 
 interface MostPulled {
     name: string;
@@ -49,7 +46,7 @@ export function calculatePullStats(
     allPulls: Pull[][],
     all5Stars: Pull[],
     all4Stars: Pull[],
-    allHeroBanners: HeroBanner[]
+    allHeroBanners: heroBanner[]
 ): PullStats {
     let fiftyFiftyWins = 0;
     let fiftyFiftyAttempts = 0;
@@ -74,25 +71,25 @@ export function calculatePullStats(
     // Split 5★ into limited vs standard
     for (const pull of all5Stars) {
         const isLimited = allHeroBanners.some(
-            (b) => b.hero === pull.name_en || b.weapon === pull.name_en
+            (b) => b.hero_id == pull.id || b.weapon_id == pull.id
         );
 
         const target = isLimited ? counts5Limited : counts5Standard;
 
-        if (!target[pull.name_en]) {
-            target[pull.name_en] = { count: 0, lastPull: pull };
+        if (!target[pull.id]) {
+            target[pull.id] = { count: 0, lastPull: pull };
         }
-        target[pull.name_en].count++;
-        target[pull.name_en].lastPull = pull;
+        target[pull.id].count++;
+        target[pull.id].lastPull = pull;
     }
 
     // Count most pulled for 4★
     for (const pull of all4Stars) {
-        if (!counts4[pull.name_en]) {
-            counts4[pull.name_en] = { count: 0, lastPull: pull };
+        if (!counts4[pull.id]) {
+            counts4[pull.id] = { count: 0, lastPull: pull };
         }
-        counts4[pull.name_en].count++;
-        counts4[pull.name_en].lastPull = pull;
+        counts4[pull.id].count++;
+        counts4[pull.id].lastPull = pull;
     }
 
     function getAllPulledCombined(pulls: Pull[]): (Pull & { count: number })[] {
@@ -102,7 +99,7 @@ export function calculatePullStats(
             if( pull.rarity < 4 ) {
                 continue;
             }
-            const key = pull.name_en; // or some unique identifier
+            const key = pull.id; // or some unique identifier
             if (!counts[key]) {
                 counts[key] = { count: 0, lastPull: pull };
             }

@@ -8,6 +8,14 @@ import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.t
 
 import screenshot1 from "@/assets/screenshots/screenshot1.png";
 import screenshot2 from "@/assets/screenshots/screenshot2.png";
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog.tsx";
 
 const screenshots = [
     { src: screenshot1, altText: "Screenshot 1", text: "The APT homepage, showing banner cards, active banners, and more" },
@@ -42,16 +50,18 @@ export default function Home() {
                 A P5X Wish Tracker
             </h1>
             <p className="leading-7 [&:not(:first-child)]:mt-6">
-                {/*
-                A P5X Wish Tracker (APT) is a website that uses Google Drive/Sheets API to
+                A P5X Wish Tracker is a website that uses Google Drive/Sheets API to
                 store pull data and our site itself displays various different things like
                 pull statistics, ongoing banners, pity tracking, luckiest pulls, pull percentages, etc. <br/> <br/>
-                This app cannot automatically grab your pull history, but you
+                This app can automatically grab pull history using iant's public API.
+                {/*but you
                 can add pulls with screenshots and local image recognition using the built-in {" "}
                 <a href={"https://tesseract.projectnaptha.com/"} className="text-blue-600 underline">
                     Tesseract.js OCR
                 </a>
-                . You can view our{" "}
+                .
+                 */}
+                You can view our{" "}
                 <Link to="/privacy" className="text-blue-600 underline">
                  Privacy Policy
                 </Link>
@@ -60,15 +70,48 @@ export default function Home() {
                     Terms of Service
                 </Link>
                 {" "}for more information.
-                */}
-                A P5X Wish Tracker is currently underdoing development to have compatability with iant's global pulling backend.
-                The site is not in a very usable state (pending frontend changes to accomodate the new backend) and I do NOT advise you to use it until this message has gone away, thank you!
 
             </p>
-            <blockquote className="mt-6 border-l-2 pl-6 italic">
-                &quot;Quite possibly the [...] best [...] software I've [...] ever [...]
-                used.&quot;
-            </blockquote>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button
+                        className="bg-coloredbg text-white"
+                    >How to use?</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-md">
+                    <DialogHeader>
+                        <DialogTitle>How to use the wish tracker</DialogTitle>
+                        <DialogDescription>
+                            Follow these steps the first time to use this wish tracker
+                        </DialogDescription>
+                    </DialogHeader>
+                    <ol className="list-decimal list-inside space-y-2">
+                        <li>
+                            Create a spreadsheet in  {" "}
+                            <a
+                                href='https://docs.google.com/spreadsheets/u/0/'
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 underline hover:text-blue-800"
+                            >
+                                Google Sheets
+                            </a>.
+                        </li>
+                        <li>
+                           Sign in with Google on this screen.
+                        </li>
+                        <li>
+                            Press the 'Set Spreadsheet from Google Drive' button and select your spreadsheet.
+                        </li>
+                        <li>
+                            Add history with your API Link with the 'Sync from API Link' button.
+                        </li>
+                        <li>
+                            Enjoy!
+                        </li>
+                    </ol>
+                </DialogContent>
+            </Dialog>
             <Separator />
             <Carousel>
                 <CarouselContent>

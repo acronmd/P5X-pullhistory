@@ -117,11 +117,10 @@ export function getLocalizedName(
         return item[field] as string;
     }
 
-    // Fallback to default name
-
-    return item.name_en || "Unknown";
+    return "Unknown";
 }
 
+// Fallback specified name
 export function getLocalizedNameFallback(
     id: number,
     language: number,

@@ -99,12 +99,10 @@ export async function fetchDataForSheet(sheetName: string) {
         }
 
         for (let i = data.length - 1; i >= 0; i--) {
-            const val = String(data[i][0] || "").trim();
-
-            if (sinceLast5 === -1 && val === "5") {
+            if (sinceLast5 === -1 && data[i][0] == "5") {
                 sinceLast5 = data.length - i - 1;
             }
-            if (sinceLast4 === -1 && val === "4") {
+            if (sinceLast4 === -1 && data[i][0] == "4") {
                 sinceLast4 = data.length - i - 1;
             }
             if (sinceLast5 !== -1 && sinceLast4 !== -1) break;
