@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Tesseract from 'tesseract.js';
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,8 @@ const CHARACTER_NAMES = availableCharacters.map(c => c.name_en);
 const WEAPON_NAMES = availableWeapons.map(c => c.name_en);
 
 import { enNameMap } from "@/components/CharacterPicker";
+import {Loader2} from "lucide-react";
+
 
 const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Agathlon": "Agathion",
@@ -64,8 +66,6 @@ type Props = {
     setAlertDialogError: (error: string) => void
     currentBannerSublabel: string;
 };
-
-
 
 function correctMistakenNames(line: string): string {
     let correctedLine = line;
@@ -133,12 +133,16 @@ function parseOcrPulls(rawText: string, sublabel: string) {
 }
 
 const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBoolean, setAlertDialogError, currentBannerSublabel }) => {
+    const [imageUploading, setImageUploading] = useState(false);
 
     async function tesseractParsing(file: File) {
+        setImageUploading(true);
         const {data} = await Tesseract.recognize(file, 'eng');
         ///This is where I can parse data before sending it back
         const parsedData = parseOcrPulls(data.text, currentBannerSublabel);
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
         onTextExtracted(parsedData); // send formatted string
     }
 
@@ -147,6 +151,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
         if (!file) return;
 
         await tesseractParsing(file);
+        setImageUploading(false);
     };
 
     const handleClipboardImage = async () => {
@@ -159,6 +164,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                     const file = new File([blob], "clipboard-image.png", { type: blob.type });
 
                     await tesseractParsing(file);
+                    setImageUploading(false);
                     return;
                 }
             }
@@ -186,26 +192,40 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                     }
                 }}
             >
-                {/* Optional graphic/icon */}
-                <img
-                    src={fileIconBig}
-                    alt="Upload Icon"
-                    className="w-22 h-22 mb-2"
-                />
 
-                {/* Drag & Drop Text */}
-                <span className="text-sm md:text-md lg:text-lg font-medium text-white">
-                    Drag & Drop Image Here
-                </span>
+                { imageUploading ? (
+                    <div className={"flex flex-col gap-5 items-center justify-center"}>
+                        <Loader2 className="animate-spin w-10 h-10 mr-2" />
+                        <span className="text-sm md:text-md lg:text-lg font-medium text-white">
+                        Uploading...
+                        </span>
+                    </div>
+                ) : (
+                    <div className={"flex flex-col gap-2 items-center justify-center"}>
+                         {/* Optional graphic/icon */}
+                        <img
+                            src={fileIconBig}
+                            alt="Upload Icon"
+                            className="w-22 h-22 mb-2"
+                        />
 
-                {/* Hidden File Input */}
-                <input
-                    type="file"
-                    id="ocr-file-input"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    style={{ display: "none" }}
-                />
+                        {/* Drag & Drop Text */}
+                        <span className="text-sm md:text-md lg:text-lg font-medium text-white">
+                        Drag & Drop Image Here
+                        </span>
+
+                        {/* Hidden File Input */}
+                        <input
+                            type="file"
+                            id="ocr-file-input"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            style={{ display: "none" }}
+                        />
+                    </div>
+                )
+                }
+
 
                 {/* Or separator */}
                 <div className="flex items-center w-full justify-center gap-2 text-background font-medium my-2 text-white">
@@ -218,6 +238,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                 <div className="flex gap-4 w-full justify-center">
                     <Button
                         onClick={() => document.getElementById("ocr-file-input")?.click()}
+                        disabled={imageUploading}
                         variant="outline"
                         className="flex-1 h-12 text-sm md:text-md lg:text-lg font-medium"
                     >
@@ -225,6 +246,7 @@ const ImageOCRUploader: React.FC<Props> = ({ onTextExtracted, setAlertDialogBool
                     </Button>
                     <Button
                         onClick={handleClipboardImage}
+                        disabled={imageUploading}
                         variant="outline"
                         className="flex-1 h-12 text-sm md:text-md lg:text-lg font-medium"
                     >
