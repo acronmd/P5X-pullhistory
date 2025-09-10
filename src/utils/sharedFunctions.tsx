@@ -61,10 +61,10 @@ export function formatUnixToLocal(unix: string | number): string {
 
 const contractTypeMap: Record<string, string> = {
     "1": "Phantom Idol",
+    "2": "Most Wanted Ph. Idol",
     "3": "Arms Deals",
     "4": "Newcomer Contracts",
-    "5": "Most Wanted Ph. Idol",
-    "2": "Most Wanted Ph. Idol",
+    "5": "Most Wanted Ph. Idol (110)",
 };
 
 // Build a reverse map automatically
