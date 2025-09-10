@@ -11,6 +11,8 @@ import fileIconBig from "@/assets/file-icon-big.png";
 const CHARACTER_NAMES = availableCharacters.map(c => c.name_en);
 const WEAPON_NAMES = availableWeapons.map(c => c.name_en);
 
+import { enNameMap } from "@/components/CharacterPicker";
+
 const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Agathlon": "Agathion",
     "Jack-o0'-Lantern": "Jack-o'-Lantern",
@@ -35,7 +37,22 @@ const MISTAKEN_NAMES_MAP: Record<string, string> = {
     "Ayaka Sali" : "Ayaka Sakai",
 };
 
+type itemData = {
+    src: string;
+    modalsrc: string;
+    collectionsrc: string;
+    rarity: "none" | "common" | "standard" | "rare" | "superrare";
+    name_en: string;
+    name_ko?: string;
+    codename: string;
+    affinity: "Cleave" | "Fire" | "Ice" | "Elec" | "Wind" | "Psi" | "Nuclear" | "Bless" | "Curse" | "Support";
+    id: number;
+
+    assChara?: number;
+}
+
 export type pullData = {
+    matchedCharacter: itemData
     name: string;
     contractType: string;
     timestampFull: string;
@@ -67,23 +84,24 @@ function parseOcrPulls(rawText: string, sublabel: string) {
     for (const line of lines) {
         const cleaned = correctMistakenNames(line.trim());
 
-        let itemName: string | undefined;
-        // Step 1: Find the character name
-        /* Weapon */
-        if (sublabel == "Arms Deals" || sublabel == "Arms Deal"){
-            itemName = WEAPON_NAMES.find(name => cleaned.includes(name));
+        let matchedName: string | undefined;
+
+        for (const name in enNameMap) {
+            if (line.includes(name)) {
+                matchedName = name;
+                break; // stop once we find a match
+            }
         }
-        /* Limited and Standard */
-        else{
-            itemName = CHARACTER_NAMES.find(name => cleaned.includes(name));
-        }
-        if (itemName == undefined) {
+
+        if (matchedName) {
+            console.log(`Matched hero: ${matchedName}, id=${enNameMap[matchedName]}`);
+        } else {
             console.log("Tesseract unknown names: " + line);
             continue;
         }
 
         // Step 2: Slice everything after the character name
-        const afterName = cleaned.slice(cleaned.indexOf(itemName) + itemName.length).trim();
+        const afterName = cleaned.slice(cleaned.indexOf(matchedName) + matchedName.length).trim();
 
         // Step 3: Extract timestamp (match format like 00:00:00 or similar)
         const timestampMatch = cleaned.match(/\d{2}:\d{2}:\d{2}/);
@@ -99,12 +117,13 @@ function parseOcrPulls(rawText: string, sublabel: string) {
         }
 
         if (timestampFull.length == 0) {
-            console.log(itemName + " was recognized but could not find a timestamp");
+            console.log(matchedName + " was recognized but could not find a timestamp");
             continue;
         }
 
         pulls.push({
-            name: itemName,
+            matchedCharacter: enNameMap[matchedName],
+            name: matchedName,
             contractType,
             timestampFull,
         });

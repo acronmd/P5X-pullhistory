@@ -134,3 +134,29 @@ export function getLocalizedNameFallback(
 
     return result;
 }
+
+const OFFSETS = {
+    JST: 9,                // Japan Standard Time
+    EST: -5,               // Eastern Standard Time
+    EDT: -4,               // Eastern Daylight Time
+    PST: -8,               // Pacific Standard Time
+    PDT: -7,               // Pacific Daylight Time
+    UTC: 0,
+};
+
+export function toUnixWithOffset(dateStr: string, tz: keyof typeof OFFSETS): number {
+    if (!(tz in OFFSETS)) {
+        throw new Error(`Unknown timezone: ${tz}`);
+    }
+
+    // Parse the input
+    const [datePart, timePart] = dateStr.split(" ");
+    const [year, month, day] = datePart.split("-").map(Number);
+    const [hour, minute, second] = timePart.split(":").map(Number);
+
+    // Interpret it as UTC first
+    const utcMs = Date.UTC(year, month - 1, day, hour, minute, second);
+
+    // Subtract the offset (because UTC = localTime - offsetHours)
+    return utcMs - OFFSETS[tz] * 3600 * 1000;
+}

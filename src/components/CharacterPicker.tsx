@@ -242,6 +242,11 @@ export const IDMap: Record<number, CharacterData | WeaponData> = {
   ...Object.fromEntries(availableWeapons.map(w => [w.id, w])),
 };
 
+export const enNameMap: Record<string, CharacterData | WeaponData> = {
+  ...Object.fromEntries(availableCharacters.map(c => [c.name_en, c])),
+  ...Object.fromEntries(availableWeapons.map(w => [w.name_en, w])),
+};
+
 interface CharacterPickerProps {
   isOpen: boolean;
   onClose: () => void;

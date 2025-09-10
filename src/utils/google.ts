@@ -7,6 +7,8 @@ import type { pullData } from "@/components/ImageOCRUploader"
 
 import { IDMap } from "@/components/CharacterPicker";
 
+import { toUnixWithOffset } from "@/utils/sharedFunctions.tsx";
+
 let accessToken: string | null = null;
 
 export let tokenClient: google.accounts.oauth2.TokenClient | null = null;
@@ -205,34 +207,25 @@ export async function appendCharactersToSheetWithOCR(
     const token = getAccessToken();
     if (!token) throw new Error("Access token is missing");
 
-    const rows = ocrResultArray.map((line) => {
-        let rarity = 0;
+    const rows = ocrResultArray.map((data) => {
 
-
-        if (bannerSublabel === "Arms Deals" || bannerSublabel === "Arms Deal") {
-            bannerSublabel = "Arms Deals";
-            const matchedWeapon = availableWeapons.find((char) => char.name_en === line.name);
-            if (matchedWeapon) {
-                rarity = rarityMap[matchedWeapon.rarity];
-            }
-        }
-        const matchedCharacter = availableCharacters.find((char) => char.name_en === line.name);
-        if (matchedCharacter) {
-            rarity = rarityMap[matchedCharacter.rarity];
-        }
+        const rarity = rarityMap[data.matchedCharacter.rarity];
 
         return [
             rarity,
-            line.name,
             bannerSublabel,
-            line.timestampFull,
+            toUnixWithOffset(data.timestampFull, "JST"),
+            data.matchedCharacter.id,
+            "123",
+            data.name,
+            data.matchedCharacter.name_en,
+            data.matchedCharacter.name_ko,
         ];
     });
 
     if (rows.length === 0) return;
 
-    console.log(sheetName);
-    const range = `${sheetName}!A:E`; // Adjust columns if needed
+    const range = `${sheetName}!A:H`; // Adjust columns if needed
 
     await gapi.client.sheets.spreadsheets.values.append({
         spreadsheetId,
@@ -240,7 +233,7 @@ export async function appendCharactersToSheetWithOCR(
         valueInputOption: "RAW",
         insertDataOption: "INSERT_ROWS",
         resource: {
-            values: rows,
+            values: rows
         },
     });
 }
