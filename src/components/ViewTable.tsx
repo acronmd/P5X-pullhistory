@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react"
 
 import { formatUnixToLocal } from "@/utils/sharedFunctions.tsx";
 import { formatPullTime } from "@/utils/sharedFunctions.tsx";
-import { formatContractTypeSublabel } from "@/utils/sharedFunctions.tsx";
+import { getContractLabel } from "@/utils/sharedFunctions.tsx";
 
 import { getCellValueByLanguage } from "@/utils/sharedFunctions.tsx";
 
@@ -97,7 +97,7 @@ export default function PullTableCard({ pulls, label }: PullTableCardProps) {
                                     <TableCell className="text-center px-4 py-2">{isReversed ? pulls.length - index : index + 1}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{starsForRarity(row[0])}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{getCellValueByLanguage(row, language)}</TableCell>
-                                    <TableCell className="text-center px-4 py-2">{formatContractTypeSublabel(row[1])}</TableCell>
+                                    <TableCell className="text-center px-4 py-2">{getContractLabel(row[1])}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{formatUnixToLocal(row[2])}</TableCell>
                                     <TableCell className="text-center px-4 py-2">{row[3]}</TableCell>
                                 </TableRow>

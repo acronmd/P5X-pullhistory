@@ -1,13 +1,12 @@
 // Declare global type fallback
 declare const google: any;
 
-import { availableCharacters } from "@/components/CharacterPicker"
-import { availableWeapons} from "@/components/CharacterPicker";
 import type { pullData } from "@/components/ImageOCRUploader"
 
 import { IDMap } from "@/components/CharacterPicker";
 
 import { toUnixWithOffset } from "@/utils/sharedFunctions.tsx";
+import { getContractId} from "@/utils/sharedFunctions.tsx";
 
 let accessToken: string | null = null;
 
@@ -213,7 +212,7 @@ export async function appendCharactersToSheetWithOCR(
 
         return [
             rarity,
-            bannerSublabel,
+            getContractId(bannerSublabel),
             toUnixWithOffset(data.timestampFull, "JST"),
             data.matchedCharacter.id,
             "123",

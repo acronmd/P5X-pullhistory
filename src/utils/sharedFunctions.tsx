@@ -59,19 +59,31 @@ export function formatUnixToLocal(unix: string | number): string {
 }
 
 
-export function formatContractTypeSublabel(contractType: string) {
-    switch (contractType) {
-        case "1":
-            return "Phantom Idol";
-        case "2":
-            return "Most Wanted Ph. Idol";
-        case "3":
-            return "Arms Deals";
-        case "4":
-            return "Newcomer Contracts";
-        case "5":
-            return "Most Wanted Ph. Idol";
-    }
+const contractTypeMap: Record<string, string> = {
+    "1": "Phantom Idol",
+    "2": "Most Wanted Ph. Idol",
+    "3": "Arms Deals",
+    "4": "Newcomer Contracts",
+    "5": "Most Wanted Ph. Idol",
+};
+
+// Build a reverse map automatically
+const contractLabelToIdMap: Record<string, string> = Object.entries(contractTypeMap).reduce(
+    (acc, [key, value]) => {
+        acc[value] = key;
+        return acc;
+    },
+    {} as Record<string, string>
+);
+
+// Function to get label from ID
+export function getContractLabel(contractType: string) {
+    return contractTypeMap[contractType] ?? "Unknown";
+}
+
+// Function to get ID from label
+export function getContractId(label: string) {
+    return contractLabelToIdMap[label] ?? null;
 }
 
 const languageColumns: Record<number, number> = {
