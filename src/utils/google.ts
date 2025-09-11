@@ -112,6 +112,7 @@ export const requestAccessToken = (): Promise<string> => {
             }
         };
 
+
         // Request the token; no args needed here
         tokenClient.requestAccessToken();
     });
@@ -147,28 +148,28 @@ export const createPicker = (
 };
  */
 
-export const createPicker = (
-    callback: (spreadsheetId: string) => void
-) => {
+export const createPicker = async (callback: (spreadsheetId: string) => void) => {
+    const token = await getValidAccessToken(); // <-- await
+
     const view = new google.picker.DocsView(google.picker.ViewId.SPREADSHEETS)
         .setMode(google.picker.DocsViewMode.CREATE);
-    // The "New" button will automatically appear for Sheets
 
     const picker = new google.picker.PickerBuilder()
-        .setOAuthToken(getValidAccessToken())
+        .setOAuthToken(token) // <-- real string
         .addView(view)
         .setDeveloperKey(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
         .setAppId("834180572925")
         .setCallback((data: any) => {
             if (data.action === google.picker.Action.PICKED) {
                 const doc = data.docs[0];
-                callback(doc.id); // This is the spreadsheetId
+                callback(doc.id);
             }
         })
         .build();
 
     picker.setVisible(true);
 };
+
 
 
 export const signOut = () => {
