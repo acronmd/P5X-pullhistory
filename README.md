@@ -9,7 +9,7 @@ This is a [site](https://p5x.acrn.me) is made with React + TS + Vite that uses e
 - List of luckiest pulls
 - List of recently pulled 4 or 5 stars
 
-To use the site, please ensure you have a new empty Google Sheets file to use (to-do: Add button for creating a new file to use), if you want to use the API to automatically grab your pulls, please use [Iant's Gacha Tools](https://iant.kr/gacha/).
+To use the site, please ensure you have a new empty Google Sheets file to use (to-do: Add button for creating a new file to use), if you want to use the API to automatically grab your pulls, please use [Iant's Gacha Tools](https://iant.kr/gacha/) to grab the URL to use.
 
 ![Screenshot of the main page](src/assets/screenshots/screenshot1.png)
 ![Screenshot of the banner detailed page](src/assets/screenshots/screenshot2.png)
