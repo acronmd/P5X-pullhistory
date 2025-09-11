@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import {
     signIn as googleSignIn,
     signOut as googleSignOut,
-    getAccessToken,
+    getValidAccessToken,
     initGoogleClient
 } from "@/utils/google";
 
@@ -24,31 +24,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         async function initialize() {
             try {
                 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-                console.log("Google Client ID:", clientId);
 
                 if (!clientId) throw new Error("Google Client ID is missing");
 
                 await initGoogleClient(clientId);
                 setIsInitialized(true);
 
-                const token = getAccessToken();
-                setIsSignedIn(!!token);
+                // Try silent refresh, but don’t force a sign-in
+                try {
+                    const token = await getValidAccessToken();
+                    setIsSignedIn(!!token);
+                } catch {
+                    // No token or refresh failed → stay signed out
+                    setIsSignedIn(false);
+                }
             } catch (error) {
                 console.error("Failed to initialize Google client:", error);
-                if (error instanceof Error) {
-                    console.error("Error message:", error.message);
-                    console.error("Error stack:", error.stack);
-                } else {
-                    try {
-                        console.error("Error details:", JSON.stringify(error));
-                    } catch {
-                        console.error("Could not stringify error");
-                    }
-                }
             }
         }
         initialize();
     }, []);
+
 
 
     async function signIn() {

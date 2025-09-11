@@ -98,15 +98,21 @@ export async function fetchDataForSheet(sheetName: string) {
             pityCounter4 = 0;
         }
 
+        // After finishing the main loop:
         for (let i = data.length - 1; i >= 0; i--) {
-            if (sinceLast5 === -1 && data[i][0] == "5") {
+            if (sinceLast5 === -1 && data[i][0] === "5") {
                 sinceLast5 = data.length - i - 1;
             }
-            if (sinceLast4 === -1 && data[i][0] == "4") {
+            if (sinceLast4 === -1 && data[i][0] === "4") {
                 sinceLast4 = data.length - i - 1;
             }
             if (sinceLast5 !== -1 && sinceLast4 !== -1) break;
         }
+
+        // If no 5★ or 4★ found at all, just use total pulls
+        if (sinceLast5 === -1) sinceLast5 = data.length;
+        if (sinceLast4 === -1) sinceLast4 = data.length;
+
     }
 
     const avg = (arr: number[]) =>

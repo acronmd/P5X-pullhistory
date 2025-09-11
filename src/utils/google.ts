@@ -9,6 +9,7 @@ import { toUnixWithOffset } from "@/utils/sharedFunctions.tsx";
 import { getContractId} from "@/utils/sharedFunctions.tsx";
 
 let accessToken: string | null = null;
+let tokenExpiry: number | null = null; // unix timestamp (ms)
 
 export let tokenClient: google.accounts.oauth2.TokenClient | null = null;
 
@@ -47,6 +48,7 @@ export function signIn(): Promise<void> {
                 reject(resp.error);
             } else {
                 accessToken = resp.access_token;
+                tokenExpiry = Date.now() + (resp.expires_in * 1000); // expires_in is in seconds
                 resolve();
             }
         };
@@ -55,9 +57,40 @@ export function signIn(): Promise<void> {
     });
 }
 
-export function getAccessToken(): string | null {
-    return accessToken;
+export async function getValidAccessToken(): Promise<string> {
+    if (!accessToken) {
+        throw new Error("No access token yet — user not signed in");
+    }
+
+    if (accessToken && tokenExpiry && Date.now() < tokenExpiry - 60000) {
+        // still valid (with 1min buffer)
+        return accessToken;
+    }
+
+    // refresh silently
+    return new Promise((resolve, reject) => {
+        if (!tokenClient) {
+            reject("Token client not initialized");
+            return;
+        }
+
+        (tokenClient as any).callback = (resp: { error?: any; access_token?: string; expires_in?: number }) => {
+            if (resp.error) {
+                reject(resp.error);
+            } else if (resp.access_token) {
+                accessToken = resp.access_token;
+                tokenExpiry = Date.now() + (resp.expires_in! * 1000);
+                resolve(accessToken);
+            } else {
+                reject("No access token returned");
+            }
+        };
+
+        tokenClient.requestAccessToken({ prompt: "" });
+    });
 }
+
+
 
 
 export const requestAccessToken = (): Promise<string> => {
@@ -122,9 +155,10 @@ export const createPicker = (
     // The "New" button will automatically appear for Sheets
 
     const picker = new google.picker.PickerBuilder()
-        .setOAuthToken(getAccessToken())
+        .setOAuthToken(getValidAccessToken())
         .addView(view)
         .setDeveloperKey(import.meta.env.VITE_GOOGLE_SHEETS_API_KEY)
+        .setAppId("834180572925")
         .setCallback((data: any) => {
             if (data.action === google.picker.Action.PICKED) {
                 const doc = data.docs[0];
@@ -167,7 +201,7 @@ export async function appendCharactersToSheet(
     date: Date,
     time: string
 ): Promise<void> {
-    const token = getAccessToken();
+    const token = getValidAccessToken();
     if (!token) throw new Error("Access token is missing");
 
     const validCharacters = characters.filter(
@@ -203,7 +237,7 @@ export async function appendCharactersToSheetWithOCR(
     ocrResultArray: pullData[],
     bannerSublabel: string,
 ): Promise<void> {
-    const token = getAccessToken();
+    const token = getValidAccessToken();
     if (!token) throw new Error("Access token is missing");
 
     const rows = ocrResultArray.map((data) => {
@@ -290,7 +324,7 @@ export async function appendCharactersToSheetWithAPI(
     sheetName: string,
     bannerData: any[],
 ): Promise<void> {
-    const token = getAccessToken();
+    const token = getValidAccessToken();
     if (!token) throw new Error("Access token is missing");
     if (!bannerData || bannerData.length === 0) {
         console.log("No banner data → nothing to do");

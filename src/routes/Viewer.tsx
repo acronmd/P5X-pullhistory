@@ -433,13 +433,10 @@ const SheetStats: React.FC = () => {
     function returnLanguageBool( lang : number | undefined ){
         switch (lang) {
             case(1):
-                console.log(lang + " language stuff!")
                 return true;
             case (2):
-                console.log(lang + " language stuff!")
                 return false;
             default:
-                console.log(lang + " language stuff!")
                 return true;
         }
     }
